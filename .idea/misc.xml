@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/Java 4/Lab4/pom.xml" />
+        <option value="$PROJECT_DIR$/Java 4/Buoi1/pom.xml" />
+        <option value="$PROJECT_DIR$/Java 4/Buoi2/pom.xml" />
+        <option value="$PROJECT_DIR$/Java 4/demo-taco/pom.xml" />
+        <option value="$PROJECT_DIR$/Java 4/template-sof3012/pom.xml" />
+        <option value="$PROJECT_DIR$/Java 4/demo_web_hibernate/pom.xml" />
+        <option value="$PROJECT_DIR$/TutorJava3/botucj4sof3012/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_24" default="true" project-jdk-name="24" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>

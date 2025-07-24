@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="botucj4sof3012" />
+        <module name="template-sof3012" />
+        <module name="Buoi1_Demo_With_Hibernate" />
+        <module name="demo_web_hibernate" />
+        <module name="Buoi2" />
+        <module name="demo_web_hibernate (1)" />
+        <module name="demo_web_hibernate (2)" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>
