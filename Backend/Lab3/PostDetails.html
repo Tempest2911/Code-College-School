@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Phương pháp tập Pilates - Energy Pilates</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<style>
+    .navbar-nav>li {
+        transition: background-color 0.3s ease;
+        position: relative;
+    }
+
+    .navbar-nav>li:hover {
+        border-radius: 5px;
+    }
+
+    .navbar-nav>li:hover>a,
+    .navbar-nav>li:hover>a.nav-link {
+        color: #3d9e41 !important;
+        position: relative;
+        transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Animated underline for active/hovered nav item */
+    .navbar-nav>li>a {
+        display: inline-block;
+        position: relative;
+        transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .navbar-nav>li:hover>a::after,
+    .navbar-nav>li.active>a::after {
+        content: "";
+        display: block;
+        height: 4px;
+        width: 100%;
+        background: #3d9e41;
+        border-radius: 2px;
+        margin-top: 4px;
+        animation: underlineGrow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .navbar-nav>li>a::after {
+        content: "";
+        display: block;
+        height: 4px;
+        width: 0;
+        background: #3d9e41;
+        border-radius: 2px;
+        margin-top: 4px;
+        transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes underlineGrow {
+        from {
+            width: 0;
+            opacity: 0.2;
+        }
+
+        to {
+            width: 100%;
+            opacity: 1;
+        }
+    }
+</style>
+
+<body>
+    <header style="background-color: #f0f7ff; box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);">
+        <nav class="navbar navbar-expand-sm navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="Lab3.html">
+                    <img src="logo-energy-pilates.png" alt="" style="width: 150px;">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapsibleNavbar" style="color: black;">
+                    <i class="fa-solid fa-bars" style="color: #000000;"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="Post.html" style="color: black">
+                                <i class="fa-solid fa-list"></i> Bài viết
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" style="color: black"><i class="fa-solid fa-film"></i> Video</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" style="color: black"><i class="fa-solid fa-circle-info"></i>
+                                Giới thiệu</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" style="color: black"><i class="fa-solid fa-calendar-days"></i>
+                                Sự kiện</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" style="color: black">
+                                <i class="fa-solid fa-user"></i> Tài khoản <i class="fa-solid fa-caret-down"></i>
+                            </a>
+
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Đăng nhập</a></li>
+                                <li><a class="dropdown-item" href="#">Quên mật khẩu</a></li>
+                                <li><a class="dropdown-item" href="#">Đăng ký thành viên</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" style="color: black">Tiếng Việt</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" style="color: black">Tiếng Anh</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-lg-8">
+                <h2 class="text-info text-center mb-3" style="font-size: 2.5rem;">Phương pháp tập Pilates giúp
+                    phục hồi chấn thương cột sống</h2>
+                <img src="tap-pilates1.jpg" class="w-100 mb-3 rounded" style="object-fit: cover;" alt="Pilates">
+                <p  style="font-size: 1.175rem;">
+                    Tập Pilates có thể còn khá xa lạ với người Việt, nhưng tại các nước phương Tây thì đây chính là
+                    phương pháp thể dục giúp duy trì vóc dáng, tăng cường ý chí và cải thiện sự linh hoạt, dẻo dai cho
+                    người tập. Đặc biệt, các bài tập Pilates còn có khả năng trị đau lưng, là giải pháp hữu hiệu để phục
+                    hồi chấn thương cột sống. Sau đây hãy cùng tìm hiểu các phương pháp tập luyện này giúp phục hồi chấn
+                    thương cột sống nhanh chóng nhé!
+                </p>
+                <h4 class="fw-bold" style="font-size:  1.5rem;">Pilates giúp phục hồi chấn thương cột
+                    sống nhanh chóng</h4>
+                <p class="mb-3" style="font-size: 1.175rem;">
+                    Một trong những căn bệnh ngày càng phổ biến, đặc biệt là dân văn phòng, đó là đau lưng, thoát vị đĩa
+                    đệm. Tuy nhiên, nếu không trị đúng cách có thể dẫn đến nhiều biến chứng nguy hiểm, bao gồm: Vì điều
+                    này, bác sĩ khuyên dùng các hoặc tập yoga không đúng cách có thể khiến bệnh nhân nằm liệt giường.
+                </p>
+                <img src="tap-piltes.jpg" class="w-100 rounded" style="object-fit: cover;" alt="Pilates">
+                <h5 class="mt-2 text-dark fw-bold" style="font-size: 1.5rem;">Phương pháp tập Pilates Cat Cow</h5>
+                <p>Các bước thực hiện:</p>
+                <ul style="font-size: 1.175rem;">
+                    <li>Bắt đầu với tư thế 4 điểm. Vai và tay của bạn phải thẳng hàng và vuông góc với thảm, lưng của
+                        bạn phải bằng phẳng và xương chậu của bạn phải cân đối.</li>
+                    <li>Hít vào, võng lưng, nâng cằm lên, mở rộng ngực.</li>
+                    <li>Thở ra, siết bụng, cong lưng hướng lên và đưa cằm về gần khoang ngực.</li>
+                    <li>Lặp lại động tác từ 5-7 lần.</li>
+                </ul>
+                <h5 class="mt-4 text-dark fw-bold" style="font-size: 1.5rem;">Lời kết</h5>
+                <p class="mt-3" style="font-size: 1.175rem;">
+                    Trên đây là phương pháp tập Pilates giúp phục hồi chấn thương cột sống nhanh chóng. Để đạt được kết
+                    quả tập luyện như mong muốn, bạn nên duy trì chế độ tập luyện đều đặn, thực hiện đúng động tác, kết
+                    hợp ăn uống cân đối và khoa học.
+                </p>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="bg-white rounded p-3 mb-4">
+                    <label for="commentBox" class="fw-bold mb-2" style="font-size: 1.5rem;">Bình luận vài viết tại
+                        đây</label>
+                    <div class="mb-2">
+                        <textarea id="commentBox" class="form-control" rows="2"
+                            placeholder="Nhập bình luận của bạn"></textarea>
+                    </div>
+                    <button class="btn btn-success mb-3 " style="padding: 0.5rem 1.5rem;">Gửi bình luận</button>
+
+                    <div class="fw-bold mb-2" style="font-size: 1.5rem;">Danh sách các bình luận:</div>
+                    <ul class="mb-0" style="padding-left: 1.2em;">
+                        <li class="mb-2" style="list-style-type: disc;font-size: 1.115rem;">
+                            <strong>Bình An:</strong> Bài viết rất hữu ích
+                        </li>
+                        <li style="list-style-type: disc; font-size: 1.115rem;">
+                            <strong>Bình An:</strong> Cảm ơn những chia sẻ bổ ích
+                        </li>
+                    </ul>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+    <footer class="bg-dark text-white text-center p-4">@Copyright by FPT Polytechnic</footer>
+</body>
+
+</html>

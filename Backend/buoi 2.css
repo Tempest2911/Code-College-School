@@ -1,0 +1,11 @@
+.container-fluid{
+    
+}
+.container{
+    width: 1500px;
+    background-color: #fff;
+}
+.row{
+    margin: 0;
+    padding: 0;
+}
