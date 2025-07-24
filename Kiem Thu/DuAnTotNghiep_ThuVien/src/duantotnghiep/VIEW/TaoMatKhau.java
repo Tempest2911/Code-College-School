@@ -1,0 +1,212 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package duantotnghiep.VIEW;
+
+import duantotnghiep.DAO.CRUD;
+import duantotnghiep.MODEL.Mail;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import java.sql.*;
+import javax.swing.BorderFactory;
+
+/**
+ *
+ * @author MINHDUC
+ */
+public class TaoMatKhau extends javax.swing.JFrame {
+
+    /**
+     * Creates new form TaoMatKhau
+     */
+    public TaoMatKhau() {
+        initComponents();
+        getContentPane().setBackground(java.awt.Color.decode("#311b0c"));
+
+        setTitle("Tạo mật khẩu mới");
+        setSize(1000, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        JLabel lblDangNhap = new JLabel("TẠO MẬT KHẨU MỚI");
+        lblDangNhap.setSize(400, 50);
+        lblDangNhap.setLocation(520, 40);
+        lblDangNhap.setForeground(Color.white);
+        lblDangNhap.setFont(new Font("Arial", Font.BOLD, 30));
+        this.add(lblDangNhap);
+
+        JLabel lblTen = new JLabel("Nhập mật khẩu mới:");
+        lblTen.setSize(200, 50);
+        lblTen.setLocation(450, 100);
+        lblTen.setForeground(Color.white);
+
+        lblTen.setFont(new Font("Arial", Font.BOLD, 18));
+        this.add(lblTen);
+
+        JPasswordField txtPass = new JPasswordField();
+        txtPass.setSize(500, 40);
+        txtPass.setLocation(450, 170);
+        txtPass.setFont(new Font("Arial", Font.PLAIN, 15));
+        this.add(txtPass);
+
+        JButton btnDo = new JButton("Xác nhận đổi mật khẩu");
+        btnDo.setSize(175, 50);
+        btnDo.setLocation(600, 250);
+        btnDo.setFont(new Font("Arial", Font.BOLD, 13));
+
+        btnDo.setBackground(Color.decode("#FFEBCD"));
+        btnDo.setForeground(Color.decode("#4D2913"));
+        btnDo.setFocusPainted(false);
+
+        btnDo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnDo.setBackground(Color.decode("#F5DEB3")); // hover
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnDo.setBackground(Color.decode("#FFEBCD")); // default
+            }
+        });
+        this.add(btnDo);
+
+        btnDo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String passnew = String.valueOf(txtPass.getPassword());
+
+                if (passnew.isEmpty()) {
+                    JOptionPane.showMessageDialog(rootPane, "Vui lòng nhập mật khẩu mới!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                boolean result = DoiPass(passnew);
+
+                if (result) {
+                    dispose();
+                    JOptionPane.showMessageDialog(rootPane, "Đổi mật khẩu thành công");
+                    Login lg = new Login();
+                    lg.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "Mật khẩu mới không được trùng với mật khẩu cũ hoặc có lỗi xảy ra!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+    }
+
+    public static boolean DoiPass(String passNew) {
+        String email = Mail.getEmail();
+        String sqlCheckOld = "SELECT [Pass] FROM NhanVien WHERE Email = ?";
+        String sqlUpdate = "UPDATE NhanVien SET [Pass] = ? WHERE Email = ?";
+
+        try (Connection con = DriverManager.getConnection(CRUD.connectionUrl)) {
+            // Lấy mật khẩu cũ
+            PreparedStatement checkStmt = con.prepareStatement(sqlCheckOld);
+            checkStmt.setString(1, email);
+            ResultSet rs = checkStmt.executeQuery();
+
+            if (rs.next()) {
+                String oldPass = rs.getString("Pass");
+                if (oldPass.equals(passNew)) {
+                    return false;
+                }
+            }
+
+            PreparedStatement updateStmt = con.prepareStatement(sqlUpdate);
+            updateStmt.setString(1, passNew);
+            updateStmt.setString(2, email);
+            int row = updateStmt.executeUpdate();
+            return row > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jLabel1 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/duantotnghiep/IMAGE/logo.PNG"))); // NOI18N
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(jLabel1)
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(67, 67, 67)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(TaoMatKhau.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(TaoMatKhau.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(TaoMatKhau.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(TaoMatKhau.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new TaoMatKhau().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    // End of variables declaration//GEN-END:variables
+}
