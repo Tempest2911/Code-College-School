@@ -284,14 +284,29 @@ class AuthManager {
   }
 
   deleteComment(commentId) {
-    const commentIndex = this.comments.findIndex(c => c.id === commentId);
-    if (commentIndex !== -1) {
-      const deletedComment = this.comments.splice(commentIndex, 1)[0];
+    // Xoá ở cấp 1
+    const idx = this.comments.findIndex(c => c.id === commentId);
+    if (idx !== -1) {
+      const deleted = this.comments.splice(idx, 1)[0];
       this.saveComments();
-      return deletedComment;
+      return deleted;
     }
+  
+    // Xoá ở cấp 2 (reply trong từng comment)
+    for (const c of this.comments) {
+      if (Array.isArray(c.replies)) {
+        const rIdx = c.replies.findIndex(r => r.id === commentId);
+        if (rIdx !== -1) {
+          const deleted = c.replies.splice(rIdx, 1)[0];
+          this.saveComments();
+          return deleted;
+        }
+      }
+    }
+  
     return null;
   }
+  
 
   // User Statistics
   getUserStats(userId) {

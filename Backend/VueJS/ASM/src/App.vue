@@ -74,9 +74,8 @@ const handleProfileUpdated = (updatedUser) => {
               {{ currentUser?.name || 'User' }}
             </a>
             <ul class="dropdown-menu">
-              <li><router-link class="dropdown-item" to="/profile"><i class="bi bi-person me-2"></i>Profile</router-link></li>
-              <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
-              <li><hr class="dropdown-divider"></li>
+              <!-- <li><router-link class="dropdown-item" to="/profile"><i class="bi bi-person me-2"></i>Profile</router-link></li> -->
+              <!-- <li><hr class="dropdown-divider"></li> -->
               <li><a class="dropdown-item" href="#" @click.prevent="handleLogout"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
             </ul>
           </div>
@@ -108,16 +107,8 @@ body {
   border-radius: 0.5rem;
 }
 
-.dropdown-item {
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  margin: 0.125rem 0.5rem;
-  width: calc(100% - 1rem);
-}
 
-.dropdown-item:hover {
-  background-color: #f8f9fa;
-}
+
 
 #app {
   min-height: 100vh;

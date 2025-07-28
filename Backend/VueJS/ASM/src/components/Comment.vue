@@ -53,8 +53,8 @@
             <!-- Comment Header -->
             <div class="d-flex justify-content-between align-items-start mb-2">
               <div class="d-flex align-items-center">
-                <img :src="comment.userAvatar || 'https://via.placeholder.com/40x40/0d6efd/ffffff?text=U'"
-                  class="rounded-circle me-3" width="40" height="40" :alt="comment.userName" />
+                <img :src="getUserAvatar(comment.userId)" class="rounded-circle me-3" width="40" height="40"
+                  :alt="getUserName(comment.userId)" />
                 <div>
                   <h6 class="mb-0 fw-bold">{{ comment.userName }}</h6>
                   <small class="text-muted">
@@ -134,53 +134,92 @@
               <div class="reply-item ms-4" v-for="reply in comment.replies" :key="reply.id">
                 <div class="card bg-light border-0">
                   <div class="card-body py-2">
+                    <!-- Header: Avatar + Name + Time + Dropdown -->
                     <div class="d-flex justify-content-between align-items-start">
                       <div class="d-flex align-items-center">
-                        <img :src="reply.userAvatar || 'https://via.placeholder.com/32x32/0d6efd/ffffff?text=U'"
-                          class="rounded-circle me-2" width="32" height="32" :alt="reply.userName" />
+                        <img :src="getUserAvatar(reply.userId)" class="rounded-circle me-2" width="32" height="32"
+                          :alt="getUserName(reply.userId)" />
                         <div>
                           <h6 class="mb-0 fw-bold small">{{ reply.userName }}</h6>
                           <small class="text-muted">{{ formatDate(reply.createdAt) }}</small>
                         </div>
                       </div>
 
-                  
+                      <!-- Dropdown actions for reply -->
+                      <div class="dropdown position-relative" v-if="canEditComment(reply)">
+                        <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown">
+                          <i class="bi bi-three-dots"></i>
+                        </button>
+                        <ul class="dropdown-menu custom-dropdown">
+                          <li>
+                            <a class="dropdown-item" href="#" @click.prevent="reply.isEditing = true">
+                              <i class="bi bi-pencil me-2"></i>Edit
+                            </a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item text-danger" href="#"
+                              @click.prevent="$emit('request-delete', reply)">
+                              <i class="bi bi-trash me-2"></i>Delete
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+
                     </div>
 
-                    <p class="mb-0 mt-2 small">{{ reply.content }}</p>
+                    <!-- Content or Edit Mode -->
+                    <div v-if="!reply.isEditing">
+                      <p class="mb-0 mt-2 small">{{ reply.content }}</p>
+                    </div>
+                    <div v-else class="mt-2">
+                      <textarea class="form-control mb-2" v-model="reply.editContent" rows="2"
+                        maxlength="500"></textarea>
+                      <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-primary" @click="saveEdit(reply)"
+                          :disabled="!reply.editContent.trim()">
+                          Save
+                        </button>
+                        <button class="btn btn-sm btn-secondary" @click="cancelEdit(reply)">Cancel</button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+
+
+
+
           </div>
         </div>
       </div>
     </div>
 
-    
+
     <!-- Delete Comment Modal -->
-<div class="modal fade" :class="{ show: showDeleteModal }" :style="{ display: showDeleteModal ? 'block' : 'none' }" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Delete Comment</h5>
-        <button type="button" class="btn-close" @click="showDeleteModal = false"></button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure you want to delete this comment?</p>
-        <p class="text-danger">This action cannot be undone.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" @click="showDeleteModal = false">Cancel</button>
-        <button type="button" class="btn btn-danger" @click="confirmDeleteComment" :disabled="deleting">
-          <span v-if="deleting" class="spinner-border spinner-border-sm me-2"></span>
-          {{ deleting ? 'Deleting...' : 'Delete' }}
-        </button>
+    <div class="modal fade" :class="{ show: showDeleteModal }" :style="{ display: showDeleteModal ? 'block' : 'none' }"
+      tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Delete Comment</h5>
+            <button type="button" class="btn-close" @click="showDeleteModal = false"></button>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to delete this comment?</p>
+            <p class="text-danger">This action cannot be undone.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="showDeleteModal = false">Cancel</button>
+            <button type="button" class="btn btn-danger" @click="confirmDeleteComment" :disabled="deleting">
+              <span v-if="deleting" class="spinner-border spinner-border-sm me-2"></span>
+              {{ deleting ? 'Deleting...' : 'Delete' }}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-<div v-if="showDeleteModal" class="modal-backdrop fade show"></div>
+    <div v-if="showDeleteModal" class="modal-backdrop fade show"></div>
 
 
   </div>
@@ -243,14 +282,23 @@ export default {
       this.loadComments();
     }
   },
+
   methods: {
     loadComments() {
       this.comments = authManager.getCommentsByPost(this.postId).map(c => ({
         ...c,
         showReplyForm: false,
-        replyContent: ''
+        replyContent: '',
+        isEditing: false,
+        editContent: c.content,
+        replies: (c.replies || []).map(r => ({
+          ...r,
+          isEditing: false,
+          editContent: r.content
+        }))
       }));
-    },
+    }
+    ,
 
     validateComment() {
       const content = this.newComment.content.trim();
@@ -371,14 +419,24 @@ export default {
 
     async confirmDeleteComment() {
       this.deleting = true;
-      authManager.deleteComment(this.commentToDelete.id);
-      this.showDeleteModal = false;
-      this.commentToDelete = null;
-      this.deleting = false;
-      // Tăng key để reload Comment.vue
-      this.$emit('reload');
-      alert('Comment deleted successfully!');
-    },
+      try {
+        authManager.deleteComment(this.commentToDelete.id);
+
+        this.showDeleteModal = false;
+        this.commentToDelete = null;
+        this.deleting = false;
+
+        // ✅ Sửa tại đây:
+        this.loadComments(); // ← Cập nhật lại danh sách comment từ authManager
+
+        alert('Comment deleted successfully!');
+      } catch (err) {
+        console.error('Failed to delete comment:', err);
+        alert('Error deleting comment');
+        this.deleting = false;
+      }
+    }
+    ,
 
     canEditComment(comment) {
       return this.currentUser && comment.userId === this.currentUser.id;
@@ -393,7 +451,22 @@ export default {
         hour: '2-digit',
         minute: '2-digit'
       });
+    },
+    getUserById(id) {
+      return authManager.getUserById(id);
+    },
+
+    getUserAvatar(userId) {
+      const user = this.getUserById(userId);
+      return user?.avatar || 'https://via.placeholder.com/40x40';
+    },
+
+    getUserName(userId) {
+      const user = this.getUserById(userId);
+      return user?.name || 'Unknown';
     }
+
+
   }
 };
 </script>
@@ -402,6 +475,7 @@ export default {
 .comment-section {
   margin-top: 2rem;
 }
+
 
 .comment-item {
   transition: transform 0.2s ease;
@@ -439,7 +513,15 @@ export default {
   border: none;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   border-radius: 8px;
+  z-index: 9999 !important;
+  position: absolute !important;
 }
+
+.custom-dropdown {
+  z-index: 9999 !important;
+  position: absolute !important;
+}
+
 
 .dropdown-item {
   border-radius: 4px;
@@ -463,8 +545,11 @@ export default {
 .modal-backdrop.fade.show {
   position: fixed;
   z-index: 1050;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .modal-overlay {
@@ -487,5 +572,4 @@ export default {
   width: 90%;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
-
 </style>
