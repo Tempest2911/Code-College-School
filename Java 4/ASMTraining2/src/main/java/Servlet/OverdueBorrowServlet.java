@@ -17,6 +17,6 @@ public class OverdueBorrowServlet extends HttpServlet {
         List<BorrowRecord> overdueList = new Repository().getOverdueRecords();
         request.setAttribute("action", "overdue");
         request.setAttribute("records", overdueList);
-        request.getRequestDispatcher("/borrow.jsp").forward(request, response);
+        request.getRequestDispatcher("/books.jsp").forward(request, response);
     }
 }

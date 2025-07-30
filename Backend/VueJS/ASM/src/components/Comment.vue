@@ -182,13 +182,12 @@
                         <button class="btn btn-sm btn-secondary" @click="cancelEdit(reply)">Cancel</button>
                       </div>
                     </div>
+
+                    
                   </div>
                 </div>
               </div>
             </div>
-
-
-
 
           </div>
         </div>

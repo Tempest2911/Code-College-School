@@ -9,7 +9,7 @@ import java.util.List;
 public class TopAttendanceRepo {
     public List<Object[]> getTop5Attendance() {
         try (var session = HibernateUtil.getSession()) {
-            String hql = """
+            String hql = """    
             select m, count(r.id)
             from ClassRegistration r
             join r.member m
