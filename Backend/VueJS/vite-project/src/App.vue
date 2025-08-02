@@ -12,6 +12,7 @@ import ArrReactiveExp from './components/ArrReactiveExp.vue';
 import AccountExp from './components/AccountExp.vue';
 import ArrClassBinding from './components/ArrClassBinding.vue';
 const parentMessage = 'Thong diep tu thanh phan cha';
+import ConditionalRendering from './components/ConditionalRendering.vue';
 // const StudentData = {
 //     name: 'Nguyen Van ABC',
 //     age: '20',
@@ -68,17 +69,11 @@ const parentMessage = 'Thong diep tu thanh phan cha';
 
 <template>
   <main>
-    <ArrClassBinding></ArrClassBinding>
+    <ConditionalRendering></ConditionalRendering>
   </main>
 </template>
 
 
 <style scoped>
-.full-page{
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 </style>

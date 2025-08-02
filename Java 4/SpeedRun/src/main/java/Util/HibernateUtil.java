@@ -1,7 +1,7 @@
 package Util;
 
 
-import Model.Customer;
+import Model.Product;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -9,8 +9,6 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 
-import java.awt.print.Book;
-import java.lang.reflect.Member;
 import java.util.Properties;
 
 public final class HibernateUtil {
@@ -28,7 +26,7 @@ public final class HibernateUtil {
         // properties.put(Environment.HBM2DDL_AUTO, "create"); // tự động sinh db
 
         conf.setProperties(properties);
-        conf.addAnnotatedClass(Customer.class);
+        conf.addAnnotatedClass(Product.class);
 
 
 

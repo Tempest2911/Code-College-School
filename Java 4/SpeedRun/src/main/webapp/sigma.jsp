@@ -9,45 +9,53 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Customer List</title>
-    <c:if test="${not empty dscustomers}">
-        <table border="1">
-            <tr>
-                <th>ID</th>
-                <th>Fist name</th>
-                <th>Last name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Address</th>
-                <th>City</th>
-                <th>Country</th>
-                <th>Postal Code</th>
-                <th>Date of Birth</th>
-                <th>Created at</th>
-                <th>Is Active</th>
-                <th>Gender</th>
-                <th>Notes</th>
-            </tr>
-            <c:forEach var="custom" items="${dscustomers}">
+
+    <c:choose>
+        <c:when test="${action == 'listProducts' || action == 'drinks' || action == 'outStocks' || action == 'prepare-expire' || action == 'searchProducts'}">
+            <h1>List Products</h1>
+            <table border="1">
+            <c:if test="${not empty products}">
                 <tr>
-                    <td>${custom.id}</td>
-                    <td>${custom.firstName}</td>
-                    <td>${custom.lastName}</td>
-                    <td>${custom.email}</td>
-                    <td>${custom.phoneNumber}</td>
-                    <td>${custom.address}</td>
-                    <td>${custom.city}</td>
-                    <td>${custom.country}</td>
-                    <td>${custom.postalCode}</td>
-                    <td>${custom.dateOfBirth}</td>
-                    <td>${custom.createdAt}</td>
-                    <td>${custom.isActive}</td>
-                    <td>${custom.gender}</td>
-                    <td>${custom.notes}</td>
+                    <th>id</th>
+                    <th>productName</th>
+                    <th>category</th>
+                    <th>supplier</th>
+                    <th>quantityInStock</th>
+                    <th>unitPric</th>
+                    <th>reorderLevel</th>
+                    <th>discontinued</th>
+                    <th>description</th>
+                    <th>manufactureDate</th>
+                    <th>expiryDate</th>
+                    <th>createdAt</th>
+                    <th>barcode</th>
+
+
                 </tr>
-            </c:forEach>
-        </table>
-    </c:if>
+                <c:forEach items="${products}" var="mb">
+                    <tr>
+                        <td>${mb.id}</td>
+                        <td>${mb.productName}</td>
+                        <td>${mb.category}</td>
+                        <td>${mb.supplier}</td>
+                        <td>${mb.quantityInStock}</td>
+                        <td>${mb.unitPrice}</td>
+                        <td>${mb.reorderLevel}</td>
+                        <td>${mb.discontinued}</td>
+                        <td>${mb.description}</td>
+                        <td>${mb.manufactureDate}</td>
+                        <td>${mb.expiryDate}</td>
+                        <td>${mb.createdAt}</td>
+                        <td>${mb.barcode}</td>
+                    </tr>
+
+                </c:forEach>
+                </table>
+            </c:if>
+        </c:when>
+    </c:choose>
+
+
 </head>
 <body>
 
