@@ -14,6 +14,12 @@ import ArrClassBinding from './components/ArrClassBinding.vue';
 const parentMessage = 'Thong diep tu thanh phan cha';
 import ConditionalRendering from './components/ConditionalRendering.vue';
 import ListRendering from './components/ListRendering.vue';
+import EventHandling from './components/EventHandling.vue';
+
+const handleEvent = (data) => {
+  alert(data)
+}
+
 // const StudentData = {
 //     name: 'Nguyen Van ABC',
 //     age: '20',
@@ -70,7 +76,7 @@ import ListRendering from './components/ListRendering.vue';
 
 <template>
   <main>
-    <ListRendering></ListRendering>
+    <EventHandling @increment="handleEvent"></EventHandling>
   </main>
 </template>
 
