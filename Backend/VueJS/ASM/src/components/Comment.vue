@@ -183,7 +183,7 @@
                       </div>
                     </div>
 
-                    
+
                   </div>
                 </div>
               </div>
@@ -326,26 +326,22 @@ export default {
       this.validation.content = { valid: true, error: "" };
     },
 
-    async submitComment() {
-      if (!this.isCommentValid) {
-        alert('Please enter a valid comment');
+    async saveEdit(item) {
+      if (!item.editContent.trim()) {
+        alert('Please enter comment content');
         return;
       }
 
-      this.loading = true;
-
       try {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        authManager.createComment(this.postId, this.newComment.content);
-        this.loadComments(); // <-- Thay vì unshift
-        this.newComment.content = "";
-        this.validation.content = { valid: false, error: "" };
-        alert('Comment posted successfully!');
+        const updated = authManager.updateComment(item.id, item.editContent); // Dù là comment hay reply thì ID vẫn giống nhau
+        if (updated) {
+          this.loadComments();
+        }
+        item.isEditing = false;
+        alert('Comment updated successfully!');
       } catch (error) {
-        console.error('Error posting comment:', error);
-        alert('Failed to post comment');
-      } finally {
-        this.loading = false;
+        console.error('Error updating comment:', error);
+        alert('Failed to update comment');
       }
     },
 
@@ -380,35 +376,34 @@ export default {
     },
 
     editComment(comment) {
-      this.editingComment = comment;
-      this.editContent = comment.content;
-    },
+      comment.isEditing = true;
+      comment.editContent = comment.content;
+    }
+    ,
 
-    async saveEdit() {
-      if (!this.editContent.trim()) {
+    async saveEdit(comment) {
+      if (!comment.editContent.trim()) {
         alert('Please enter comment content');
         return;
       }
 
       try {
-        const updatedComment = authManager.updateComment(this.editingComment.id, this.editContent);
-        if (updatedComment) {
-          // Refresh comments to get updated data
-          this.loadComments();
+        const updated = authManager.updateComment(comment.id, comment.editContent);
+        if (updated) {
+          this.loadComments(); // reload lại comment từ data source
         }
-
-        this.cancelEdit();
+        comment.isEditing = false;
         alert('Comment updated successfully!');
-
       } catch (error) {
         console.error('Error updating comment:', error);
         alert('Failed to update comment');
       }
-    },
+    }
+    ,
 
-    cancelEdit() {
-      this.editingComment = null;
-      this.editContent = "";
+    cancelEdit(item) {
+      item.isEditing = false;
+      item.editContent = item.content;
     },
 
     handleRequestDelete(comment) {
@@ -451,6 +446,7 @@ export default {
         minute: '2-digit'
       });
     },
+
     getUserById(id) {
       return authManager.getUserById(id);
     },

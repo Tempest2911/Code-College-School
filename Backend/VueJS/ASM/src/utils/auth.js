@@ -17,23 +17,10 @@ class AuthManager {
     localStorage.setItem('blog_users', JSON.stringify(this.users));
   }
 
-  getDefaultUsers() {
-    return [
-      {
-       
-      },
-      {
-       
-      },
-      {
-       
-      }
-    ];
-  }
 
   // Authentication Methods
   login(username, password) {
-    const user = this.users.find(u => 
+    const user = this.users.find(u =>
       (u.username === username || u.email === username) && u.password === password
     );
 
@@ -50,16 +37,16 @@ class AuthManager {
 
   register(userData) {
     // Check if username or email already exists
-    const existingUser = this.users.find(u => 
+    const existingUser = this.users.find(u =>
       u.username === userData.username || u.email === userData.email
     );
 
     if (existingUser) {
-      return { 
-        success: false, 
-        error: existingUser.username === userData.username 
-          ? 'Username already exists' 
-          : 'Email already exists' 
+      return {
+        success: false,
+        error: existingUser.username === userData.username
+          ? 'Username already exists'
+          : 'Email already exists'
       };
     }
 
@@ -137,26 +124,6 @@ class AuthManager {
     localStorage.setItem('blog_posts', JSON.stringify(this.posts));
   }
 
-  getDefaultPosts() {
-    return [
-      {
-      
-      },
-      {
-      
-      },
-      {
-       
-      },
-      {
-      
-      },
-      {
-      
-      }
-    ];
-  }
-
   getPostsByUser(userId) {
     return this.posts.filter(post => post.authorId === userId);
   }
@@ -219,20 +186,6 @@ class AuthManager {
     localStorage.setItem('blog_comments', JSON.stringify(this.comments));
   }
 
-  getDefaultComments() {
-    return [
-      {
-       
-      },
-      {
-
-      },
-      {
-      
-      }
-    ];
-  }
-
   getCommentsByPost(postId) {
     return this.comments.filter(comment => comment.postId === postId);
   }
@@ -274,14 +227,29 @@ class AuthManager {
   }
 
   updateComment(commentId, content) {
+    // Cập nhật comment cấp 1
     const comment = this.comments.find(c => c.id === commentId);
     if (comment) {
       comment.content = content;
       this.saveComments();
       return comment;
     }
-    return null;
+
+    // Cập nhật comment cấp 2 (reply)
+    for (const c of this.comments) {
+      if (Array.isArray(c.replies)) {
+        const reply = c.replies.find(r => r.id === commentId);
+        if (reply) {
+          reply.content = content;
+          this.saveComments();
+          return reply;
+        }
+      }
+    }
+
+    return null; // Không tìm thấy
   }
+
 
   deleteComment(commentId) {
     // Xoá ở cấp 1
@@ -291,7 +259,7 @@ class AuthManager {
       this.saveComments();
       return deleted;
     }
-  
+
     // Xoá ở cấp 2 (reply trong từng comment)
     for (const c of this.comments) {
       if (Array.isArray(c.replies)) {
@@ -303,16 +271,16 @@ class AuthManager {
         }
       }
     }
-  
+
     return null;
   }
-  
+
 
   // User Statistics
   getUserStats(userId) {
     const userPosts = this.getPostsByUser(userId);
     const userComments = this.comments.filter(c => c.userId === userId);
-    
+
     return {
       totalPosts: userPosts.length,
       publishedPosts: userPosts.filter(p => p.isPublished).length,
@@ -342,12 +310,12 @@ class AuthManager {
     localStorage.removeItem('blog_posts');
     localStorage.removeItem('blog_comments');
     localStorage.removeItem('blog_current_user');
-    
+
     this.users = this.getDefaultUsers();
     this.posts = this.getDefaultPosts();
     this.comments = this.getDefaultComments();
     this.currentUser = null;
-    
+
     this.saveUsers();
     this.savePosts();
     this.saveComments();

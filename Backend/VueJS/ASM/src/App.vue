@@ -106,10 +106,6 @@ body {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
   border-radius: 0.5rem;
 }
-
-
-
-
 #app {
   min-height: 100vh;
 }

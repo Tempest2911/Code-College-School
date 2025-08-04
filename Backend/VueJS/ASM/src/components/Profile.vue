@@ -183,7 +183,7 @@
                       <i class="bi bi-calendar me-1"></i>
                       {{ formatDate(post.createdAt) }}
                     </small>
-                    <p class="text-muted mb-1">By {{ post.author }}</p>
+                    <p class="text-muted mb-1">By {{ getUserName(post.authorId) }}</p>
                     <div class="mt-2 d-flex gap-1">
                       <button
                         class="btn btn-sm btn-outline-primary"
