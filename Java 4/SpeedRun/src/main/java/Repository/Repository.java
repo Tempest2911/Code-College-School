@@ -52,4 +52,5 @@ public class Repository {
             return query.getResultList();
         }
     }
+    
 }
