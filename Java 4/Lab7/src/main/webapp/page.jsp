@@ -1,16 +1,8 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: drago
-  Date: 8/5/2025
-  Time: 8:35 PM
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!-- views/page.jsp -->
+<%@ page contentType="text/html;charset=UTF-8" %>
 <html>
-<head>
-    <title>Title</title>
-</head>
+<head><title>Trang chính</title></head>
 <body>
-
+<h1>Xin chào</h1>
 </body>
 </html>
