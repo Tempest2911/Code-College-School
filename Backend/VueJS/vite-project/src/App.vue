@@ -19,7 +19,7 @@ import EventHandling from './components/EventHandling.vue';
 const handleEvent = (data) => {
   alert(data)
 }
-
+ 
 // const StudentData = {
 //     name: 'Nguyen Van ABC',
 //     age: '20',

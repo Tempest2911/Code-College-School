@@ -24,6 +24,14 @@ function handleSubmitted() {
   submitted.value = true;
   console.log('Đã gửi:', name.value);
 }
+
+const onClick = () => {
+        message.value = 'Click thông thường hoặc là có Ctrl'
+    }
+
+    const onCtrlClick  =  () => {
+        message.value = 'Chỉ Ctrl được ấn, không có Shift, Alt hoặc Meta'
+    }
 </script>
 
 <template>
@@ -69,4 +77,51 @@ function handleSubmitted() {
       Bạn đã gửi: {{ name }}
     </div>
   </div>
+
+   <div class="container mb-3">
+    <h4>5. Các phím hệ thống</h4>
+
+    <!-- Input để bắt phím -->
+    <input
+      @keyup.alt.c="onAltC"
+      @keyup.ctrl.a="onCtrlA"
+      placeholder="Nhấn Alt + C hoặc Ctrl + A"
+      class="form-control"
+    />
+
+    <!-- Div hiển thị thông báo -->
+    <div style="margin-top: 10px; cursor: pointer; background-color: aquamarine; padding: 2rem;">
+      {{ message }}
+    </div>
+  </div>
+
+<div class="container mb-3">
+        <h4>6. Phím Ctrl và các phím khác</h4>
+        <!--Sẽ kích hoạt ngay cả khi ấn phím Ctrl + Alt hoặc Shift-->
+        <button @click.ctrl="onClick">(A Ctrl)</button>
+        <!---Chỉ kích hoạt khi mà chỉ có Ctrl (Không Alt, Shift,..)-->
+        <button @click.ctrl.exact="onCtrlClick">A (Ctrl + exac)</button>
+        <!--Kích hoạt khi không có modifier nào-->
+        <button @click.exact="onClick">A (exac - không có modifier)</button>
+        <p v-if="message">{{ message }}</p>
+    </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      message: 'Chưa nhấn phím hệ thống nào',
+    };
+  },
+  methods: {
+    onAltC() {
+      this.message = 'Bạn đã nhấn Alt + C!';
+    },
+    onCtrlA(event) {
+      event.preventDefault(); // ngăn trình duyệt lưu trang
+      this.message = 'Bạn đã nhấn Ctrl + A!';
+    },
+  },
+};
+</script>
