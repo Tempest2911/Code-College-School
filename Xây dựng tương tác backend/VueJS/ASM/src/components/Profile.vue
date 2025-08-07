@@ -503,7 +503,7 @@ export default {
     handlePostSaved(postData) {
       if (this.editingPost) {
         const updatedPost = authManager.updatePost(postData.id, postData);
-        if (updatedPost) {
+        if (updatedPost) {                                                      
           const index = this.posts.findIndex(post => post.id === postData.id);
           if (index !== -1) {
             this.posts[index] = updatedPost;
@@ -512,9 +512,10 @@ export default {
         this.editingPost = null;
       } else {
         const newPost = authManager.createPost(postData);
-        this.posts.unshift(newPost);
+        this.posts.unshift(newPost); // Thêm post mới vào đầu danh sách
       }
       this.closePostModal();
+      this.loadAllPublishedPosts(); // ← Thêm dòng này để cập nhật tab All Posts ngay lập tức
     },
     closePostModal() {
       this.showCreatePost = false;

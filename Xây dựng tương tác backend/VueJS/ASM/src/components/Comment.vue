@@ -17,9 +17,6 @@
             <div class="invalid-feedback" v-if="validation.content.error">
               {{ validation.content.error }}
             </div>
-            <div class="valid-feedback" v-if="validation.content.valid">
-              Comment looks good!
-            </div>
             <div class="form-text">
               {{ newComment.content.length }}/500 characters
             </div>
@@ -307,13 +304,7 @@ export default {
         return;
       }
 
-      if (content.length < 5) {
-        this.validation.content = {
-          valid: false,
-          error: "Comment must be at least 5 characters long"
-        };
-        return;
-      }
+
 
       if (content.length > 500) {
         this.validation.content = {
@@ -459,8 +450,30 @@ export default {
     getUserName(userId) {
       const user = this.getUserById(userId);
       return user?.name || 'Unknown';
-    }
+    },
 
+    async submitComment() {
+      this.validateComment();
+      if (!this.isCommentValid) return;
+
+      this.loading = true;
+      try {
+        // Gọi authManager để tạo comment mới
+        const comment = authManager.createComment(this.postId, this.newComment.content);
+        if (comment) {
+          this.newComment.content = "";
+          this.validation.content = { valid: false, error: "" };
+          this.loadComments();
+          alert("Comment posted successfully!");
+        } else {
+          alert("Failed to post comment.");
+        }
+      } catch (error) {
+        console.error("Error posting comment:", error);
+        alert("Error posting comment.");
+      }
+      this.loading = false;
+    },
 
   }
 };
