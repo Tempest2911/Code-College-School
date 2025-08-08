@@ -12,7 +12,7 @@
             <textarea class="form-control" :class="{
               'is-valid': validation.content.valid && newComment.content,
               'is-invalid': validation.content.error && newComment.content
-            }" v-model="newComment.content" @blur="validateComment" @input="validateComment" rows="3"
+            }" v-model="newComment.content" @input="validateComment" rows="3"
               placeholder="Write your comment here..." maxlength="500" required></textarea>
             <div class="invalid-feedback" v-if="validation.content.error">
               {{ validation.content.error }}
@@ -59,7 +59,6 @@
                   </small>
                 </div>
               </div>
-
               <!-- Comment Actions -->
               <div class="dropdown" v-if="canEditComment(comment)">
                 <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown">
@@ -83,18 +82,15 @@
             <!-- Comment Content -->
             <div v-if="!comment.isEditing">
               <p class="mb-2">{{ comment.content }}</p>
-
-              <!-- Reply Button -->
               <button class="btn btn-sm btn-outline-primary" @click="showReplyForm(comment)"
                 v-if="isAuthenticated && !comment.showReplyForm">
                 <i class="bi bi-reply me-1"></i>
                 Reply
               </button>
             </div>
-
             <!-- Edit Comment Form -->
             <div v-else>
-              <textarea class="form-control mb-2" v-model="comment.editContent" rows="2" maxlength="500"></textarea>
+              <input v-model="comment.editContent" class="form-control mb-2" />
               <div class="d-flex gap-2">
                 <button class="btn btn-sm btn-primary" @click="saveEdit(comment)"
                   :disabled="!comment.editContent.trim()">
@@ -131,7 +127,6 @@
               <div class="reply-item ms-4" v-for="reply in comment.replies" :key="reply.id">
                 <div class="card bg-light border-0">
                   <div class="card-body py-2">
-                    <!-- Header: Avatar + Name + Time + Dropdown -->
                     <div class="d-flex justify-content-between align-items-start">
                       <div class="d-flex align-items-center">
                         <img :src="getUserAvatar(reply.userId)" class="rounded-circle me-2" width="32" height="32"
@@ -141,15 +136,13 @@
                           <small class="text-muted">{{ formatDate(reply.createdAt) }}</small>
                         </div>
                       </div>
-
-                      <!-- Dropdown actions for reply -->
                       <div class="dropdown position-relative" v-if="canEditComment(reply)">
                         <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown">
                           <i class="bi bi-three-dots"></i>
                         </button>
                         <ul class="dropdown-menu custom-dropdown">
                           <li>
-                            <a class="dropdown-item" href="#" @click.prevent="reply.isEditing = true">
+                            <a class="dropdown-item" href="#" @click.prevent="editComment(reply)">
                               <i class="bi bi-pencil me-2"></i>Edit
                             </a>
                           </li>
@@ -161,16 +154,12 @@
                           </li>
                         </ul>
                       </div>
-
                     </div>
-
-                    <!-- Content or Edit Mode -->
                     <div v-if="!reply.isEditing">
                       <p class="mb-0 mt-2 small">{{ reply.content }}</p>
                     </div>
                     <div v-else class="mt-2">
-                      <textarea class="form-control mb-2" v-model="reply.editContent" rows="2"
-                        maxlength="500"></textarea>
+                      <input v-model="reply.editContent" class="form-control mb-2" />
                       <div class="d-flex gap-2">
                         <button class="btn btn-sm btn-primary" @click="saveEdit(reply)"
                           :disabled="!reply.editContent.trim()">
@@ -179,8 +168,6 @@
                         <button class="btn btn-sm btn-secondary" @click="cancelEdit(reply)">Cancel</button>
                       </div>
                     </div>
-
-
                   </div>
                 </div>
               </div>
@@ -190,78 +177,30 @@
         </div>
       </div>
     </div>
-
-
-    <!-- Delete Comment Modal -->
-    <div class="modal fade" :class="{ show: showDeleteModal }" :style="{ display: showDeleteModal ? 'block' : 'none' }"
-      tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Delete Comment</h5>
-            <button type="button" class="btn-close" @click="showDeleteModal = false"></button>
-          </div>
-          <div class="modal-body">
-            <p>Are you sure you want to delete this comment?</p>
-            <p class="text-danger">This action cannot be undone.</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="showDeleteModal = false">Cancel</button>
-            <button type="button" class="btn btn-danger" @click="confirmDeleteComment" :disabled="deleting">
-              <span v-if="deleting" class="spinner-border spinner-border-sm me-2"></span>
-              {{ deleting ? 'Deleting...' : 'Delete' }}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div v-if="showDeleteModal" class="modal-backdrop fade show"></div>
-
-
   </div>
 </template>
 
 <script>
-import authManager from '../utils/auth.js'
+import api from '../utils/api'
 
 export default {
   name: "Comment",
   props: {
-    postId: {
-      type: Number,
-      required: true
-    },
-    currentUser: {
-      type: Object,
-      required: true
-    },
-    reload: {
-      type: Number,
-      default: 0
-    }
+    postId: { type: [Number, String], required: true }, // sửa lại cho nhận cả số và chuỗi
+    currentUser: { type: Object, required: true },
+    reload: { type: Number, default: 0 }
   },
   data() {
     return {
       comments: [],
-      newComment: {
-        content: ""
-      },
-      validation: {
-        content: { valid: false, error: "" }
-      },
-      loading: false,
-      deleting: false,
-      showDeleteModal: false,
-      commentToDelete: null,
-      replyingTo: null,
-      replyContent: "",
-      editingComment: null,
-      editContent: "",
+      newComment: { content: "" },
+      validation: { content: { valid: false, error: "" } },
+      loading: false
     };
   },
   computed: {
     sortedComments() {
-      return [...this.comments].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      return this.comments.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     },
     isCommentValid() {
       return this.validation.content.valid && this.newComment.content.trim().length > 0;
@@ -278,155 +217,111 @@ export default {
       this.loadComments();
     }
   },
-
   methods: {
-    loadComments() {
-      this.comments = authManager.getCommentsByPost(this.postId).map(c => ({
-        ...c,
-        showReplyForm: false,
-        replyContent: '',
-        isEditing: false,
-        editContent: c.content,
-        replies: (c.replies || []).map(r => ({
-          ...r,
-          isEditing: false,
-          editContent: r.content
-        }))
-      }));
-    }
-    ,
+    async loadComments() {
+      // Lấy tất cả comments của post
+      const res = await api.getCommentsByPost(this.postId);
+      const allComments = res.data;
 
+      // Lấy tất cả users (hoặc chỉ các user liên quan)
+      const userRes = await api.getUsers();
+      const users = userRes.data;
+
+      // Hàm lấy user theo id
+      const getUser = (id) => users.find(u => u.id == id);
+
+      // Gán avatar, tên, và trạng thái edit cho từng comment/reply
+      this.comments = allComments
+        .filter(c => !c.parentId)
+        .map(parent => {
+          const user = getUser(parent.userId);
+          return {
+            ...parent,
+            userName: user ? (user.name || user.username || 'User') : 'User',
+            avatar: user ? user.avatar : 'https://via.placeholder.com/40x40',
+            isEditing: false,
+            editContent: '',
+            showReplyForm: false,
+            replyContent: '',
+            replies: allComments
+              .filter(r => r.parentId === parent.id)
+              .map(reply => {
+                const replyUser = getUser(reply.userId);
+                return {
+                  ...reply,
+                  userName: replyUser ? (replyUser.name || replyUser.username || 'User') : 'User',
+                  avatar: replyUser ? replyUser.avatar : 'https://via.placeholder.com/40x40',
+                  isEditing: false,
+                  editContent: ''
+                };
+              })
+          };
+        });
+    },
     validateComment() {
       const content = this.newComment.content.trim();
-
       if (!content) {
         this.validation.content = { valid: false, error: "" };
         return;
       }
-
-
-
       if (content.length > 500) {
-        this.validation.content = {
-          valid: false,
-          error: "Comment must be less than 500 characters"
-        };
+        this.validation.content = { valid: false, error: "Comment must be less than 500 characters" };
         return;
       }
-
       this.validation.content = { valid: true, error: "" };
     },
-
-    async saveEdit(item) {
-      if (!item.editContent.trim()) {
-        alert('Please enter comment content');
-        return;
-      }
-
-      try {
-        const updated = authManager.updateComment(item.id, item.editContent); // Dù là comment hay reply thì ID vẫn giống nhau
-        if (updated) {
-          this.loadComments();
-        }
-        item.isEditing = false;
-        alert('Comment updated successfully!');
-      } catch (error) {
-        console.error('Error updating comment:', error);
-        alert('Failed to update comment');
-      }
+    async submitComment() {
+      await api.createComment({
+        postId: String(this.postId), // ép kiểu về chuỗi
+        userId: this.currentUser.id,
+        content: this.newComment.content,
+        createdAt: new Date().toISOString()
+      });
+      this.newComment.content = '';
+      await this.loadComments();
     },
-
     showReplyForm(comment) {
-      // Đóng form reply của các comment khác
       this.comments.forEach(c => c.showReplyForm = false);
       comment.showReplyForm = true;
       comment.replyContent = '';
     },
-
     cancelReply(comment) {
       comment.showReplyForm = false;
       comment.replyContent = '';
     },
-
     async submitReply(comment) {
-      if (!comment.replyContent || !comment.replyContent.trim()) {
-        alert('Please enter a reply');
-        return;
-      }
+      if (!comment.replyContent || !comment.replyContent.trim()) return;
       try {
-        const reply = authManager.createReply(comment.id, comment.replyContent);
-        if (reply) {
-          this.loadComments();
-        }
+        await api.createComment({
+          postId: this.postId,
+          userId: this.currentUser.id,
+          userName: this.currentUser.name,
+          content: comment.replyContent,
+          parentId: comment.id,
+          createdAt: new Date().toISOString()
+        });
+        await this.loadComments();
         this.cancelReply(comment);
-        alert('Reply posted successfully!');
       } catch (error) {
         console.error('Error posting reply:', error);
-        alert('Failed to post reply');
       }
     },
-
     editComment(comment) {
       comment.isEditing = true;
       comment.editContent = comment.content;
-    }
-    ,
-
+    },
+    cancelEdit(comment) {
+      comment.isEditing = false;
+      comment.editContent = '';
+    },
     async saveEdit(comment) {
-      if (!comment.editContent.trim()) {
-        alert('Please enter comment content');
-        return;
-      }
-
-      try {
-        const updated = authManager.updateComment(comment.id, comment.editContent);
-        if (updated) {
-          this.loadComments(); // reload lại comment từ data source
-        }
-        comment.isEditing = false;
-        alert('Comment updated successfully!');
-      } catch (error) {
-        console.error('Error updating comment:', error);
-        alert('Failed to update comment');
-      }
-    }
-    ,
-
-    cancelEdit(item) {
-      item.isEditing = false;
-      item.editContent = item.content;
+      await api.updateComment(comment.id, { ...comment, content: comment.editContent });
+      comment.isEditing = false;
+      this.loadComments(); // reload lại comment sau khi sửa
     },
-
-    handleRequestDelete(comment) {
-      this.commentToDelete = comment;
-      this.showDeleteModal = true;
-    },
-
-    async confirmDeleteComment() {
-      this.deleting = true;
-      try {
-        authManager.deleteComment(this.commentToDelete.id);
-
-        this.showDeleteModal = false;
-        this.commentToDelete = null;
-        this.deleting = false;
-
-        // ✅ Sửa tại đây:
-        this.loadComments(); // ← Cập nhật lại danh sách comment từ authManager
-
-        alert('Comment deleted successfully!');
-      } catch (err) {
-        console.error('Failed to delete comment:', err);
-        alert('Error deleting comment');
-        this.deleting = false;
-      }
-    }
-    ,
-
     canEditComment(comment) {
       return this.currentUser && comment.userId === this.currentUser.id;
     },
-
     formatDate(dateString) {
       const date = new Date(dateString);
       return date.toLocaleDateString('en-US', {
@@ -437,44 +332,15 @@ export default {
         minute: '2-digit'
       });
     },
-
-    getUserById(id) {
-      return authManager.getUserById(id);
-    },
-
     getUserAvatar(userId) {
-      const user = this.getUserById(userId);
-      return user?.avatar || 'https://via.placeholder.com/40x40';
+      // Ưu tiên lấy avatar từ comment đã gán
+      const comment = this.comments.find(c => c.userId === userId);
+      return comment && comment.avatar ? comment.avatar : 'https://via.placeholder.com/40x40';
     },
-
     getUserName(userId) {
-      const user = this.getUserById(userId);
-      return user?.name || 'Unknown';
-    },
-
-    async submitComment() {
-      this.validateComment();
-      if (!this.isCommentValid) return;
-
-      this.loading = true;
-      try {
-        // Gọi authManager để tạo comment mới
-        const comment = authManager.createComment(this.postId, this.newComment.content);
-        if (comment) {
-          this.newComment.content = "";
-          this.validation.content = { valid: false, error: "" };
-          this.loadComments();
-          alert("Comment posted successfully!");
-        } else {
-          alert("Failed to post comment.");
-        }
-      } catch (error) {
-        console.error("Error posting comment:", error);
-        alert("Error posting comment.");
-      }
-      this.loading = false;
-    },
-
+      const comment = this.comments.find(c => c.userId === userId);
+      return comment && comment.userName ? comment.userName : 'User';
+    }
   }
 };
 </script>
@@ -483,40 +349,31 @@ export default {
 .comment-section {
   margin-top: 2rem;
 }
-
-
 .comment-item {
   transition: transform 0.2s ease;
 }
-
 .comment-item:hover {
   transform: translateY(-2px);
 }
-
 .card {
   border: none;
   border-radius: 12px;
 }
-
 .reply-item {
   border-left: 3px solid #e9ecef;
 }
-
 .btn {
   border-radius: 8px;
   font-weight: 500;
 }
-
 .btn:hover:not(:disabled) {
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
 .form-control:focus {
   border-color: #0d6efd;
   box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
 }
-
 .dropdown-menu {
   border: none;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -524,32 +381,25 @@ export default {
   z-index: 9999 !important;
   position: absolute !important;
 }
-
 .custom-dropdown {
   z-index: 9999 !important;
   position: absolute !important;
 }
-
-
 .dropdown-item {
   border-radius: 4px;
   margin: 2px 8px;
   padding: 6px 12px;
 }
-
 .dropdown-item:hover {
   background-color: #f8f9fa;
 }
-
 .modal {
   background-color: rgba(0, 0, 0, 0.5);
 }
-
 .spinner-border {
   width: 1rem;
   height: 1rem;
 }
-
 .modal-backdrop.fade.show {
   position: fixed;
   z-index: 1050;
@@ -559,7 +409,6 @@ export default {
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
 }
-
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -572,7 +421,6 @@ export default {
   align-items: center;
   justify-content: center;
 }
-
 .modal-dialog-centered {
   background: white;
   border-radius: 12px;

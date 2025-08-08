@@ -216,6 +216,10 @@ export default {
     post: {
       type: Object,
       default: null
+    },
+    currentUser: { // thêm dòng này
+      type: Object,
+      required: true
     }
   },
   data() {
@@ -263,6 +267,9 @@ export default {
           this.imagePreview = newPost.imageUrl || null;
           this.validateTitle();
           this.validateContent();
+        } else {
+          // Nếu tạo mới thì reset form
+          this.resetForm();
         }
       }
     }
@@ -276,21 +283,6 @@ export default {
         return;
       }
       
-      if (title.length < 5) {
-        this.validation.title = {
-          valid: false,
-          error: "Title must be at least 5 characters long"
-        };
-        return;
-      }
-      
-      if (title.length > 100) {
-        this.validation.title = {
-          valid: false,
-          error: "Title must be less than 100 characters"
-        };
-        return;
-      }
       
       this.validation.title = { valid: true, error: "" };
     },
@@ -303,21 +295,6 @@ export default {
         return;
       }
       
-      if (content.length < 50) {
-        this.validation.content = {
-          valid: false,
-          error: "Content must be at least 50 characters long"
-        };
-        return;
-      }
-      
-      if (content.length > 5000) {
-        this.validation.content = {
-          valid: false,
-          error: "Content must be less than 5000 characters"
-        };
-        return;
-      }
       
       this.validation.content = { valid: true, error: "" };
     },
@@ -366,39 +343,46 @@ export default {
         alert('Please fix all validation errors before submitting');
         return;
       }
-      
+
       this.loading = true;
-      
+
       try {
         // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 2000));
-        
+
+        let postId;
+        if (this.isEditing) {
+          // KHÔNG ép sang Number
+          postId = this.post.id;
+        } else {
+          // Tạo id mới là chuỗi ngắn
+          postId = Math.random().toString(36).substr(2, 6);
+        }
+
         const postData = {
-          ...this.formData,
-          
-          id: this.isEditing ? this.post.id : Date.now(),
+          id: postId,
+          title: this.formData.title,
+          content: this.formData.content,
+          tags: this.formData.tags,
+          authorId: this.currentUser.id, // sửa lại lấy từ props
+          category: this.formData.category,
+          isPublished: this.formData.isPublished,
           createdAt: this.isEditing ? this.post.createdAt : new Date().toISOString(),
           updatedAt: new Date().toISOString(),
-          author: 'Current User', // In real app, get from auth context
-          imageUrl: this.imagePreview,
-          userId: this.$root.currentUser?.id || 0 // <-- gán userId từ current user
-
+          imageUrl: this.imagePreview || "",
         };
-        
-        console.log('Post data:', postData);
-        
-        // Emit event to parent component
+
         this.$emit('post-saved', postData);
-        
+
         // Show success message
         const action = this.isEditing ? 'updated' : 'published';
         alert(`Post ${action} successfully!`);
-        
+
         // Reset form if not editing
         if (!this.isEditing) {
           this.resetForm();
         }
-        
+
       } catch (error) {
         console.error('Error saving post:', error);
         alert('An error occurred while saving the post');
@@ -435,7 +419,7 @@ export default {
       };
       this.imagePreview = null;
       this.isEditing = false;
-      this.$refs.fileInput.value = '';
+      if (this.$refs.fileInput) this.$refs.fileInput.value = '';
     }
   }
 };

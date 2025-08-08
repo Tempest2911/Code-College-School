@@ -45,9 +45,7 @@ public class Repository {
     // 5. Tìm kiếm sản phẩm theo từ khóa
     public List<Product> searchProducts(String keyword) {
         try (Session session = HibernateUtil.getSession()) {
-            Query<Product> query = session.createQuery(
-                    "FROM Product p WHERE p.productName LIKE :kw OR p.description LIKE :kw", Product.class
-            );
+            Query<Product> query = session.createQuery("FROM Product p WHERE p.productName LIKE :kw OR p.description LIKE :kw", Product.class);
             query.setParameter("kw", "%" + keyword + "%");
             return query.getResultList();
         }

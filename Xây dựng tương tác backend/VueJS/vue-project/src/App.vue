@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-
+import TopMenu from './components/TopMenu.vue';
 import BasicOneWayBinding from './components/BasicOneWayBinding.vue';
 import ChildComponent from "./components/ChildComponent.vue";
 import User from './components/User.vue';
@@ -18,6 +18,7 @@ import ListRendering from './components/ListRendering.vue';
 import EventHandling from './components/EventHandling.vue';
 import FormBindling from './components/FormBindling.vue';
 import CustomInput from './components/CustomInput.vue';
+import { RouterView } from 'vue-router';
 
 const handleEvent = (data) => {
   alert(data)
@@ -28,13 +29,17 @@ const inputValue = ref('');
 </script>
 
 <template>
+  <TopMenu></TopMenu>
   <main>
-    <EventHandling @increment="handleEvent"></EventHandling>
+    <!-- <EventHandling @increment="handleEvent"></EventHandling>
     <h1>===========================================</h1>
     <FormBindling></FormBindling>
     <h1>===========================================</h1>
     <CustomInput v-model="inputValue"></CustomInput>
-    <p>Input value: {{ inputValue }}</p>
+    <p>Input value: {{ inputValue }}</p> -->
+
+    <RouterView></RouterView>
+
   </main>
 </template>
 

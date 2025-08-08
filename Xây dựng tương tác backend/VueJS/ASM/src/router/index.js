@@ -2,34 +2,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../components/Login.vue'
 import Register from '../components/Register.vue'
 import Profile from '../components/Profile.vue'
-import authManager from '../utils/auth.js'
 
 const routes = [
-  {
-    path: '/',
-    redirect: '/login'
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: Login,
-    meta: { requiresGuest: true }
-  },
-  {
-    path: '/register',
-    name: 'Register',
-    component: Register,
-    meta: { requiresGuest: true }
-  },
-  {
-    path: '/profile',
-    name: 'Profile',
-    component: Profile,
-    meta: { requiresAuth: true },
-    props: (route) => ({
-      currentUser: authManager.getCurrentUser()
-    })
-  }
+  { path: '/', redirect: '/login' },
+  { path: '/login', name: 'Login', component: Login, meta: { requiresGuest: true } },
+  { path: '/register', name: 'Register', component: Register, meta: { requiresGuest: true } },
+  { path: '/profile', name: 'Profile', component: Profile, meta: { requiresAuth: true } }
 ]
 
 const router = createRouter({
@@ -37,10 +15,9 @@ const router = createRouter({
   routes
 })
 
-// Navigation guards
+// Navigation guard: kiểm tra đăng nhập qua localStorage (có thể chuyển sang Vuex hoặc API nếu muốn)
 router.beforeEach((to, from, next) => {
-  const currentUser = authManager.getCurrentUser()
-  
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'))
   if (to.meta.requiresAuth && !currentUser) {
     next('/login')
   } else if (to.meta.requiresGuest && currentUser) {
@@ -50,4 +27,4 @@ router.beforeEach((to, from, next) => {
   }
 })
 
-export default router 
+export default router

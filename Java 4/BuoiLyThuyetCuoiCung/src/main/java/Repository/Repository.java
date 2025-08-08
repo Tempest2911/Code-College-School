@@ -45,4 +45,16 @@ public class Repository {
             return s.get(StudentAttendance.class, id);
         }
     }
+
+    public List<StudentAttendance> searchByName(String keyword) {
+        try (Session s = HibernateUtil.getSession()) {
+            s.beginTransaction();
+            List<StudentAttendance> results = s.createQuery("from StudentAttendance where studentName like :keyword", StudentAttendance.class)
+                    .setParameter("keyword", "%" + keyword + "%")
+                    .getResultList();
+            s.getTransaction().commit();
+
+        }
+        return null;
+    }
 }

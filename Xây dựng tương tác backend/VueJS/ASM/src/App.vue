@@ -1,24 +1,22 @@
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
-import { useRouter } from 'vue-router'
-import authManager from './utils/auth.js'
+import { ref, onMounted, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import api from './utils/api'
 
 const router = useRouter()
+const route = useRoute()
 
-// Authentication state
 const isAuthenticated = ref(false)
 const currentUser = ref(null)
 
-// Check for existing session on mount
 onMounted(() => {
-  const savedUser = authManager.getCurrentUser()
+  const savedUser = JSON.parse(localStorage.getItem('currentUser'))
   if (savedUser) {
     isAuthenticated.value = true
     currentUser.value = savedUser
   }
 })
 
-// Watch for authentication changes
 watch(isAuthenticated, (newValue) => {
   if (newValue) {
     router.push('/profile')
@@ -27,27 +25,27 @@ watch(isAuthenticated, (newValue) => {
   }
 })
 
-// Event handlers
 const handleLoginSuccess = (userData) => {
-  console.log('Login successful:', userData)
   isAuthenticated.value = true
   currentUser.value = userData
+  localStorage.setItem('currentUser', JSON.stringify(userData))
 }
 
 const handleRegisterSuccess = (userData) => {
-  console.log('Registration successful:', userData)
   isAuthenticated.value = true
   currentUser.value = userData
+  localStorage.setItem('currentUser', JSON.stringify(userData))
 }
 
 const handleLogout = () => {
-  authManager.logout()
+  localStorage.removeItem('currentUser')
   isAuthenticated.value = false
   currentUser.value = null
 }
 
 const handleProfileUpdated = (updatedUser) => {
   currentUser.value = updatedUser
+  localStorage.setItem('currentUser', JSON.stringify(updatedUser))
 }
 </script>
 
@@ -60,7 +58,6 @@ const handleProfileUpdated = (updatedUser) => {
           <i class="bi bi-journal-text me-2"></i>
           Blog App
         </router-link>
-        
         <div class="navbar-nav ms-auto">
           <div class="nav-item dropdown">
             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
@@ -74,9 +71,11 @@ const handleProfileUpdated = (updatedUser) => {
               {{ currentUser?.name || 'User' }}
             </a>
             <ul class="dropdown-menu">
-              <!-- <li><router-link class="dropdown-item" to="/profile"><i class="bi bi-person me-2"></i>Profile</router-link></li> -->
-              <!-- <li><hr class="dropdown-divider"></li> -->
-              <li><a class="dropdown-item" href="#" @click.prevent="handleLogout"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+              <li>
+                <a class="dropdown-item" href="#" @click.prevent="handleLogout">
+                  <i class="bi bi-box-arrow-right me-2"></i>Logout
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -84,9 +83,16 @@ const handleProfileUpdated = (updatedUser) => {
     </nav>
 
     <!-- Main Content -->
-  <main>
-      <router-view @login-success="handleLoginSuccess" @register-success="handleRegisterSuccess" @profile-updated="handleProfileUpdated" />
-  </main>
+    <main>
+      <router-view
+        v-slot="{ Component }"
+        @login-success="handleLoginSuccess"
+        @register-success="handleRegisterSuccess"
+        @profile-updated="handleProfileUpdated"
+      >
+        <component :is="Component" :currentUser="currentUser" @profile-updated="handleProfileUpdated" />
+      </router-view>
+    </main>
   </div>
 </template>
 

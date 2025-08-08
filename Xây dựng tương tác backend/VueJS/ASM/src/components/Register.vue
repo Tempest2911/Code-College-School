@@ -10,20 +10,11 @@
               <!-- Username Field -->
               <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  :class="{
-                    'is-valid': validation.username.valid && formData.username,
-                    'is-invalid': validation.username.error && formData.username
-                  }"
-                  id="username"
-                  v-model="formData.username"
-                  @blur="validateUsername"
-                  @input="validateUsername"
-                  placeholder="Enter username"
-                  required
-                />
+                <input type="text" class="form-control" :class="{
+                  'is-valid': validation.username.valid && formData.username,
+                  'is-invalid': validation.username.error && formData.username
+                }" id="username" v-model="formData.username" @blur="validateUsername" @input="validateUsername"
+                  placeholder="Enter username" required />
                 <div class="invalid-feedback" v-if="validation.username.error">
                   {{ validation.username.error }}
                 </div>
@@ -35,20 +26,11 @@
               <!-- Email Field -->
               <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input
-                  type="email"
-                  class="form-control"
-                  :class="{
-                    'is-valid': validation.email.valid && formData.email,
-                    'is-invalid': validation.email.error && formData.email
-                  }"
-                  id="email"
-                  v-model="formData.email"
-                  @blur="validateEmail"
-                  @input="validateEmail"
-                  placeholder="Enter email address"
-                  required
-                />
+                <input type="email" class="form-control" :class="{
+                  'is-valid': validation.email.valid && formData.email,
+                  'is-invalid': validation.email.error && formData.email
+                }" id="email" v-model="formData.email" @blur="validateEmail" @input="validateEmail"
+                  placeholder="Enter email address" required />
                 <div class="invalid-feedback" v-if="validation.email.error">
                   {{ validation.email.error }}
                 </div>
@@ -61,25 +43,12 @@
               <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
                 <div class="input-group">
-                  <input
-                    :type="showPassword ? 'text' : 'password'"
-                    class="form-control"
-                    :class="{
-                      'is-valid': validation.password.valid && formData.password,
-                      'is-invalid': validation.password.error && formData.password
-                    }"
-                    id="password"
-                    v-model="formData.password"
-                    @blur="validatePassword"
-                    @input="validatePassword"
-                    placeholder="Enter password"
-                    required
-                  />
-                  <button
-                    class="btn btn-outline-secondary"
-                    type="button"
-                    @click="showPassword = !showPassword"
-                  >
+                  <input :type="showPassword ? 'text' : 'password'" class="form-control" :class="{
+                    'is-valid': validation.password.valid && formData.password,
+                    'is-invalid': validation.password.error && formData.password
+                  }" id="password" v-model="formData.password" @blur="validatePassword" @input="validatePassword"
+                    placeholder="Enter password" required />
+                  <button class="btn btn-outline-secondary" type="button" @click="showPassword = !showPassword">
                     <i :class="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
                   </button>
                 </div>
@@ -95,11 +64,8 @@
               <div class="mb-3" v-if="formData.password">
                 <label class="form-label">Password Strength:</label>
                 <div class="progress" style="height: 8px;">
-                  <div
-                    class="progress-bar"
-                    :class="passwordStrengthClass"
-                    :style="{ width: passwordStrength + '%' }"
-                  ></div>
+                  <div class="progress-bar" :class="passwordStrengthClass" :style="{ width: passwordStrength + '%' }">
+                  </div>
                 </div>
                 <small class="text-muted">
                   {{ passwordStrengthText }}
@@ -109,20 +75,11 @@
               <!-- Confirm Password Field -->
               <div class="mb-3">
                 <label for="confirmPassword" class="form-label">Confirm Password</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  :class="{
-                    'is-valid': validation.confirmPassword.valid && formData.confirmPassword,
-                    'is-invalid': validation.confirmPassword.error && formData.confirmPassword
-                  }"
-                  id="confirmPassword"
-                  v-model="formData.confirmPassword"
-                  @blur="validateConfirmPassword"
-                  @input="validateConfirmPassword"
-                  placeholder="Confirm your password"
-                  required
-                />
+                <input type="password" class="form-control" :class="{
+                  'is-valid': validation.confirmPassword.valid && formData.confirmPassword,
+                  'is-invalid': validation.confirmPassword.error && formData.confirmPassword
+                }" id="confirmPassword" v-model="formData.confirmPassword" @blur="validateConfirmPassword"
+                  @input="validateConfirmPassword" placeholder="Confirm your password" required />
                 <div class="invalid-feedback" v-if="validation.confirmPassword.error">
                   {{ validation.confirmPassword.error }}
                 </div>
@@ -133,17 +90,10 @@
 
               <!-- Terms and Conditions -->
               <div class="form-check mb-3">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  :class="{
-                    'is-valid': validation.terms.valid,
-                    'is-invalid': validation.terms.error
-                  }"
-                  id="terms"
-                  v-model="formData.terms"
-                  @change="validateTerms"
-                />
+                <input type="checkbox" class="form-check-input" :class="{
+                  'is-valid': validation.terms.valid,
+                  'is-invalid': validation.terms.error
+                }" id="terms" v-model="formData.terms" @change="validateTerms" />
                 <label class="form-check-label" for="terms">
                   I agree to the
                   <a href="#" class="text-decoration-none">Terms and Conditions</a>
@@ -155,16 +105,8 @@
 
               <!-- Register Button -->
               <div class="d-grid">
-                <button
-                  type="submit"
-                  class="btn btn-primary"
-                  :disabled="loading || !isFormValid"
-                >
-                  <span
-                    v-if="loading"
-                    class="spinner-border spinner-border-sm me-2"
-                    role="status"
-                  ></span>
+                <button type="submit" class="btn btn-primary" :disabled="loading || !isFormValid">
+                  <span v-if="loading" class="spinner-border spinner-border-sm me-2" role="status"></span>
                   {{ loading ? "Creating account..." : "Register" }}
                 </button>
               </div>
@@ -185,7 +127,7 @@
 </template>
 
 <script>
-import authManager from '../utils/auth.js';
+import api from '../utils/api';
 
 export default {
   name: "Register",
@@ -212,20 +154,20 @@ export default {
   computed: {
     passwordStrength() {
       if (!this.formData.password) return 0;
-      
+
       let strength = 0;
       const password = this.formData.password;
-      
+
       // Length check
       if (password.length >= 8) strength += 25;
       if (password.length >= 12) strength += 10;
-      
+
       // Character variety checks
       if (/[a-z]/.test(password)) strength += 15;
       if (/[A-Z]/.test(password)) strength += 15;
       if (/[0-9]/.test(password)) strength += 15;
       if (/[^A-Za-z0-9]/.test(password)) strength += 20;
-      
+
       return Math.min(strength, 100);
     },
     passwordStrengthClass() {
@@ -251,12 +193,12 @@ export default {
   methods: {
     validateUsername() {
       const username = this.formData.username;
-      
+
       if (!username) {
         this.validation.username = { valid: false, error: "" };
         return;
       }
-      
+
       if (username.length < 3) {
         this.validation.username = {
           valid: false,
@@ -264,7 +206,7 @@ export default {
         };
         return;
       }
-      
+
       if (username.length > 20) {
         this.validation.username = {
           valid: false,
@@ -272,7 +214,7 @@ export default {
         };
         return;
       }
-      
+
       if (!/^[a-zA-Z0-9_]+$/.test(username)) {
         this.validation.username = {
           valid: false,
@@ -280,18 +222,18 @@ export default {
         };
         return;
       }
-      
+
       this.validation.username = { valid: true, error: "" };
     },
-    
+
     validateEmail() {
       const email = this.formData.email;
-      
+
       if (!email) {
         this.validation.email = { valid: false, error: "" };
         return;
       }
-      
+
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         this.validation.email = {
@@ -300,18 +242,18 @@ export default {
         };
         return;
       }
-      
+
       this.validation.email = { valid: true, error: "" };
     },
-    
+
     validatePassword() {
       const password = this.formData.password;
-      
+
       if (!password) {
         this.validation.password = { valid: false, error: "" };
         return;
       }
-      
+
       if (password.length < 8) {
         this.validation.password = {
           valid: false,
@@ -319,7 +261,7 @@ export default {
         };
         return;
       }
-      
+
       if (!/[a-z]/.test(password)) {
         this.validation.password = {
           valid: false,
@@ -327,7 +269,7 @@ export default {
         };
         return;
       }
-      
+
       if (!/[A-Z]/.test(password)) {
         this.validation.password = {
           valid: false,
@@ -335,7 +277,7 @@ export default {
         };
         return;
       }
-      
+
       if (!/[0-9]/.test(password)) {
         this.validation.password = {
           valid: false,
@@ -343,7 +285,7 @@ export default {
         };
         return;
       }
-      
+
       if (!/[^A-Za-z0-9]/.test(password)) {
         this.validation.password = {
           valid: false,
@@ -351,23 +293,23 @@ export default {
         };
         return;
       }
-      
+
       this.validation.password = { valid: true, error: "" };
-      
+
       // Re-validate confirm password if it exists
       if (this.formData.confirmPassword) {
         this.validateConfirmPassword();
       }
     },
-    
+
     validateConfirmPassword() {
       const confirmPassword = this.formData.confirmPassword;
-      
+
       if (!confirmPassword) {
         this.validation.confirmPassword = { valid: false, error: "" };
         return;
       }
-      
+
       if (confirmPassword !== this.formData.password) {
         this.validation.confirmPassword = {
           valid: false,
@@ -375,95 +317,51 @@ export default {
         };
         return;
       }
-      
+
       this.validation.confirmPassword = { valid: true, error: "" };
     },
-    
+
     validateTerms() {
       this.validation.terms = {
         valid: this.formData.terms,
         error: this.formData.terms ? "" : "You must agree to the terms and conditions",
       };
     },
-    
+
     async handleRegister() {
       if (!this.isFormValid) {
         alert("Please fix all validation errors before submitting");
         return;
       }
-      
+
       this.loading = true;
-      
+
       try {
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        
-        console.log("Registration attempt:", {
+        const res = await api.createUser({
           username: this.formData.username,
           email: this.formData.email,
-          password: "***hidden***",
-        });
-        
-        // Example API call:
-        // const response = await fetch('/api/register', {
-        //   method: 'POST',
-        //   headers: {
-        //     'Content-Type': 'application/json'
-        //   },
-        //   body: JSON.stringify({
-        //     username: this.formData.username,
-        //     email: this.formData.email,
-        //     password: this.formData.password
-        //   })
-        // })
-        
-        // if (response.ok) {
-        //   const data = await response.json()
-        //   // Handle successful registration
-        //   this.$router.push('/login')
-        // } else {
-        //   // Handle registration error
-        //   alert('Registration failed')
-        // }
-        
-        // Use AuthManager for registration
-        const result = authManager.register({
-          username: this.formData.username,
-          email: this.formData.email,
-          password: this.formData.password
+          password: this.formData.password,
+          createdAt: new Date().toLocaleDateString('en-GB') // "dd/mm/yyyy"
         });
 
-        if (result.success) {
-          // Emit registration success event
-          this.$emit('register-success', result.user);
+        if (res.status === 201 || res.status === 200) {
+          alert("Account created successfully!");
+          this.$router.push('/login');
         } else {
-          alert(result.error);
+          alert("Registration failed");
         }
-        
-        // Reset form
-        this.formData = {
-          username: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-          terms: false,
-        };
-        
-        // Reset validation
-        Object.keys(this.validation).forEach(key => {
-          this.validation[key] = { valid: false, error: "" };
-        });
-        
+
       } catch (error) {
         console.error("Registration error:", error);
         alert("An error occurred during registration");
       } finally {
         this.loading = false;
       }
-    },
+    }
   },
 };
 </script>
+
 
 <style scoped>
 .card {

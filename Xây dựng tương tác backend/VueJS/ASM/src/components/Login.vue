@@ -66,14 +66,10 @@
 
 <script>
 import { useRouter } from 'vue-router'
-import authManager from '../utils/auth.js'
-import AccountList from './AccountList.vue'
+import api from '../utils/api'
 
 export default {
   name: "Login",
-  components: {
-    AccountList
-  },
   setup() {
     const router = useRouter()
     return { router }
@@ -93,22 +89,20 @@ export default {
       this.loading = true;
       try {
         // Simulate loading
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
-        console.log("Login attempt:", this.formData);
+        // Lấy danh sách user từ API
+        const res = await api.getUsers();
+        const user = res.data.find(
+          u =>
+            (u.username === this.formData.username || u.email === this.formData.username) &&
+            u.password === this.formData.password
+        );
 
-        // Use AuthManager for authentication
-        const result = authManager.login(this.formData.username, this.formData.password);
-        
-        console.log('Login result:', result);
-
-        if (result.success) {
-          console.log('Login successful, emitting event with user:', result.user);
-          // Emit login success event
-          this.$emit('login-success', result.user);
+        if (user) {
+          this.$emit('login-success', user);
         } else {
-          console.log('Login failed:', result.error);
-          alert(result.error);
+          alert('Invalid username or password');
         }
       } catch (error) {
         console.error("Login error:", error);

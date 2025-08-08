@@ -59,10 +59,10 @@
                 <div class="col-md-3 text-center">
                   <div class="position-relative d-inline-block">
                     <img
-                      :src="userProfile?.avatar || 'https://via.placeholder.com/120x120/0d6efd/ffffff?text=U'"
+                      :src="userProfile.avatar || defaultAvatar"
                       class="rounded-circle"
-                      width="120"
-                      height="120"
+                      width="150"
+                      height="150"
                       alt="Profile"
                     />
                   </div>
@@ -98,7 +98,7 @@
             <div class="d-flex gap-2">
               <button
                 class="btn btn-primary"
-                @click="showCreatePost = true"
+                @click="showCreatePostModal"
               >
                 <i class="bi bi-plus-circle me-2"></i>
                 Create New Post
@@ -234,7 +234,7 @@
                         <img
                           :src="typeof post.image === 'string' && post.image.startsWith('data:') ? post.image : post.imageUrl"
                           class="img-fluid rounded"
-                          style="max-height:200px;"
+                          style="max-height:500px;"
                         />
                       </div>
                       <div class="d-flex justify-content-between align-items-center">
@@ -246,7 +246,12 @@
                     </div>
                   </div>
                   <!-- Comment Section -->
-                  <Comment :postId="post.id" :currentUser="currentUser" :reload="reloadCommentKey[post.id] || 0" @request-delete="(comment) => handleRequestDelete(comment, post.id)" />
+                  <Comment 
+                    :postId="post.id"
+                    :currentUser="currentUser"
+                    :reload="reloadCommentKey[post.id] || 0"
+                    @request-delete="(comment) => handleRequestDelete(comment, post.id)"
+                  />
                 </div>
               </div>
             </div>
@@ -277,6 +282,7 @@
           <div class="modal-body">
             <Upload 
               :post="editingPost"
+              :currentUser="currentUser"
               @post-saved="handlePostSaved"
               @cancel-edit="closePostModal"
             />
@@ -372,22 +378,13 @@
 import { useRouter } from 'vue-router'
 import Upload from './Upload.vue'
 import UserProfile from './UserProfile.vue'
-import authManager from '../utils/auth.js'
-import Comment from './Comment.vue' // Added import for Comment component
+import Comment from './Comment.vue'
+import api from '../utils/api'
 
 export default {
   name: "Profile",
-  components: {
-    Upload,
-    UserProfile,
-    Comment // Added Comment component to components
-  },
-  props: {
-    currentUser: {
-      type: Object,
-      required: true
-    }
-  },
+  components: { Upload, UserProfile, Comment },
+  props: { currentUser: { type: Object, required: true } },
   setup() {
     const router = useRouter()
     return { router }
@@ -404,12 +401,14 @@ export default {
       editingPost: null,
       filterStatus: 'all',
       sortBy: 'newest',
-      allPublishedPosts: [], // Added for all posts
-      commentToDelete: null, // Added for comment deletion
+      allPublishedPosts: [],
+      commentToDelete: null,
       showDeleteCommentModal: false,
       showDeletePostModal: false,
       postToDelete: null,
-      reloadCommentKey: {}, // key: postId, value: số lần reload
+      reloadCommentKey: {},
+      commentToDeletePostId: null,
+      users: [],
     };
   },
   watch: {
@@ -419,7 +418,7 @@ export default {
         if (newUser) {
           this.loadUserProfile();
           this.loadPosts();
-          this.loadAllPublishedPosts(); // Load all published posts on user change
+          this.loadAllPublishedPosts();
         }
       }
     }
@@ -428,94 +427,94 @@ export default {
     if (this.currentUser) {
       this.loadUserProfile();
       this.loadPosts();
-      this.loadAllPublishedPosts(); // Load all published posts on mount
+      this.loadAllPublishedPosts();
     }
+    this.loadUsers();
   },
   computed: {
     filteredPosts() {
       let filtered = [...this.posts];
-      
-      // Filter by status
-      if (this.filterStatus === 'published') {
-        filtered = filtered.filter(post => post.isPublished);
-      } else if (this.filterStatus === 'draft') {
-        filtered = filtered.filter(post => !post.isPublished);
-      }
-      
-      // Sort posts
-      filtered.sort((a, b) => {
-        switch (this.sortBy) {
-          case 'oldest':
-            return new Date(a.createdAt) - new Date(b.createdAt);
-          case 'title':
-            return a.title.localeCompare(b.title);
-          case 'newest':
-          default:
-            return new Date(b.createdAt) - new Date(a.createdAt);
-        }
-      });
-      
+      if (this.filterStatus === 'published') filtered = filtered.filter(post => post.isPublished);
+      else if (this.filterStatus === 'draft') filtered = filtered.filter(post => !post.isPublished);
+      filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       return filtered;
     },
     stats() {
-      return authManager.getUserStats(this.userProfile?.id || 0);
+      const total = this.posts.length;
+      const published = this.posts.filter(p => p.isPublished).length;
+      const draft = total - published;
+      return { totalPosts: total, publishedPosts: published, draftPosts: draft };
     }
   },
   methods: {
     loadUserProfile() {
-      console.log('Profile component - currentUser prop:', this.currentUser);
-      
-      if (this.currentUser) {
-        this.userProfile = { ...this.currentUser };
-        console.log('Profile component - userProfile loaded:', this.userProfile);
-      } else {
-        console.error('No currentUser prop provided to Profile component');
-      }
+      if (this.currentUser) this.userProfile = { ...this.currentUser };
     },
     async loadPosts() {
       this.loading = true;
       try {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        if (this.userProfile) {
-          this.posts = authManager.getPostsByUser(this.userProfile.id);
-        }
+        const res = await api.getPosts();
+        this.posts = res.data.filter(post => String(post.authorId) === String(this.currentUser.id));
       } catch (error) {
         console.error("Error loading posts:", error);
       } finally {
         this.loading = false;
       }
     },
-    refreshPosts() {
-      this.loadPosts();
-    },
+    refreshPosts() { this.loadPosts(); },
+    // Xem chi tiết post (ví dụ: mở modal hoặc chuyển trang)
     viewPost(post) {
-      // In a real app, this would navigate to a post detail page
-      alert(`Viewing post: ${post.title}`);
+      // Ví dụ: mở modal chi tiết hoặc chuyển route
+      alert(`Title: ${post.title}\nContent: ${post.content}`);
+      // Hoặc: this.$router.push({ name: 'PostDetail', params: { id: post.id } });
     },
+    // Sửa post: mở modal và truyền dữ liệu post vào form
     editPost(post) {
-      this.editingPost = post;
+      this.editingPost = {
+        id: post.id, // giữ nguyên kiểu chuỗi
+        title: post.title,
+        content: post.content,
+        tags: post.tags,
+        authorId: post.authorId, // giữ nguyên
+        category: post.category,
+        isPublished: post.isPublished,
+        createdAt: post.createdAt,
+        updatedAt: post.updatedAt,
+        imageUrl: post.imageUrl || "",
+      };
       this.showCreatePost = true;
     },
+    // Xóa post: mở modal xác nhận xóa
     deletePost(post) {
       this.postToDelete = post;
       this.showDeleteModal = true;
     },
-    handlePostSaved(postData) {
-      if (this.editingPost) {
-        const updatedPost = authManager.updatePost(postData.id, postData);
-        if (updatedPost) {                                                      
-          const index = this.posts.findIndex(post => post.id === postData.id);
-          if (index !== -1) {
-            this.posts[index] = updatedPost;
-          }
-        }
-        this.editingPost = null;
-      } else {
-        const newPost = authManager.createPost(postData);
-        this.posts.unshift(newPost); // Thêm post mới vào đầu danh sách
+    // Xác nhận xóa post
+    async confirmDelete() {
+      this.deleting = true;
+      try {
+        await api.deletePost(this.postToDelete.id);
+        await this.loadPosts();
+        await this.loadAllPublishedPosts();
+        this.showDeleteModal = false;
+        this.postToDelete = null;
+      } catch (error) {
+        console.error("Error deleting post:", error);
+      } finally {
+        this.deleting = false;
       }
+    },
+    async handlePostSaved(postData) {
+      if (this.editingPost) {
+        await api.updatePost(postData.id, postData); // truyền đầy đủ postData
+      } else {
+        const { id, ...data } = postData;
+        await api.createPost(data);
+      }
+      this.editingPost = null;
       this.closePostModal();
-      this.loadAllPublishedPosts(); // ← Thêm dòng này để cập nhật tab All Posts ngay lập tức
+      await this.loadPosts();
+      await this.loadAllPublishedPosts();
     },
     closePostModal() {
       this.showCreatePost = false;
@@ -524,15 +523,11 @@ export default {
     async confirmDelete() {
       this.deleting = true;
       try {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        const deletedPost = authManager.deletePost(this.postToDelete.id);
-        if (deletedPost) {
-          this.posts = this.posts.filter(post => post.id !== this.postToDelete.id);
-        }
-        alert('Post deleted successfully!');
+        await api.deletePost(this.postToDelete.id);
+        this.posts = this.posts.filter(post => post.id !== this.postToDelete.id);
+        await this.loadAllPublishedPosts();
       } catch (error) {
         console.error("Error deleting post:", error);
-        alert('Failed to delete post.');
       } finally {
         this.deleting = false;
         this.showDeleteModal = false;
@@ -540,71 +535,81 @@ export default {
       }
     },
     handleProfileUpdated(updatedProfile) {
-      const result = authManager.updateUserProfile(this.userProfile.id, updatedProfile);
-      if (result.success) {
-        this.userProfile = { ...this.userProfile, ...updatedProfile };
-        this.$emit('profile-updated', result.user);
-      }
+      // Gọi API cập nhật user nếu cần
+      this.userProfile = { ...this.userProfile, ...updatedProfile };
+      this.$emit('profile-updated', this.userProfile);
     },
     handleAvatarUpdated(avatarUrl) {
       this.userProfile.avatar = avatarUrl;
     },
     formatDate(dateString) {
       const date = new Date(dateString);
-      return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      });
+      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
     },
     truncateText(text, maxLength) {
+      if (!text) return '';
       if (text.length <= maxLength) return text;
       return text.substring(0, maxLength) + '...';
     },
     async loadAllPublishedPosts() {
-      this.allPublishedPosts = authManager.getAllPublishedPosts();
+      const res = await api.getPosts();
+      // Sắp xếp theo createdAt mới nhất lên đầu
+      this.allPublishedPosts = res.data
+        .filter(post => post.isPublished)
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    },
+    loadUsers() {
+      api.getUsers().then(res => {
+        this.users = res.data;
+      }).catch(err => {
+        console.error('Failed to load users:', err);
+      });
     },
     getUserName(userId) {
-      if (!userId) return 'Unknown User';
-      const user = authManager.getUserById(userId);
-      return user ? user.name : 'Unknown User';
+      const user = this.users.find(u => u.id === userId);
+      // Ưu tiên lấy trường 'name', nếu không có thì lấy 'username'
+      return user ? (user.name || user.username || 'Unknown User') : 'Unknown User';
     },
     handleRequestDelete(comment, postId) {
       this.commentToDelete = comment;
       this.commentToDeletePostId = postId;
       this.showDeleteCommentModal = true;
     },
-    handleRequestDeletePost(post) {
-      this.postToDelete = post;
-      this.showDeletePostModal = true;
-    },
     async confirmDeleteComment() {
       this.deleting = true;
-      authManager.deleteComment(this.commentToDelete.id);
-      this.showDeleteCommentModal = false;
-      this.commentToDelete = null;
-      this.deleting = false;
-      // Tăng key reload cho đúng postId
-      if (!this.reloadCommentKey[this.commentToDeletePostId]) {
-        this.reloadCommentKey[this.commentToDeletePostId] = 1;
-      } else {
-        this.reloadCommentKey[this.commentToDeletePostId]++;
+      try {
+        await api.deleteComment(this.commentToDelete.id);
+        this.showDeleteCommentModal = false;
+        // Reload comment section
+        if (!this.reloadCommentKey[this.commentToDeletePostId]) {
+          this.reloadCommentKey[this.commentToDeletePostId] = 1;
+        } else {
+          this.reloadCommentKey[this.commentToDeletePostId]++;
+        }
+      } catch (e) {
+        console.error('Failed to delete comment');
       }
-      alert('Comment deleted successfully!');
+      this.deleting = false;
+      this.commentToDelete = null;
     },
     async confirmDeletePost() {
       this.deleting = true;
-      // Xóa post bằng authManager
-      const result = authManager.deletePost(this.postToDelete.id);
-      if (result) {
-        // Reload lại post list nếu cần
+      try {
+        await api.deletePost(this.postToDelete.id);
+        await this.loadPosts();
+        await this.loadAllPublishedPosts();
         this.showDeletePostModal = false;
         this.postToDelete = null;
-      } else {
-        alert('Failed to delete post');
+      } catch (e) {
+        console.error('Failed to delete post');
       }
       this.deleting = false;
-    }
+    },
+    // Khi bấm nút "Create New Post"
+    showCreatePostModal() {
+      this.editingPost = null; // Đảm bảo prop post là null
+      this.showCreatePost = true;
+    },
   },
 };
 </script>

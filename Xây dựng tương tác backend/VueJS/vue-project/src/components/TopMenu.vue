@@ -1,11 +1,9 @@
 <template>
     <nav class="menu">
         <ul>
-            <li><a href="#">Link 1</a></li>
-            <li><a href="#">Link 2</a></li>
-            <li><a href="#">Link 3</a></li>
-            <li><a href="#">Link 4</a></li>
-            <li><a href="#">Link 5</a></li>
+            <li><router-link class="nav-link" :to="{ name: 'home' }">Home</router-link></li>
+            <li><router-link class="nav-link" :to="{ name: 'about' }">About</router-link></li>
+            <li><router-link class="nav-link" :to="{ name: 'contact' }">Contact</router-link></li>
         </ul>
     </nav>
 </template>
