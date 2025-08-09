@@ -52,7 +52,7 @@ public class Repository {
 
     public void add(Destination enityAdd) {
         try {
-            session.getTransaction().begin();   
+            session.getTransaction().begin();
             session.save(enityAdd);
             session.getTransaction().commit();
         } catch (Exception e) {
