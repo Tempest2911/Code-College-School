@@ -3,6 +3,7 @@ package Repository;
 import Model.StudentAttendance;
 import Util.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -46,15 +47,11 @@ public class Repository {
         }
     }
 
-    public List<StudentAttendance> searchByName(String keyword) {
-        try (Session s = HibernateUtil.getSession()) {
-            s.beginTransaction();
-            List<StudentAttendance> results = s.createQuery("from StudentAttendance where studentName like :keyword", StudentAttendance.class)
-                    .setParameter("keyword", "%" + keyword + "%")
-                    .getResultList();
-            s.getTransaction().commit();
-
+    public List<StudentAttendance> searchProducts(String keyword) {
+        try (Session session = HibernateUtil.getSession()) {
+            Query<StudentAttendance> query = session.createQuery("FROM StudentAttendance s WHERE s.studentName LIKE :kw", StudentAttendance.class);
+            query.setParameter("kw", "%" + keyword + "%");
+            return query.getResultList();
         }
-        return null;
     }
 }

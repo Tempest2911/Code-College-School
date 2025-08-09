@@ -13,7 +13,7 @@
 </head>
 <body>
    <c:choose>
-       <c:when test="${action == 'listTables' || action == 'add'}">
+       <c:when test="${action == 'listTables' || action == 'add' || action == 'search'}">
 
 
            <!-- Add Form -->

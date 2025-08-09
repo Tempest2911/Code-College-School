@@ -1,10 +1,11 @@
 package Repository;
 // pls import HibernateConfig
-
 import Model.StudentAttendance;
 import Util.HibernateConfig;
+import Util.HibernateUtil;
 import org.hibernate.Session;
 
+import org.hibernate.query.Query;
 import java.util.List;
 
 public class test {
@@ -53,6 +54,14 @@ public class test {
         } catch (Exception e) {
             session.getTransaction().rollback();
             e.printStackTrace();
+        }
+    }
+    
+        public List<StudentAttendance> searchProducts(String keyword) {
+        try (Session session = HibernateUtil.getSession()) {
+            Query<StudentAttendance> query = session.createQuery("FROM StudentAttendance s WHERE s.studentName LIKE :kw", StudentAttendance.class);
+            query.setParameter("kw", "%" + keyword + "%");
+            return query.getResultList();
         }
     }
 }
