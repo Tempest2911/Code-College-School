@@ -65,4 +65,15 @@ public class Destination {
         this.isVisited = isVisited;
     }
 
+    public Destination(Integer id, String name, String country, Integer budgetEst, Boolean isVisited) {
+        this.id = id;
+        this.name = name;
+        this.country = country;
+        this.budgetEst = budgetEst;
+        this.isVisited = isVisited;
+    }
+
+    public Destination() {
+
+    }
 }

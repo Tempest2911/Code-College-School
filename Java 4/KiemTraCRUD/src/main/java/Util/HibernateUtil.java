@@ -27,8 +27,6 @@ public final class HibernateUtil {
         conf.setProperties(properties);
         conf.addAnnotatedClass(Destination.class);
 
-
-
         ServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .applySettings(conf.getProperties())
                 .build();
