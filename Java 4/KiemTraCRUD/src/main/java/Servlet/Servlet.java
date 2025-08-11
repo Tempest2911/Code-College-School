@@ -57,7 +57,7 @@ public class Servlet extends HttpServlet {
             Integer budgetEst = Integer.valueOf(req.getParameter("budgetEst"));
             Boolean isVisited = Boolean.valueOf(req.getParameter("isVisited"));
 
-            Destination destination = new Destination(null, name, country, budgetEst, isVisited);
+            Destination destination = new   Destination(null, name, country, budgetEst, isVisited);
             repository.add(destination);
 
             resp.sendRedirect("/destination/display");

@@ -1,11 +1,14 @@
-<script setup></script>
+<script setup>
+import Header from './layout/Header.vue'
+import Footer from './layout/Footer.vue'
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <header> <Header></Header> </header>
+  <body>
+    
+  </body>
+  <footer> <Footer></Footer> </footer>
 </template>
 
 <style scoped></style>

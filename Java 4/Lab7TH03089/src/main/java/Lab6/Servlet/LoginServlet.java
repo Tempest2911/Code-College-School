@@ -14,10 +14,9 @@ public class LoginServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = req.getParameter("username");
-        String password = req.getParameter("password");
 
         if ("admin".equals(username)){
-            if ("123".equals(password)){
+
                 HttpSession session = req.getSession(true);
                 session.setAttribute("user", username);
                 session.setAttribute("role", "admin"); // or "user"
@@ -30,11 +29,7 @@ public class LoginServlet extends HttpServlet {
                     resp.sendRedirect(req.getContextPath() + "/");
                 }
                 return;
-            }else {
-                req.setAttribute("error", "Invalid admin password");
-                req.getRequestDispatcher("/login.jsp").forward(req, resp);
-                return;
-            }
+
         }
 
         // Các username khác: cho vào role "user" miễn mật khẩu bất kỳ (giả lập không kiểm tra)
