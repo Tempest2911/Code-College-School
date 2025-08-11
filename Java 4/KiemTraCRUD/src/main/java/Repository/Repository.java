@@ -62,11 +62,9 @@ public class Repository {
         return query.list();
     }
     
-    
     public List<Destination> soft() {
-        Query query = session.createQuery("FROM Destination sp ORDER BY sp.budgetEst");
+        Query query = session.createQuery("FROM Destination sp ORDER BY sp.name");
         return query.list();
     }
-    
     
 }

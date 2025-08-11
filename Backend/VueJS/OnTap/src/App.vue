@@ -1,33 +1,11 @@
+<script setup></script>
+
 <template>
-  <div>
-    <header>
-      <Header></Header>
-    </header>
-
-    <body>
-      <TacGiaComponent></TacGiaComponent>
-    </body>
-    <footer>
-      <Footer></Footer>
-    </footer>
-  </div>
-
-
+  <h1>You did it!</h1>
+  <p>
+    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
+    documentation
+  </p>
 </template>
 
-<script setup>
-import Header from './layout/Header.vue';
-import Footer from './layout/Footer.vue';
-import TacGiaComponent from './components/TacGiaComponent.vue';
-</script>
-
-<style scoped>
-div{
-  width: 100%;
-  height: 100%; 
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  
-}
-</style>
+<style scoped></style>

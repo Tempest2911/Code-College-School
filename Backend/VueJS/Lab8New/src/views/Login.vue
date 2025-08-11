@@ -205,7 +205,7 @@ export default {
 .btn-primary {
   width: 100%;
   padding: 0.85rem;
-  background: linear-gradient(135deg,#6366f1,#a78bfa);
+  background: linear-gradient(135deg,#63e3f1,#ff5f5f);
   border: none;
   color: white;
   font-weight: 600;
