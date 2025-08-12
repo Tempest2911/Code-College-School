@@ -35,6 +35,19 @@ public class BookRepo {
         }
     }
 
+    public boolean addBorrowRequest(int userId, int bookId) {
+        String sql = "INSERT INTO BorrowRequests (UserId, BookId, Status) VALUES (?, ?, 'PENDING')";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, bookId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
     public void delete(Integer id) {
         try {

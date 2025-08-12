@@ -33,7 +33,7 @@
     </c:when>
 
     <c:when test="${action == 'home' || action == 'searchAuthor' || action == 'searchTitle'}">
-       <h1>List of Book</h1>
+        <h1>List of Book</h1>
 
         <table border="1">
             <c:if test="${not empty books}">
@@ -41,7 +41,7 @@
                     <th>ID</th>
                     <th>Title</th>
                     <th>Author</th>
-                    <th>quantity</th>
+                    <th>Quantity</th>
                     <th>Action</th>
                 </tr>
                 <c:forEach items="${books}" var="book">
@@ -51,12 +51,23 @@
                         <td>${book.author}</td>
                         <td>${book.quantity}</td>
                         <td>
-                            <a href="/attendance/delete?id=${dsStudent.id}">Borrow</a>
+                            <c:choose>
+                                <c:when test="${book.quantity > 0}">
+                                    <a href="${pageContext.request.contextPath}/borrow?bookId=${book.id}">
+                                        Borrow
+                                    </a>
+                                </c:when>
+
+                                <c:otherwise>
+                                    Out of stock
+                                </c:otherwise>
+                            </c:choose>
                         </td>
                     </tr>
                 </c:forEach>
             </c:if>
         </table>
+
 
         <form action="/home/searchAuthor" method="get" id="searchForm">
             <h2>Search Author</h2> <br>

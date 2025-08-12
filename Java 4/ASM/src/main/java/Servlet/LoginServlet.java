@@ -24,9 +24,16 @@ public class LoginServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         UserRepo userRepo = new UserRepo();
-        userRepo.userLogin(email, password);
+        User user = userRepo.userLogin(email, password);
 
-        resp.sendRedirect("/home");
-
+        if (user != null) {
+            // Store user in session
+            req.getSession().setAttribute("user", user);
+            resp.sendRedirect(req.getContextPath() + "/home");
+        } else {
+            req.setAttribute("error", "Invalid email or password!");
+            req.setAttribute("action", "login");
+            req.getRequestDispatcher("/asm.jsp").forward(req, resp);
+        }
     }
 }
