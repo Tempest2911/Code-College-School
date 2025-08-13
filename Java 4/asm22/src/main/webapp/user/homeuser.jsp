@@ -125,7 +125,10 @@
                     <td>
                         <c:choose>
                             <c:when test="${book.quantity > 0}">
-                                <form method="post" action="${pageContext.request.contextPath}/user/borrow_requests" style="margin:0;">
+                                <form method="post"
+                                      action="${pageContext.request.contextPath}/user/borrow_requests"
+                                      style="margin:0;"
+                                      onsubmit="this.querySelector('button').disabled = true;">
                                     <input type="hidden" name="bookId" value="${book.id}" />
                                     <button type="submit">Mượn</button>
                                 </form>
@@ -135,6 +138,7 @@
                             </c:otherwise>
                         </c:choose>
                     </td>
+
                 </tr>
             </c:forEach>
         </c:when>

@@ -1,4 +1,4 @@
-package org.example.buoi10;
+
 
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
@@ -23,7 +23,6 @@ public class AdminFilter implements Filter {
         } else if (!currentUser.equals("admin")) {
             servletResponse.getWriter().println("You are not ADMIN");
         } else {
-            // ✅ User is admin, continue processing
             filterChain.doFilter(servletRequest, servletResponse);
         }
     }

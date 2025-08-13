@@ -12,7 +12,8 @@ import util.PasswordUtil;
 
 import java.io.IOException;
 
-@WebServlet("/login")
+@WebServlet({"/login", "/admin/login"})
+
 public class LoginServlet extends HttpServlet {
     private UsersRepository usersRepo = new UsersRepository();
 
