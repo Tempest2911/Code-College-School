@@ -19,7 +19,7 @@ public final class HibernateUtil {
         Configuration conf = new Configuration();
 
         Properties properties = new Properties();
-        properties.put(Environment.DIALECT, "org.hibernate.dialect.SQLServerDialect");
+        properties.put(Environment.DIALECT, "org.hibernate.dialect.SQLServer2012Dialect");
         properties.put(Environment.DRIVER, "com.microsoft.sqlserver.jdbc.SQLServerDriver");
         properties.put(Environment.URL, DbMetadata.getConnectString());
         properties.put(Environment.SHOW_SQL, "true"); // Hiển thị câu lệnh SQL thực hiện

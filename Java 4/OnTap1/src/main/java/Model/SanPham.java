@@ -34,8 +34,9 @@ public class SanPham {
     @Column(name = "so_luong")
     private Integer soLuong;
 
-    @Column(name = "id_loai_sp")
-    private Integer idLoaiSp;
+    @ManyToOne
+    @JoinColumn(name = "id_loai_sp", referencedColumnName = "id")
+    private LoaiSp idLoaiSp;
 
     @Column(name = "trang_thai")
     private Integer trangThai;
@@ -96,11 +97,11 @@ public class SanPham {
         this.soLuong = soLuong;
     }
 
-    public Integer getIdLoaiSp() {
+    public LoaiSp getIdLoaiSp() {
         return idLoaiSp;
     }
 
-    public void setIdLoaiSp(Integer idLoaiSp) {
+    public void setIdLoaiSp(LoaiSp idLoaiSp) {
         this.idLoaiSp = idLoaiSp;
     }
 
@@ -112,4 +113,18 @@ public class SanPham {
         this.trangThai = trangThai;
     }
 
+    public SanPham() {
+    }
+
+    public SanPham(Integer id, String ma, String ten, String mota, String website, BigDecimal giaBan, Integer soLuong, LoaiSp idLoaiSp, Integer trangThai) {
+        this.id = id;
+        this.ma = ma;
+        this.ten = ten;
+        this.mota = mota;
+        this.website = website;
+        this.giaBan = giaBan;
+        this.soLuong = soLuong;
+        this.idLoaiSp = idLoaiSp;
+        this.trangThai = trangThai;
+    }
 }
