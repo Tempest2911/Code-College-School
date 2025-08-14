@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 
-@WebFilter({"/sanpham/*"})
+@WebFilter("/sanpham/*")
 
 public class AuthServlet implements Filter {
 
@@ -26,7 +26,7 @@ public class AuthServlet implements Filter {
             }
         }
         if (!authenticated) {
-            response.sendRedirect(request.getContextPath() + "/sigma.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
         filterChain.doFilter(servletRequest, servletResponse);

@@ -22,7 +22,7 @@ import java.util.List;
         "/sanpham/delete",
         "/sanpham/soft",
         "/sanpham/search",
-        "login"
+        "/login"
 })
 
 public class Servlet extends HttpServlet {
@@ -69,7 +69,11 @@ public class Servlet extends HttpServlet {
             req.setAttribute("action", "hien-thi-update");
             req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
 
+        } else if (uri.contains("login")){
+            req.setAttribute("action", "login");
+            req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
         }
+
 //        else if (uri.contains("soft")) {
 //            req.setAttribute("danhSach", repository.soft());
 //            req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
@@ -110,22 +114,23 @@ public class Servlet extends HttpServlet {
         } else if (uri.contains("login")) {
             String username = req.getParameter("username");
             String password = req.getParameter("password");
-            if (username.isBlank() || username.isEmpty() || password.isBlank() || password.isEmpty()) {
+
+            if (username == null || username.isBlank() || password == null || password.isBlank()) {
                 req.setAttribute("error", "Ko duoc de trong");
-                req.getRequestDispatcher("/login.jsp").forward(req, resp);
+                req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
                 return;
             } else if (!username.equals("ptpm") || !password.equals("123456")) {
                 req.setAttribute("error", "Kiem tra lai thong tin");
-                req.getRequestDispatcher("/login.jsp").forward(req, resp);
+                req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
                 return;
             } else {
                 HttpSession session = req.getSession();
                 session.setAttribute("username", username);
-                session.setAttribute("password", password);
                 resp.sendRedirect("/sanpham/hien-thi");
             }
+            return;
         }
-
     }
 
 }
+

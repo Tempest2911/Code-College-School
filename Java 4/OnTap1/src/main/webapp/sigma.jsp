@@ -55,7 +55,7 @@
                 </tr>
             </c:forEach>
         </table>
-      <a href="/sanpham/hien-thi?page=${page-1}" ${page <= 1 ? 'style="pointer-events:none;opacity:0.5;"' : ''}>Prev</a>
+        <a href="/sanpham/hien-thi?page=${page-1}" ${page <= 1 ? 'style="pointer-events:none;opacity:0.5;"' : ''}>Prev</a>
         Page ${page} of ${totalPages}
         <a href="/sanpham/hien-thi?page=${page+1}" ${page >= totalPages ? 'style="pointer-events:none;opacity:0.5;"' : ''}>Next</a>
     </c:when>
@@ -79,7 +79,8 @@
 
     <c:when test="${action == 'login'}">
         <h2>Login</h2>
-        <form action="/login" method="post">
+       <form action="/login" method="post">
+            <i>${error}</i> <br>
             Username: <input type="text" name="username"> <br>
             Password: <input type="password" name="password"> <br>
             <button type="submit">Login</button>
