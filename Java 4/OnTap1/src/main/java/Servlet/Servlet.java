@@ -8,6 +8,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -68,16 +69,6 @@ public class Servlet extends HttpServlet {
             req.setAttribute("action", "hien-thi-update");
             req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
 
-        } else if (uri.contains("login")) {
-            String username = req.getParameter("username");
-            String password = req.getParameter("password");
-            if (username.isBlank() || username.isEmpty() || password.isBlank() || password.isEmpty()) {
-                .
-            }
-
-
-            req.setAttribute("action", "login");
-            req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
         }
 //        else if (uri.contains("soft")) {
 //            req.setAttribute("danhSach", repository.soft());
@@ -115,7 +106,26 @@ public class Servlet extends HttpServlet {
             SanPham obj = new SanPham(id, ma, ten, moTa, null, null, null, LoaiSp, 1);
             repository.update(obj);
             resp.sendRedirect("/sanpham/hien-thi");
+
+        } else if (uri.contains("login")) {
+            String username = req.getParameter("username");
+            String password = req.getParameter("password");
+            if (username.isBlank() || username.isEmpty() || password.isBlank() || password.isEmpty()) {
+                req.setAttribute("error", "Ko duoc de trong");
+                req.getRequestDispatcher("/login.jsp").forward(req, resp);
+                return;
+            } else if (!username.equals("ptpm") || !password.equals("123456")) {
+                req.setAttribute("error", "Kiem tra lai thong tin");
+                req.getRequestDispatcher("/login.jsp").forward(req, resp);
+                return;
+            } else {
+                HttpSession session = req.getSession();
+                session.setAttribute("username", username);
+                session.setAttribute("password", password);
+                resp.sendRedirect("/sanpham/hien-thi");
+            }
         }
+
     }
 
 }
