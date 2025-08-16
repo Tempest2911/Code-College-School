@@ -10,7 +10,7 @@
 
 <script>
     document.getElementById("btnLoad").addEventListener("click", function() {
-        fetch("/api/sinh-vien/get-all")
+        fetch("/api/sinhvien/get-all")
             .then(response => response.json())
             .then(data => {
                 console.log("Danh sách sinh viên:", data);

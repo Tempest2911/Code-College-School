@@ -25,10 +25,12 @@ public class AuthServlet implements Filter {
                 authenticated = true;
             }
         }
+
         if (!authenticated) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
+
         filterChain.doFilter(servletRequest, servletResponse);
     }
 }

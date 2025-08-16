@@ -1,8 +1,10 @@
 package Servlet;
 
-import Model.LoaiSp;
 import Model.SanPham;
+import Model.LoaiSp;
+import Model.SinhVien;
 import Repository.Repository;
+import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -11,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "SanPhamServlet", value = {
@@ -22,9 +24,9 @@ import java.util.List;
         "/sanpham/delete",
         "/sanpham/soft",
         "/sanpham/search",
-        "/login"
+        "/login",
+        "/api/sinhvien/get-all"
 })
-
 public class Servlet extends HttpServlet {
 
     private Repository repository = new Repository();
@@ -54,14 +56,12 @@ public class Servlet extends HttpServlet {
             req.setAttribute("totalPages", totalPages);
             req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
 
-
         } else if (uri.contains("delete")) {
             Integer id = Integer.valueOf(req.getParameter("id"));
             repository.delete(id);
             resp.sendRedirect("/sanpham/hien-thi");
 
         } else if (uri.contains("viewUpdate")) {
-
             Integer id = Integer.valueOf(req.getParameter("id"));
             SanPham sp = repository.getOne(id);
             req.setAttribute("listSP", repository.getLoaiSanPham());
@@ -69,20 +69,37 @@ public class Servlet extends HttpServlet {
             req.setAttribute("action", "hien-thi-update");
             req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
 
-        } else if (uri.contains("login")){
+        } else if (uri.contains("login")) {
             req.setAttribute("action", "login");
             req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
-        }
 
-//        else if (uri.contains("soft")) {
-//            req.setAttribute("danhSach", repository.soft());
-//            req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
-//
-//        } else if (uri.contains("search")) {
-//            String keyword = req.getParameter("keyword");
-//            req.setAttribute("danhSach", repository.search(keyword));
-//            req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
-//        }
+        } else if (uri.contains("api/sinhvien/get-all")) {
+
+            List<SinhVien> list = new ArrayList<>();
+            list.add(new SinhVien("SV01", "Nguyen Van A", 18, true, "CNTT"));
+            list.add(new SinhVien("SV02", "Nguyen Van B", 20, false, "TKDH"));
+            list.add(new SinhVien("SV03", "Nguyen Van C", 15, true, "MKT"));
+            list.add(new SinhVien("SV04", "Nguyen Van D", 11, false, "CNTT"));
+            list.add(new SinhVien("SV05", "Nguyen Van E", 19, true, "TKDH"));
+
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("UTF-8");
+
+            Gson gson = new Gson();
+            String json = gson.toJson(list);
+            resp.getWriter().write(json);
+
+        } else if (uri.contains("soft")) {
+            req.setAttribute("danhSach", repository.soft());
+            req.setAttribute("action", "hien-thi");
+            req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
+
+        } else if (uri.contains("search")) {
+            String keyword = req.getParameter("keyword");
+            req.setAttribute("danhSach", repository.search(keyword));
+            req.setAttribute("action", "hien-thi");
+            req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
+        }
     }
 
     @Override
@@ -92,10 +109,11 @@ public class Servlet extends HttpServlet {
         if (uri.contains("add")) {
             String ma = req.getParameter("ma");
             Integer idLoaiSp = Integer.valueOf(req.getParameter("idLoaiSp"));
-            LoaiSp LoaiSp = repository.getLoaiSPID(idLoaiSp);
+            LoaiSp loaiSp = repository.getLoaiSPID(idLoaiSp);
             String ten = req.getParameter("ten");
             String moTa = req.getParameter("mota");
-            SanPham obj = new SanPham(null, ma, ten, moTa, null, null, null, LoaiSp, 1);
+
+            SanPham obj = new SanPham(null, ma, ten, moTa, null, null, null, loaiSp, 1);
             repository.add(obj);
             resp.sendRedirect("/sanpham/hien-thi");
 
@@ -103,11 +121,11 @@ public class Servlet extends HttpServlet {
             Integer id = Integer.valueOf(req.getParameter("id"));
             String ma = req.getParameter("ma");
             Integer idLoaiSp = Integer.valueOf(req.getParameter("idLoaiSp"));
-            LoaiSp LoaiSp = repository.getLoaiSPID(idLoaiSp);
+            LoaiSp loaiSp = repository.getLoaiSPID(idLoaiSp);
             String ten = req.getParameter("ten");
             String moTa = req.getParameter("mota");
 
-            SanPham obj = new SanPham(id, ma, ten, moTa, null, null, null, LoaiSp, 1);
+            SanPham obj = new SanPham(id, ma, ten, moTa, null, null, null, loaiSp, 1);
             repository.update(obj);
             resp.sendRedirect("/sanpham/hien-thi");
 
@@ -128,9 +146,8 @@ public class Servlet extends HttpServlet {
                 session.setAttribute("username", username);
                 resp.sendRedirect("/sanpham/hien-thi");
             }
-            return;
         }
     }
 
-}
 
+}

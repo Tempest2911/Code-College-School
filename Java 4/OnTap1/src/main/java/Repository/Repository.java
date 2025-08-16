@@ -70,28 +70,23 @@ public class Repository {
 
     public List<SanPham> getAllPaged(int page, int pageSize) {
         int offset = (page - 1) * pageSize;
-        return session.createQuery("FROM SanPham", SanPham.class)
-                .setFirstResult(offset)
-                .setMaxResults(pageSize)
-                .getResultList();
+        return session.createQuery("FROM SanPham", SanPham.class).setFirstResult(offset).setMaxResults(pageSize).getResultList();
     }
-
 
     public long countAll() {
-        return session.createQuery("SELECT COUNT(sp.id) FROM SanPham sp", Long.class)
-                .getSingleResult();
+        return session.createQuery("SELECT COUNT(sp.id) FROM SanPham sp", Long.class).getSingleResult();
     }
 
 
-//    public List<SanPham> search(String keyword) {
-//        Query query = session.createQuery("FROM SanPham sp WHERE sp.[Đổi] LIKE :kw");
-//        query.setParameter("kw", "%" + keyword + "%");
-//        return query.list();
-//    }
-//
-//    public List<SanPham> soft() {
-//        Query query = session.createQuery("FROM SanPham sp ORDER BY sp.[Đổi]");
-//        return query.list();
-//    }
+    public List<SanPham> search(String keyword) {
+        Query query = session.createQuery("FROM SanPham sp WHERE sp.ten LIKE :kw");
+        query.setParameter("kw", "%" + keyword + "%");
+        return query.getResultList();
+    }
+
+    public List<SanPham> soft() {
+        Query query = session.createQuery("FROM SanPham sp ORDER BY sp.ten");
+        return query.getResultList();
+    }
 
 }
