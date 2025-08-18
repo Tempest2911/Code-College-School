@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>nigger</title>
+</head>
+<body>
+<h2>AJAX Hiển thị Sinh Viên BAKAAA</h2>
+<button id="btnLoad">Tải Data</button>
+
+<script>
+    document.getElementById("btnLoad").addEventListener("click", function () {
+        fetch("/api/sinhvien/get-all")
+            .then(response => response.json())
+            .then(data => {
+                console.log("Danh sách sinh viên:", data);
+                data.forEach(sv => {
+                    console.log(`Mã: ${sv.id}, Tên: ${sv.ten}, Tuổi: ${sv.tuoi}, Giới tính: ${sv.gioiTinh ? 'Nam' : 'Nữ'}, Ngành: ${sv.nganhHoc}`);
+                });
+            })
+            .catch(error => console.error("Lỗi:", error));
+    });
+</script>
+</body>
+</html>
