@@ -79,8 +79,6 @@ public class Repository {
         return query.list();
     }
 
-
-
     public long countAll() {
         return session.createQuery("SELECT COUNT(sp.id) FROM NhanVien sp", Long.class).getSingleResult();
     }

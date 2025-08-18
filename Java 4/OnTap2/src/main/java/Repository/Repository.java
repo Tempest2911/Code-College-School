@@ -1,6 +1,5 @@
 package Repository;
 // pls import HibernateConfig
-
 import Model.LoaiPhieuGiamGia;
 import org.hibernate.Session;
 import Model.PhieuGiamGia;
@@ -9,7 +8,6 @@ import Util.HibernateUtil;
 import org.hibernate.Session;
 
 import org.hibernate.query.Query;
-
 import java.util.List;
 
 
@@ -17,20 +15,20 @@ public class Repository {
 
     Session session = HibernateUtil.getSession();
 
-    public List<PhieuGiamGia> getAll() {
-        return session.createQuery("FROM PhieuGiamGia").list();
+    public List<PhieuGiamGia> getAll(int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        return session.createQuery("FROM PhieuGiamGia",PhieuGiamGia.class).setFirstResult(offset).setMaxResults(pageSize).getResultList();
     }
 
     public PhieuGiamGia getOne(Integer id) {
         return session.find(PhieuGiamGia.class, id);
     }
 
-    //Bang 2
-    public List<LoaiPhieuGiamGia> getLoai() {
-        return session.createQuery("FROM LoaiPhieuGiamGia ").list();
+    public List<LoaiPhieuGiamGia> getLoaiPhieuGiamGia() {
+        return session.createQuery("FROM LoaiPhieuGiamGia").list();
     }
 
-    public LoaiPhieuGiamGia getLoaiSP(int id) {
+    public LoaiPhieuGiamGia getLoaiPhieuGiamGiaID(Integer id) {
         return session.get(LoaiPhieuGiamGia.class, id);
     }
 
@@ -67,23 +65,18 @@ public class Repository {
             e.printStackTrace();
         }
     }
-
+    
     public List<PhieuGiamGia> search(String keyword) {
         Query query = session.createQuery("FROM PhieuGiamGia sp WHERE sp.ten LIKE :kw");
         query.setParameter("kw", "%" + keyword + "%");
         return query.list();
     }
-
+    
     public List<PhieuGiamGia> soft() {
         Query query = session.createQuery("FROM PhieuGiamGia sp ORDER BY sp.ten");
         return query.list();
     }
-
-    public List<PhieuGiamGia> getAllPaged(int page, int pageSize) {
-        int offset = (page - 1) * pageSize;
-        return session.createQuery("FROM PhieuGiamGia", PhieuGiamGia.class).setFirstResult(offset).setMaxResults(pageSize).getResultList();
-    }
-
+    
     public long countAll() {
         return session.createQuery("SELECT COUNT(sp.id) FROM PhieuGiamGia sp", Long.class).getSingleResult();
     }

@@ -6,37 +6,85 @@
     <title>Title</title>
 </head>
 <body>
-    <c:choose>
-        <c:when test="${action == 'hien-thi'}">
-           <table border="1">
+<c:choose>
+    <c:when test="${action == 'hien-thi'}">
+        <h2>Add</h2>
+        <form action="/phieugiamgia/add" method="post" onsubmit="return validateForm()">
+            ID: <input type="text" name="id" id="id"><br>
+            Ma: <input type="text" name="ma" id="ma"><br>
+            Loai Phieu Giam Gia:
+            <select name="loaiPhieu">
+                <c:forEach var="cv" items="${listSP}">
+                    <option value="${cv.id}">${cv.ten}</option>
+                </c:forEach>
+            </select><br>
+            Ten: <input type="text" name="ten" id="ten"><br>
+            So Luong: <input type="number" name="soLuong" id="soLuong"><br>
+
+            <button type="submit">Add</button>
+        </form>
+
+        <form action="/phieugiamgia/search" method="get" id="searchForm">
+            <h2>Search</h2> <br>
+            <input type="text" name="keyword" placeholder="Enter search term">
+            <button type="submit">Search</button>
+        </form>
+
+        <form action="/phieugiamgia/soft" method="get">
+            <button type="submit">Soft</button>
+        </form>
+
+        <h2>Table</h2>
+        <table border="1">
+            <tr>
+                <th>#</th>
+                <th>Ma Phieu</th>
+                <th>Ma Loai Phieu</th>
+                <th>Ten Phieu</th>
+                <th>Ten Loai Phieu</th>
+                <th>So Luong</th>
+                <th>Hanh Dong</th>
+            </tr>
+
+            <c:forEach items="${danhSach}" var="sp">
                 <tr>
-                    <th>#</th>
-                    <th>Ma Phieu</th>
-                    <th>Ma Loai Phieu</th>
-                    <th>Ten Phieu</th>
-                    <th>Ten Loai Phieu</th>
-                    <th>So Luong</th>
-                    <th>Hanh Dong</th>
+                    <td>${sp.id}</td>
+                    <td>${sp.ma}</td>
+                    <td>${sp.loaiPhieu.ma}</td>
+                    <td>${sp.ten}</td>
+                    <td>${sp.loaiPhieu.ten}</td>
+                    <td>${sp.soLuong}</td>
+                    <td>
+                        <a href="/phieugiamgia/viewUpdate?id=${sp.id}">View Update</a>
+                        <a href="/phieugiamgia/delete?id=${sp.id}">Delete</a>
+                    </td>
                 </tr>
+            </c:forEach>
+        </table>
+        <a href="/phieugiamgia/hien-thi?page=${page-1}" ${page <= 1 ? 'style="pointer-events:none;opacity:0.5;"' : ''}>Prev</a>
+        Page ${page} of ${totalPages}
+        <a href="/phieugiamgia/hien-thi?page=${page+1}" ${page >= totalPages ? 'style="pointer-events:none;opacity:0.5;"' : ''}>Next</a>
 
-               <c:forEach items="${danhSach}" var="sp">
-                    <tr>
-                        <td>${sp.id}</td>
-                        <td>${sp.ma}</td>
-                        <td>${sp.loaiPhieu.ma}</td>
-                        <td>${sp.ten}</td>
-                        <td>${sp.loaiPhieu.ten}</td>
-                        <td>${sp.soLuong}</td>
-                        <td>
-                            <a href="/phieugiamgia/viewUpdate?id=${sp.id}">View Update</a>
-                            <a href="/phieugiamgia/delete?id=${sp.id}">Delete</a>
-                        </td>
-                    </tr>
-               </c:forEach>
-           </table>
-        </c:when>
+    </c:when>
 
+    <c:when test="${action == 'update'}">
+        <h2>Update</h2>
+        <form action="/phieugiamgia/update" method="post" onsubmit="return validateForm()">
+            ID: <input type="text" name="id" id="id" value="${sp.id}"><br>
+            Ma: <input type="text" name="ma" id="ma" value="${sp.ma}"><br>
+            Loai Phieu Giam Gia:
+            <select name="loaiPhieu">
+                <c:forEach var="cv" items="${listSP}">
+                    <option value="${cv.id}" ${cv.id == sp.loaiPhieu.id ? 'selected' : ''}>${cv.ten}</option>
+                </c:forEach>
+            </select><br>
+            Ten: <input type="text" name="ten" id="ten" value="${sp.ten}"><br>
+            So Luong: <input type="number" name="soLuong" id="soLuong" value="${sp.soLuong}"><br>
 
-    </c:choose>
+            <button type="submit">Update</button>
+
+        </form>
+    </c:when>
+</c:choose>
 </body>
 </html>

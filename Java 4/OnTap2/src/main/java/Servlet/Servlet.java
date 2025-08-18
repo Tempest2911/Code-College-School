@@ -21,8 +21,8 @@ import java.util.List;
         "/phieugiamgia/update",
         "/phieugiamgia/viewUpdate",
         "/phieugiamgia/delete",
-        "/phieugiamgia/soft",
         "/phieugiamgia/search",
+        "/phieugiamgia/soft",
         "/login",
         "/api/sinhvien/get-all"
 })
@@ -35,66 +35,17 @@ public class Servlet extends HttpServlet {
         String uri = req.getRequestURI();
 
         if (uri.contains("hien-thi")) {
-            int page = 1;
-            int pageSize = 5;
-            String pageParam = req.getParameter("page");
-            if (pageParam != null) {
-                try {
-                    page = Integer.parseInt(pageParam);
-                    if (page < 1) page = 1;
-                } catch (NumberFormatException ignored) {
-                }
-            }
-            long totalItems = repository.countAll();
-            int totalPages = (int) Math.ceil((double) totalItems / pageSize);
-
-            req.setAttribute("danhSach", repository.getAllPaged(page, pageSize));
-            req.setAttribute("listSP", repository.getLoai());
-            req.setAttribute("action", "hien-thi");
-            req.setAttribute("page", page);
-            req.setAttribute("totalPages", totalPages);
-            req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
-
+            HienThi(req, resp);
         } else if (uri.contains("delete")) {
-            Integer id = Integer.valueOf(req.getParameter("id"));
-            repository.delete(id);
-            resp.sendRedirect("/phieugiamgia/hien-thi");
-
+            Delete(req, resp);
         } else if (uri.contains("viewUpdate")) {
-            Integer id = Integer.valueOf(req.getParameter("id"));
-            PhieuGiamGia sp = repository.getOne(id);
-            req.setAttribute("listSP", repository.getLoai());
-            req.setAttribute("sp", sp);
-            req.setAttribute("action", "hien-thi-update");
-            req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
-
-        } else if (uri.contains("login")) {
-            req.setAttribute("action", "login");
-            req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
-
-//        } else if (uri.contains("api/sinhvien/get-all")) {
-//            List<SinhVien> list = new ArrayList<>();
-//            list.add(new SinhVien("SV01", "Nguyen Van A", 18, true, "CNTT"));
-//            list.add(new SinhVien("SV02", "Nguyen Van B", 20, false, "TKDH"));
-//            list.add(new SinhVien("SV03", "Nguyen Van C", 15, true, "MKT"));
-//            list.add(new SinhVien("SV04", "Nguyen Van D", 11, false, "CNTT"));
-//            list.add(new SinhVien("SV05", "Nguyen Van E", 19, true, "TKDH"));
-//
-//            resp.setContentType("application/json");
-//            resp.setCharacterEncoding("UTF-8");
-//
-//            Gson gson = new Gson();
-//            String json = gson.toJson(list);
-//            resp.getWriter().write(json);
-
-        } else if (uri.contains("soft")) {
-            req.setAttribute("danhSach", repository.soft());
-            req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
-
+            ViewUpdate(req, resp);
         } else if (uri.contains("search")) {
-            String keyword = req.getParameter("keyword");
-            req.setAttribute("danhSach", repository.search(keyword));
-            req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
+            Search(req, resp);
+        } else if (uri.contains("soft")) {
+            Soft(req, resp);
+        } else if (uri.contains("login")) {
+            LoginUI(req, resp);
         }
     }
 
@@ -103,45 +54,117 @@ public class Servlet extends HttpServlet {
         String uri = req.getRequestURI();
 
         if (uri.contains("add")) {
-            String ma = req.getParameter("ma");
-            Integer idLoai = Integer.valueOf(req.getParameter("idLoai"));
-            LoaiPhieuGiamGia loai = repository.getLoaiSP(idLoai);
-            String ten = req.getParameter("ten");
-            Integer soLuong = Integer.valueOf(req.getParameter("soLuong"));
-
-            PhieuGiamGia obj = new PhieuGiamGia(null, loai, ma, ten, soLuong, null, null, null);
-            repository.add(obj);
-            resp.sendRedirect("/phieugiamgia/hien-thi");
-
+            Add(req, resp);
         } else if (uri.contains("update")) {
-            Integer id = Integer.valueOf(req.getParameter("id"));
-            String ma = req.getParameter("ma");
-            Integer idLoai = Integer.valueOf(req.getParameter("idLoai"));
-            LoaiPhieuGiamGia loai = repository.getLoaiSP(idLoai);
-            String ten = req.getParameter("ten");
-            Integer soLuong = Integer.valueOf(req.getParameter("soLuong"));
-
-            PhieuGiamGia obj = new PhieuGiamGia(id, loai, ma, ten, soLuong, null, null, null);
-            repository.update(obj);
-            resp.sendRedirect("/phieugiamgia/hien-thi");
-
+            Update(req, resp);
         } else if (uri.contains("login")) {
-            String username = req.getParameter("username");
-            String password = req.getParameter("password");
-
-            if (username == null || username.isBlank() || password == null || password.isBlank()) {
-                req.setAttribute("error", "Ko duoc de trong");
-                req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
-                return;
-            } else if (!username.equals("ptpm") || !password.equals("123456")) {
-                req.setAttribute("error", "Kiem tra lai thong tin");
-                req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
-                return;
-            } else {
-                HttpSession session = req.getSession();
-                session.setAttribute("username", username);
-                resp.sendRedirect("/phieugiamgia/hien-thi");
-            }
+            Login(req, resp);
         }
     }
+
+    public void HienThi(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int page = 1;
+        int pageSize = 5;
+        String pageParam = req.getParameter("page");
+        if (pageParam != null) {
+            try {
+                page = Integer.parseInt(pageParam);
+                if (page < 1) page = 1;
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        long totalItems = repository.countAll();
+        int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+
+        req.setAttribute("danhSach", repository.getAll(page, pageSize));
+        req.setAttribute("listSP", repository.getLoaiPhieuGiamGia());
+        req.setAttribute("action", "hien-thi");
+        req.setAttribute("page", page);
+        req.setAttribute("totalPages", totalPages);
+        req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
+    }
+
+    public void Add(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Integer id = Integer.parseInt(req.getParameter("id"));
+        String ma = req.getParameter("ma");
+        Integer idGG = Integer.valueOf(req.getParameter("loaiPhieu"));
+        LoaiPhieuGiamGia loaiPhieuGiamGia = repository.getLoaiPhieuGiamGiaID(idGG);
+        String ten = req.getParameter("ten");
+        Integer soLuong = Integer.valueOf(req.getParameter("soLuong"));
+
+        PhieuGiamGia obj = new PhieuGiamGia(id, loaiPhieuGiamGia, ma, ten, soLuong, null, null, null);
+
+        repository.add(obj);
+        resp.sendRedirect(req.getContextPath() + "/phieugiamgia/hien-thi");
+    }
+
+    public void Delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Integer id = Integer.valueOf(req.getParameter("id"));
+        repository.delete(id);
+        resp.sendRedirect("/phieugiamgia/hien-thi");
+    }
+
+    public void ViewUpdate(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Integer id = Integer.valueOf(req.getParameter("id"));
+        PhieuGiamGia sp = repository.getOne(id);
+        req.setAttribute("listSP", repository.getLoaiPhieuGiamGia());
+        req.setAttribute("sp", sp);
+        req.setAttribute("action", "update");
+        req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
+    }
+
+    public void Update(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Integer id = Integer.parseInt(req.getParameter("id"));
+        String ma = req.getParameter("ma");
+        Integer idGG = Integer.valueOf(req.getParameter("loaiPhieu"));
+        LoaiPhieuGiamGia loaiPhieuGiamGia = repository.getLoaiPhieuGiamGiaID(idGG);
+        String ten = req.getParameter("ten");
+        Integer soLuong = Integer.valueOf(req.getParameter("soLuong"));
+
+        PhieuGiamGia obj = new PhieuGiamGia(id, loaiPhieuGiamGia, ma, ten, soLuong, null, null, null);
+
+        repository.update(obj);
+        resp.sendRedirect("/phieugiamgia/hien-thi");
+    }
+
+    public void Search(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String keyword = req.getParameter("keyword");
+        req.setAttribute("action", "hien-thi");
+        req.setAttribute("danhSach", repository.search(keyword));
+        req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
+    }
+
+    public void Soft(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("action", "hien-thi");
+        req.setAttribute("danhSach", repository.soft());
+        req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
+    }
+
+    public void LoginUI(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("action", "login");
+        req.getRequestDispatcher("/Login.jsp").forward(req, resp);
+    }
+
+    public void Login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
+        String role = null;
+
+        if ("HangNT169".equals(username) && "123456".equals(password)) {
+            role = "Admin";
+        } else if ("TH03089".equals(username) && "SD20204".equals(password)) {
+            role = "Student";
+        }
+
+        if (role != null) {
+            HttpSession session = req.getSession();
+            session.setAttribute("username", username);
+            session.setAttribute("role", role);
+            resp.sendRedirect(req.getContextPath() + "/phieugiamgia/hien-thi");
+        } else {
+            req.setAttribute("error", "Sai tài khoản hoặc mật khẩu!");
+            req.getRequestDispatcher("/Login.jsp").forward(req, resp);
+        }
+    }
+
 }

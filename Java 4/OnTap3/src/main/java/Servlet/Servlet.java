@@ -181,12 +181,10 @@ public class Servlet extends HttpServlet {
             String password = req.getParameter("password");
 
             if (username == null || username.isBlank() || password == null || password.isBlank()) {
-
                 req.setAttribute("error", "Ko duoc de trong");
                 req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
                 return;
             } else if (!username.equals("ptpm") || !password.equals("123456")) {
-
                 req.setAttribute("error", "Kiem tra lai thong tin");
                 req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
                 return;

@@ -9,8 +9,8 @@ import java.util.Set;
 @Entity
 @Table(name = "loai_phieu_giam_gia")
 public class LoaiPhieuGiamGia {
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 

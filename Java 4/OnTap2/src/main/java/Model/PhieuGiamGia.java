@@ -5,11 +5,9 @@ import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-
 @Entity
 @Table(name = "phieu_giam_gia")
 public class PhieuGiamGia {
-
     @Id
     @Column(name = "id", nullable = false)
     private Integer id;
