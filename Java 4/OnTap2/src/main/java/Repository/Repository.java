@@ -20,6 +20,10 @@ public class Repository {
         return session.createQuery("FROM PhieuGiamGia",PhieuGiamGia.class).setFirstResult(offset).setMaxResults(pageSize).getResultList();
     }
 
+//    public List<PhieuGiamGia> getAll() {
+//        return session.createQuery("FROM PhieuGiamGia").list();
+//    }
+
     public PhieuGiamGia getOne(Integer id) {
         return session.find(PhieuGiamGia.class, id);
     }

@@ -66,26 +66,33 @@ public class Servlet extends HttpServlet {
     }
 
     public void HienThi(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        int page = 1;
-        int pageSize = 5;
-        String pageParam = req.getParameter("page");
-        if (pageParam != null) {
-            try {
-                page = Integer.parseInt(pageParam);
-                if (page < 1) page = 1;
-            } catch (NumberFormatException ignored) {
+            int page = 1;
+            int pageSize = 5;
+            String pageParam = req.getParameter("page");
+            if (pageParam != null) {
+                try {
+                    page = Integer.parseInt(pageParam);
+                    if (page < 1) page = 1;
+                } catch (NumberFormatException ignored) {
+                }
             }
-        }
-        long totalItems = repository.countAll();
-        int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+            long totalItems = repository.countAll();
+            int totalPages = (int) Math.ceil((double) totalItems / pageSize);
 
-        req.setAttribute("danhSach", repository.getAll(page, pageSize));
-        req.setAttribute("listSP", repository.getLoaiPhieuGiamGia());
-        req.setAttribute("action", "hien-thi");
-        req.setAttribute("page", page);
-        req.setAttribute("totalPages", totalPages);
-        req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
-    }
+            req.setAttribute("danhSach", repository.getAll(page, pageSize));
+            req.setAttribute("listSP", repository.getLoaiPhieuGiamGia());
+            req.setAttribute("action", "hien-thi");
+            req.setAttribute("page", page);
+            req.setAttribute("totalPages", totalPages);
+            req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
+    //        public void HienThi(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    //
+    //            req.setAttribute("danhSach", repository.getAll());
+    //            req.setAttribute("listSP", repository.getLoaiPhieuGiamGia());
+    //            req.setAttribute("action", "hien-thi");
+    //            req.getRequestDispatcher("/sigma.jsp").forward(req, resp);
+    //        }
+        }
 
     public void Add(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer id = Integer.parseInt(req.getParameter("id"));
@@ -170,20 +177,20 @@ public class Servlet extends HttpServlet {
         }
     }
 
-        public void Ajax(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-                List<SinhVien> list = new ArrayList<>();
-                list.add(new SinhVien("SV01", "Nguyen Van A", 18, true, "CNTT"));
-                list.add(new SinhVien("SV02", "Nguyen Van B", 20, false, "TKDH"));
-                list.add(new SinhVien("SV03", "Nguyen Van C", 15, true, "MKT"));
-                list.add(new SinhVien("SV04", "Nguyen Van D", 11, false, "CNTT"));
-                list.add(new SinhVien("SV05", "Nguyen Van E", 19, true, "TKDH"));
+    public void Ajax(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        List<SinhVien> list = new ArrayList<>();
+        list.add(new SinhVien("SV01", "Nguyen Van A", 18, true, "CNTT"));
+        list.add(new SinhVien("SV02", "Nguyen Van B", 20, false, "TKDH"));
+        list.add(new SinhVien("SV03", "Nguyen Van C", 15, true, "MKT"));
+        list.add(new SinhVien("SV04", "Nguyen Van D", 11, false, "CNTT"));
+        list.add(new SinhVien("SV05", "Nguyen Van E", 19, true, "TKDH"));
 
-                resp.setContentType("application/json");
-                resp.setCharacterEncoding("UTF-8");
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
 
-                Gson gson = new Gson();
-                String json = gson.toJson(list);
-                resp.getWriter().write(json);
-            }
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        resp.getWriter().write(json);
+    }
 
 }

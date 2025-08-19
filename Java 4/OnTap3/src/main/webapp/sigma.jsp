@@ -20,11 +20,11 @@
              Ten: <input type="text" id="ten" name="ten"><br>
              Ten Dem: <input type="text" id="tenDem" name="tenDem"><br>
              Ho: <input type="text" id="ho" name="ho"><br>
-             Gioi Tinh:
-             <select name="gioiTinh">
-                 <option value="true">Nam</option>
-                 <option value="false">Nu</option>
-             </select><br>
+             Giới Tính:
+             <input type="radio" name="gioiTinh" value="Nam" checked> Nam
+             <input type="radio" name="gioiTinh" value="Nữ"> Nữ
+             <br>
+
              Dia Chi: <input type="text" id="diaChi" name="diaChi"><br>
              SDT: <input type="text" id="sdt" name="sdt"><br>
              Mat Khau: <input type="password" id="matKhau" name="matKhau"><br>
@@ -99,16 +99,12 @@
             Ten: <input type="text" id="ten" name="ten" value="${sp.ten}"><br>
             Ten Dem: <input type="text" id="tenDem" name="tenDem" value="${sp.tenDem}"><br>
             Ho: <input type="text" id="ho" name="ho" value="${sp.ho}"><br>
-            Gioi Tinh:
-            <select name="gioiTinh">
-                if (sp.gioiTinh) {
-                <option value="true" selected>Nam</option>
-                <option value="false">Nu</option>
-                } else {
-                <option value="true">Nam</option>
-                <option value="false" selected>Nu</option>
-                }
-            </select><br>
+            Giới Tính:
+            <input type="radio" name="gioiTinh" value="Nam" ${sp.gioiTinh eq 'Nam' ? 'checked' : ''}> Nam
+            <input type="radio" name="gioiTinh" value="Nữ" ${sp.gioiTinh eq 'Nữ' ? 'checked' : ''}> Nữ
+            <br>
+
+
             Dia Chi: <input type="text" id="diaChi" name="diaChi" value="${sp.diaChi}"><br>
             SDT: <input type="text" id="sdt" name="sdt" value="${sp.sdt}"><br>
             Mat Khau: <input type="password" id="matKhau" name="matKhau" value="${sp.matKhau}"><br>

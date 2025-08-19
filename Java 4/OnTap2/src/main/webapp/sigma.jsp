@@ -20,7 +20,10 @@
             </select><br>
             Ten: <input type="text" name="ten" id="ten"><br>
             So Luong: <input type="number" name="soLuong" id="soLuong"><br>
-
+                <%--            Giới Tính:--%>
+                <%--            <input type="radio" name="gioiTinh" value="Nam" checked> Nam--%>
+                <%--            <input type="radio" name="gioiTinh" value="Nữ"> Nữ--%>
+                <%--            <br>--%>
             <button type="submit">Add</button>
         </form>
 
@@ -64,13 +67,12 @@
         <a href="/phieugiamgia/hien-thi?page=${page-1}" ${page <= 1 ? 'style="pointer-events:none;opacity:0.5;"' : ''}>Prev</a>
         Page ${page} of ${totalPages}
         <a href="/phieugiamgia/hien-thi?page=${page+1}" ${page >= totalPages ? 'style="pointer-events:none;opacity:0.5;"' : ''}>Next</a>
-
     </c:when>
 
     <c:when test="${action == 'update'}">
         <h2>Update</h2>
         <form action="/phieugiamgia/update" method="post" onsubmit="return validateForm()">
-            ID: <input type="text" name="id" id="id" value="${sp.id}"><br>
+            ID: <input type="text" name="id" id="id" value="${sp.id}" readonly><br>
             Ma: <input type="text" name="ma" id="ma" value="${sp.ma}"><br>
             Loai Phieu Giam Gia:
             <select name="loaiPhieu">
@@ -80,6 +82,10 @@
             </select><br>
             Ten: <input type="text" name="ten" id="ten" value="${sp.ten}"><br>
             So Luong: <input type="number" name="soLuong" id="soLuong" value="${sp.soLuong}"><br>
+                <%--            Giới Tính:--%>
+                <%--            <input type="radio" name="gioiTinh" value="Nam" ${sp.gioiTinh eq 'Nam' ? 'checked' : ''}> Nam--%>
+                <%--            <input type="radio" name="gioiTinh" value="Nữ" ${sp.gioiTinh eq 'Nữ' ? 'checked' : ''}> Nữ--%>
+                <%--            <br>--%>
 
             <button type="submit">Update</button>
 
@@ -87,4 +93,69 @@
     </c:when>
 </c:choose>
 </body>
+
+<script>
+    function validateForm() {
+        const id = document.getElementById("id").value;
+        const ma = document.getElementById("ma").value;
+        const ten = document.getElementById("ten").value;
+        const soLuong = document.getElementById("soLuong").value;
+
+        if (!ma || !ten || !soLuong) {
+            alert("Vui lòng điền đầy đủ thông tin.");
+            return false;
+        }
+
+        if (isNaN(soLuong) || soLuong <= 0) {
+            alert("Số lượng phải là một số dương.");
+            return false;
+        }
+        if (id && isNaN(id)) {
+            alert("ID phải là một số.");
+            return false;
+        }
+
+        //tên ko được chứa ký tự đặc biệt, số
+        const regex = /^[a-zA-Z\s]+$/;
+        if (!regex.test(ten)) {
+            alert("Tên không được chứa ký tự đặc biệt hoặc số.");
+            return false;
+        }
+
+        return true;
+    }
+</script>
+<script>
+    function validateForm() {
+        const id = document.getElementById("id").value;
+        const ma = document.getElementById("ma").value;
+        const ten = document.getElementById("ten").value;
+        const soLuong = document.getElementById("soLuong").value;
+
+        if (!ma || !ten || !soLuong) {
+            alert("Vui lòng điền đầy đủ thông tin.");
+            return false;
+        }
+
+        if (isNaN(soLuong) || soLuong <= 0) {
+            alert("Số lượng phải là một số dương.");
+            return false;
+        }
+        if (id && isNaN(id)) {
+            alert("ID phải là một số.");
+            return false;
+        }
+
+        //tên ko được chứa ký tự đặc biệt, số
+        const regex = /^[a-zA-Z\s]+$/;
+        if (!regex.test(ten)) {
+            alert("Tên không được chứa ký tự đặc biệt hoặc số.");
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+
 </html>
