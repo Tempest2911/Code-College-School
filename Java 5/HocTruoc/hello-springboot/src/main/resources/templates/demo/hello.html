@@ -2,9 +2,25 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Hello Page</title>
+    <title>Demo Page</title>
 </head>
 <body>
-<h1 th:text="${subject}">Default Subject</h1>
+<!-- Hiển thị subject nếu có -->
+<!-- Chỉ hiển thị nếu subject, author, year tồn tại -->
+<div th:if="${subject != null}">
+    <h1 th:text="${subject}">Default Subject</h1>
+    <p>Tác giả: <span th:text="${author}">Name</span></p>
+    <p>Năm: <span th:text="${year}">year</span></p>
+</div>
+
+
+
+<!-- Hiển thị danh sách sinh viên nếu có -->
+<div th:if="${students != null}">
+    <h2>Danh sách sinh viên</h2>
+    <ul>
+        <li th:each="sv : ${students}" th:text="${sv}">Tên mặc định</li>
+    </ul>
+</div>
 </body>
 </html>
