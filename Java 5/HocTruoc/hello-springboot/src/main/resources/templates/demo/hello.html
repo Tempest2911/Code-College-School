@@ -22,5 +22,77 @@
         <li th:each="sv : ${students}" th:text="${sv}">Tên mặc định</li>
     </ul>
 </div>
+
+<div th:if="${dsCN != null}">
+    <h1>Danh sách Nhân viên</h1>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>ID</th>
+            <th>Tên</th>
+            <th>Địa chỉ</th>
+            <th>SĐT</th>
+            <th>Email</th>
+        </tr>
+        <tr th:each="cn : ${dsCN}">
+            <td th:text="${cn.id}">ID</td>
+            <td th:text="${cn.ten}">Tên</td>
+            <td th:text="${cn.diaChi}">Địa chỉ</td>
+            <td th:text="${cn.soDienThoai}">sdt</td>
+            <td th:text="${cn.email}">email</td>
+        </tr>
+    </table>
+</div>
+
+
+<!-- Dùng switch để phân biệt -->
+<div th:switch="${view}">
+
+    <!-- Danh sách -->
+    <div th:case="'list'">
+        <h1>Danh sách Chủ Nhà</h1>
+
+        <table border="1">
+            <tr>
+                <th>ID</th><th>Tên</th><th>Địa chỉ</th><th>SĐT</th><th>Email</th><th>Hành động</th>
+            </tr>
+            <tr th:each="cn : ${chuNhas}">
+                <td th:text="${cn.id}"></td>
+                <td th:text="${cn.ten}"></td>
+                <td th:text="${cn.diaChi}"></td>
+                <td th:text="${cn.soDienThoai}"></td>
+                <td th:text="${cn.email}"></td>
+                <td>
+                    <a th:href="@{'/chunha/edit/' + ${cn.id}}">Sửa</a> |
+                    <a th:href="@{'/chunha/delete/' + ${cn.id}}" onclick="return confirm('Xóa?')">Xóa</a>
+                </td>
+            </tr>
+        </table>
+        <a th:href="@{/chunha/add}">Thêm</a>
+    </div>
+
+    <!-- Form -->
+    <div th:case="'form'">
+        <h1 th:text="${chuNha.id == null} ? 'Thêm Chủ Nhà' : 'Sửa Chủ Nhà'"></h1>
+        <form th:action="@{/chunha/save}" th:object="${chuNha}" method="post">
+            <input type="hidden" th:field="*{id}"/>
+
+            <label>Tên:</label>
+            <input type="text" th:field="*{ten}" required/><br/>
+
+            <label>Địa chỉ:</label>
+            <input type="text" th:field="*{diaChi}" required/><br/>
+
+            <label>SĐT:</label>
+            <input type="text" th:field="*{soDienThoai}" required/><br/>
+
+            <label>Email:</label>
+            <input type="email" th:field="*{email}" required/><br/>
+
+            <button type="submit">💾 Lưu</button>
+        </form>
+        <a th:href="@{/chunha}">⬅ Quay lại danh sách</a>
+    </div>
+
+</div>
 </body>
 </html>
