@@ -20,7 +20,7 @@ public class ChuNhaController {
     @GetMapping
     public String list(Model model) {
         model.addAttribute("view", "list");
-        model.addAttribute("chuNhas", chuNhaRepository.findAll());
+        model.addAttribute("chuNha", chuNhaRepository.findAll());
         return "demo/hello";
     }
 
