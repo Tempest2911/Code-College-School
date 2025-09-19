@@ -23,27 +23,6 @@
     </ul>
 </div>
 
-<div th:if="${dsCN != null}">
-    <h1>Danh sách Nhân viên</h1>
-    <table border="1" cellpadding="5">
-        <tr>
-            <th>ID</th>
-            <th>Tên</th>
-            <th>Địa chỉ</th>
-            <th>SĐT</th>
-            <th>Email</th>
-        </tr>
-        <tr th:each="cn : ${dsCN}">
-            <td th:text="${cn.id}">ID</td>
-            <td th:text="${cn.ten}">Tên</td>
-            <td th:text="${cn.diaChi}">Địa chỉ</td>
-            <td th:text="${cn.soDienThoai}">sdt</td>
-            <td th:text="${cn.email}">email</td>
-        </tr>
-    </table>
-</div>
-
-
 <!-- Dùng switch để phân biệt -->
 <div th:switch="${view}">
 
@@ -88,7 +67,7 @@
             <label>Email:</label>
             <input type="email" th:field="*{email}" required/><br/>
 
-            <button type="submit">💾 Lưu</button>
+            <button type="submit">Lưu</button>
         </form>
         <a th:href="@{/chunha}">⬅ Quay lại danh sách</a>
     </div>

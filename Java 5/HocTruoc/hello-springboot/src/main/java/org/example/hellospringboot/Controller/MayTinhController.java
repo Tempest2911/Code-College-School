@@ -31,7 +31,7 @@ public class MayTinhController {
 
     @GetMapping("may-tinh/chia")
     @ResponseBody
-    public String mayTinh4(@RequestParam(name = "soThuNhat") double a, @RequestParam(name = "soThuHai", defaultValue = "0") double b) {
+    public String mayTinh4(@RequestParam(name = "soThuNhat") double a, @RequestParam(name = "soThuHai") double b) {
 
         double c = a/b;
         if (b==0) {
