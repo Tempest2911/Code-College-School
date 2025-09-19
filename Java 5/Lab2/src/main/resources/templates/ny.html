@@ -5,7 +5,14 @@
     <title>Người yêu</title>
 </head>
 <body>
-<h2>Lover list</h2>
+
+<h1>Add new lover</h1>
+<form th:action="@{/lab-1/nguoi-yeu}" method="post">
+    Nickname: <input type="text" name="nickName" required /><br/>
+    Năm sinh: <input type="number" name="namSinh" required /><br/>
+    <button type="submit">Add</button>
+</form>
+<h1>Lover list</h1>
 <ul>
     <li th:if="${lovers.size() == 0}">không có</li>
     <li th:each="ny : ${lovers}">
@@ -13,11 +20,5 @@
         <span th:text="${ny.namSinh}"></span>
     </li>
 </ul>
-<h3>Add new lover</h3>
-<form th:action="@{/lab-1/nguoi-yeu}" method="post">
-    Nickname: <input type="text" name="nickName" required /><br/>
-    Năm sinh: <input type="number" name="namSinh" required /><br/>
-    <button type="submit">Add</button>
-</form>
 </body>
 </html>
