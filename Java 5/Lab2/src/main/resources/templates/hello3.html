@@ -1,0 +1,845 @@
+<html lang="en"><head><style>body {transition: opacity ease-in 0.2s; }
+body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; }
+</style><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="/Content/css?v=5SsskdAh3ChL4quPJSdTqyWDt4Uye5HAhSRdbwb5Vwg1" rel="stylesheet">
+    <link href="../../../fonts/css/font-awesome.min.css" rel="stylesheet"><link href="../../../Content/font-face.css" rel="stylesheet"><link href="../../../Content/bootstrap.min.css" rel="stylesheet"><link href="../../../Content/common.css" rel="stylesheet"><link href="../../../bundles/customcss" rel="stylesheet"><link href="../../../fonts/css/font-awesome.min.css" rel="stylesheet"><link href="../../../fonts/css/Bootstrap-select-v1.13.14.css" rel="stylesheet"><link href="../../../Content/toastr.min.css" rel="stylesheet">
+    <style>
+        h1 {
+            font-size: 2em;
+        }
+
+        h2 {
+            font-size: 1.5em;
+        }
+
+        * {
+            font-family: 'Roboto';
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.5em;
+        }
+
+        body {
+            background: #fafafa;
+            padding: 0;
+        }
+
+        nav-bar {
+            position: fixed;
+            width: 100%
+        }
+
+        #sidebar a,
+        #sidebar a:hover,
+        #sidebar a:focus {
+            color: inherit;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        /* Side Bar*/
+
+
+
+        #sidebar.sb-active {
+            margin-left: -300px;
+        }
+
+        .wrapper {
+            display: flex;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+
+        input, select {
+            font-size: inherit !important;
+            /*height: 33.5px !important;*/
+        }
+
+        table {
+            border-collapse: separate;
+            border-spacing: 0 0.8em;
+        }
+
+        .tbl-data {
+            border: 1px solid rgba(0,0,0,.05);
+        }
+
+        .tbl-data th {
+            font-weight: bold;
+            background-color: #F2994A !important;
+            color: white;
+        }
+
+        .tbl-data input[type=checkbox] {
+            width: 20px;
+        }
+
+        .tbl-detail tr td {
+            padding: 4px 5px 4px 5px;
+            border: 1px solid rgba(0,0,0,.05);
+        }
+
+        .tbl-checkbox label {
+            position: relative;
+            top: -11px;
+            left: 2px;
+        }
+
+        .max-with-fit {
+            max-width: fit-content;
+        }
+
+        textarea {
+            font-size: inherit !important;
+        }
+
+        #sidebar {
+            min-width: 300px;
+            max-width: 300px;
+            margin-top: 10px;
+            margin-left: 10px;
+            color: #fff;
+            transition: all 0.3s;
+            overflow-y: scroll;
+            height: 800px;
+            border-radius: 5px;
+            background-color: #F2994A;
+        }
+
+        #sidebar::-webkit-scrollbar {
+            width: 0;
+        }
+
+        #sidebar p {
+            padding: 15px;
+            background: #F2994A;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        #sidebar ul.components {
+            padding: 20px 0;
+        }
+
+
+        #sidebar ul li a {
+            padding: 10px;
+            font-size: 1em;
+            display: block;
+            background-color: #f4a158;
+        }
+
+        #sidebar ul li a:hover {
+            background: #d06e17;
+        }
+
+        #sidebar ul li.sb-active > a,
+        a[aria-expanded="true"] {
+            color: #fff;
+        }
+
+        a[data-toggle="collapse"] {
+            position: relative;
+        }
+
+        #navbarSupportedContent .dropdown-toggle::after {
+            display: block;
+            position: absolute;
+            top: 50%;
+            right: -15%;
+            transform: translateY(-50%);
+        }
+
+        .dropdown-toggle::after {
+            display: block;
+            position: absolute;
+            top: 50%;
+            right: 7%;
+            transform: translateY(-50%);
+        }
+
+        #sidebar ul ul a {
+            font-size: 0.9em !important;
+            padding-left: 30px !important;
+            background: #d29a68;
+        }
+
+        #content {
+            height: calc(100vh - 97px);
+            width: 100%;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        #ui-datepicker-div {
+            width: fit-content;
+        }
+
+        .menu-btn {
+            border: none;
+            background-color: #F2994A;
+        }
+
+        .menu-btn:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        .btn-green:hover {
+            background-color: #009900;
+        }
+
+        .btn-success {
+            width: 70px;
+            height: 40px;
+            font-weight: bold;
+        }
+
+        #btn-home {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+        }
+
+        #btn-home:hover {
+            color: white;
+        }
+
+        #btn-home span {
+            position: relative;
+            top: 2px;
+            font-size: 15px;
+        }
+
+        #btn-home i {
+            position: relative;
+            top: 2px;
+        }
+
+        .btn-light {
+            border: 1px solid #d9cfcf;
+        }
+
+        #showModelNeed {
+            height: 33.5px;
+        }
+    </style>
+    <title>
+        FPT Polytechnic Learning Materials
+    </title></head>
+
+<body style="">
+<form method="post" action="./SyllabusDetails?sylID=1898" id="form2">
+    <div class="aspNetHidden">
+        <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+        <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+        <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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">
+    </div>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        var theForm = document.forms['form2'];
+        if (!theForm) {
+            theForm = document.form2;
+        }
+        function __doPostBack(eventTarget, eventArgument) {
+            if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+                theForm.__EVENTTARGET.value = eventTarget;
+                theForm.__EVENTARGUMENT.value = eventArgument;
+                theForm.submit();
+            }
+        }
+        //]]>
+    </script>
+
+
+    <script src="/WebResource.axd?d=pynGkmcFUV13He1Qd6_TZN4syzYvH7qLD0TkzUQH2o42B1rLnuevgvPVLOn4pp6edJFYBya3FlIB-N8SChkGbw2&amp;t=638628459619783110" type="text/javascript"></script>
+
+
+    <script src="../../../Scripts/WebForms/MsAjax/MicrosoftAjax.js" type="text/javascript"></script>
+    <script src="../../../Scripts/WebForms/MsAjax/MicrosoftAjaxWebForms.js" type="text/javascript"></script>
+    <script src="../../../Scripts/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/popper.js" type="text/javascript"></script>
+    <script src="../../../Scripts/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/Bootstrap-select-v1.13.14.js" type="text/javascript"></script>
+    <script src="../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/custom.js" type="text/javascript"></script>
+    <script src="../../../Scripts/toastr.min.js" type="text/javascript"></script>
+    <div class="aspNetHidden">
+
+        <input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="3364F04B">
+        <input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="">
+        <input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="xFH+iPnlNzIFCdEv8rGhet/fBvxjO16w/zGswO2NFjjV1sN5kDIxiudSS4B7pGh4ooVdP2G3niuEigoGtIkYqXxPaqeLdYht2psnfDaZ1+zzbxgErX4DTDZRfj9Kxu7pkCIxrOMWSHZ244Vg8iQVZZf0o489+733iN50uk9lmO9oq5pWnzZmeAt5pBiolFfZ/aAE0uVl/0OEJq/BGIrEf9pCEekShpqeRYlD6bT1mVHAABrbD9TZFDIsnIcuhq7lyS/1wSgePaHvY/tEyJb45wzq3WFEkpLfcd5kWFiVw5aCVQmhfI5sgEX8Vn7RqMpyBUyTu6OG9YKuk2dvrL5RW+ll5DTgeoiiDSHTlBhzkL4QrBz7PA3iBYFKeN/8Q6uQ+9HjycPWpxeXz3OMEiuHij6Uep2DYl8Kyeth+z1C4Gnot7srUl87BL4bfC9OhedCUqNJp9Upcqay6bIqrqzAw24jjEAUX45w7NPKzMmyIEsWsx50bsSgX7Bv2IHXxwwZ">
+    </div>
+    <nav class="navbar navbar-expand-lg px-0 pb-2 m-0" style="background-color: #F2994A; color: white;">
+        <div class="container-fluid p-0">
+
+
+            <a id="btn-home" class="btn btn-lg ml-3" href="/gui/Home.aspx">
+                <i class="fa fa-home fa-2x" aria-hidden="true"></i>
+                <span style="font-weight: bold;">Home</span>
+            </a>
+
+            <h1 class="text-center" style="position: absolute; left: 24%">FPT Polytechnic Learning Materials</h1>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse nav-right-style" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item sb-active">
+                        <span class="sr-only">(current)</span>
+                    </li>
+                </ul>
+                <select id="language" style="z-index: 1; width: 130px" class="form-control">
+                    <option value="en">English</option>
+                    <option value="vi">Vietnamese</option>
+                </select>
+                <div class="mt-2">
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img id="ProfileImage" class="rounded-circle" src="https://lh3.googleusercontent.com/a/ACg8ocL0lE5TfsQoSPaZYIj3hOUN3FdvBzJeYYU0Iy34efU07b6eg3nC=s96-c" style="height:50px;width:50px;">
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <div id="pnlProfile">
+
+                                            <span class="dropdown-item">Name:
+                                                <span id="lblName" style="font-weight:bold;">Nguyen Duy Phong (PTCD HN)</span>
+                                            </span>
+                                        <span class="dropdown-item">
+                                                <div id="pnlEmail">
+
+                                                    Email:
+                                                        <span id="lblEmail" style="font-weight:bold;">phongndth03089@fpt.edu.vn</span>
+
+	</div>
+                                            </span>
+                                        <span class="dropdown-item">User's role:
+                                                   <span id="lblRole" style="font-weight:bold;">Student</span>
+                                            </span>
+                                        <span class="dropdown-item">Education level:
+                                                <span id="lblEduLevel" style="font-weight:bold;">FPOLY</span>
+                                            </span>
+                                        <div class="dropdown-item">
+
+                                        </div>
+
+                                        <div class="dropdown-item ">
+                                            <a id="lbtnSignOut" href="javascript:__doPostBack('ctl00$lbtnSignOut','')" style="display:inline-block;width:100%;">Sign out FLM</a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="wrapper">
+
+        <div id="content" class="p-4">
+
+            <div class="mx-3 ">
+                <script type="text/javascript">
+                    //<![CDATA[
+                    Sys.WebForms.PageRequestManager._initialize('ctl00$ScriptManager1', 'form2', [], [], [], 90, 'ctl00');
+                    //]]>
+                </script>
+
+
+                <link href="../../../fonts/css/font-awesome.min.css" rel="stylesheet">
+                <link href="../../../Content/font-face.css" rel="stylesheet">
+                <link href="../../../Content/bootstrap.min.css" rel="stylesheet">
+                <link href="../../../Content/common.css" rel="stylesheet">
+                <style type="text/css">
+                    .auto-style2 {
+                        width: 155px;
+                    }
+
+                    .auto-style3 {
+                        width: 155px;
+                        height: 24px;
+                    }
+
+                    /*Table*/
+                    #gvSubs, #table-detail, #gvMaterial, #gvLO, #gvSchedule, #gvAssessment {
+                        border: 1px solid rgba(0,0,0,.05);
+                    }
+
+                    #gvSubs th {
+                        font-weight: bold;
+                        background-color: #F2994A;
+                        color: white;
+                    }
+
+                    #gvMaterial th {
+                        font-weight: bold;
+                        background-color: #F2994A;
+                        color: white;
+                    }
+
+                    #gvLO th {
+                        font-weight: bold;
+                        background-color: #F2994A;
+                        color: white;
+                    }
+
+                    #gvSchedule th {
+                        font-weight: bold;
+                        background-color: #F2994A;
+                        color: white;
+                    }
+                    /*Table*/
+                    #gvCQ {
+                        border: 1px solid rgba(0,0,0,.05);
+                    }
+
+                    #gvCQ th {
+                        font-weight: bold;
+                        background-color: #F2994A;
+                        color: white;
+                    }
+
+                    .table-top {
+                        border-collapse: separate;
+                        border-spacing: 0 0.5em;
+                    }
+
+                    #gvAssessment th {
+                        font-weight: bold;
+                        background-color: #F2994A;
+                        color: white;
+                    }
+
+                    .table-detail tr td {
+                        padding: 6px 10px 6px 10px;
+                    }
+
+                    table-Schedule {
+                        table-layout: auto;
+                    }
+
+                    /*Table*/
+                    #gvPLO {
+                        border: 1px solid rgba(0,0,0,.05);
+                    }
+
+                    #gvPLO th {
+                        font-weight: bold;
+                        background-color: #F2994A;
+                        color: white;
+                    }
+
+                    .table-top {
+                        border-collapse: separate;
+                        border-spacing: 0 0.5em;
+                    }
+
+                    .plo, table {
+                        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+                        border-collapse: collapse;
+                        width: 100%;
+                    }
+
+                    .plo td, #customers th {
+                        border: 1px solid rgba(0,0,0,.05);
+                        padding: 8px;
+                    }
+
+                    .plo tr:nth-child(even) {
+                        background-color: #f2f2f2;
+                    }
+
+                    .plo tr:hover {
+                        background-color: #ddd;
+                    }
+
+                    .plo th, .header_PLO {
+                        border: 1px solid rgba(0,0,0,.05);
+                        padding-top: 12px;
+                        padding-bottom: 12px;
+                        padding-left: 6px;
+                        padding-right: 6px;
+                        text-align: center;
+                        background-color: #F2994A;
+                        color: white;
+                        font-weight: bold;
+                    }
+
+                    .plo td, .header_PLO td {
+                        text-align: center;
+                    }
+
+                    .textRedBold {
+                        color: red;
+                        font-weight: bold;
+                    }
+                </style>
+                <div>
+
+                    <h1 class="mb-4">Syllabus Details</h1>
+
+                    <br>
+
+                    <table id="table-detail" class="table-detail" cellspacing="0" rules="all" border="1" style="border-collapse: collapse; width: 100%;">
+                        <tbody><tr>
+                            <td class="auto-style2" align="right" style="text-align: right; table-layout: auto;">Syllabus ID:</td>
+                            <td class="auto-style6">
+                                <span id="lblSyllabusID">1898</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="auto-style3" align="right" style="text-align: right; table-layout: auto;">Syllabus Name:</td>
+                            <td class="auto-style4">
+                                <span id="lblSyllabusName" style="font-weight:bold;">Lập trình Java 6</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="auto-style3" align="right" style="text-align: right; table-layout: auto;">Syllabus English:</td>
+                            <td class="auto-style4">
+                                <span id="lblSyllabusNameEnglish" style="font-weight:bold;">Java Programming 6</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="auto-style2" align="right" style="text-align: right; table-layout: auto;">Subject Code:</td>
+                            <td class="auto-style6">
+                                <span id="lblSubjectCode" style="font-weight:bold;">SOF3062</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="auto-style2" align="right" style="text-align: right; table-layout: auto;">NoCredit:</td>
+                            <td class="auto-style6">
+                                <span id="lblNoCredit">3</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="auto-style2" align="right" style="text-align: right; table-layout: auto;">Degree Level:</td>
+                            <td class="auto-style6">
+                                <span id="lblDegreeLevel">Cao đẳng</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="auto-style2" align="right" style="text-align: right; table-layout: auto;">Time Allocation:</td>
+                            <td class="auto-style6">
+                                <span id="lblTimeAllocation">Tổng thời lượng: 75 giờ<br>1. Trên lớp: 34 giờ<br>   + Lý thuyết (Slide): 14 giờ<br>   + Thực hành (Lab, Workshop, Casestudy, Quiz, Open Activity, Project): 20 giờ<br>2. Bảo vệ, kiểm tra: 2 giờ<br>   + Bảo vệ và/hoặc thi cuối môn: 2 giờ<br>3. Học qua hướng dẫn của hệ thống: 39 giờ<br>   + Thực hiện dự án môn học (Assignment): 39 giờ</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="auto-style2" align="right" style="text-align: right; table-layout: auto;">Pre-Requisite:</td>
+                            <td class="auto-style6">
+                                <span id="lblPreRequisite">Participated: Lập trình Java 5</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="auto-style2" align="right" style="text-align: right; table-layout: auto;">Description:</td>
+                            <td class="auto-style6">
+                                <span id="lblDescription">Môn học Lập trình Java 6 được xây dựng để nâng cao kiến thức Spring Boot Framework trong môn Lập trình Java 5 bổ sung thêm Security. Trong môn học này đề cập đến những mảng kiến thức lớn chưa được đề cập trong môn Lập trình Java 5 như:<br>1. Spring Securuty<br>2. RESTful API<br>3. SPA với VueJS<br>4. WebSocket</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="auto-style2" align="right" style="text-align: right; table-layout: auto;">StudentTasks:</td>
+                            <td class="auto-style6">
+                                <span id="lblStudentTask">- Thực hiện các nhiệm vụ của sinh viên trước giờ học và sau giờ học được nêu chi tiết trong lịch trình học<br>- Tích cực tham gia các hoạt động trong giờ học trên lớp<br>- Thực hiện đầy đủ các nhiệm vụ giảng viên giao<br>- Hoàn thiện và nộp đúng hạn Assignment theo từng giai đoạn và bản báo cáo Assignment cuối kỳ<br>- Sử dụng giáo trình, các tài nguyên đi kèm (nếu có) và tìm kiếm thêm các tài nguyên tham khảo từ các nguồn khác nhau để hoàn thiện kiến thức<br>- Truy cập website tài nguyên (http://flm.poly.edu.vn) để có thông tin và tài nguyên cập nhật nhất của khóa học<br>- Truy cập website quản lý khóa học (http://ap.poly.edu.vn) để có lịch học và kết quả điểm<br>- Email cho giảng viên khi có câu hỏi thắc mắc ngoài giờ học.</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="auto-style2" align="right" style="text-align: right; table-layout: auto;">Tools:</td>
+                            <td class="auto-style6">
+                                <span id="lblTools">- Spring Tool Suite<br>- SQL Server 2012+<br>- VS Code</span>
+                            </td>
+                        </tr>
+                        <tr id="trScoringScale">
+                            <td class="auto-style2" align="right" style="text-align: right; table-layout: auto;">Scoring Scale:</td>
+                            <td class="auto-style6">
+                                <span id="lblScoringScale">10</span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="auto-style2" align="right" style="text-align: right; table-layout: auto;">DecisionNo MM/dd/yyyy: </td>
+                            <td class="auto-style6">
+                                <span id="lblDecisionNo">222/QĐ-CĐFPL dated 03/21/2025</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="auto-style2" align="right" style="text-align: right; table-layout: auto;">IsApproved:</td>
+                            <td class="auto-style6">
+                                <span id="lblIsApproved" style="font-weight:bold;">True</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="auto-style2" align="right" style="text-align: right; table-layout: auto;">Note:</td>
+                            <td class="auto-style6">
+                                <span id="lblNote">1. Điều kiện dự thi cuối môn: <br>- Trung bình cộng (theo trọng số) các thành phần điểm quá trình tối thiểu là 5<br>- Tham dự tối thiểu 80% số giờ trên lớp<br>2. Điều kiện qua môn:<br>- Điểm đánh giá cuối môn (Final Exam) tối thiểu là 5<br>- Tổng điểm môn tối thiểu là 5<br>3. Xem chi tiết ở phần cơ cấu điểm (Grading Structure)</span>
+                            </td>
+                        </tr>
+                        <tr id="trMinAvgMarkToPass">
+                            <td class="auto-style3" align="right" style="text-align: right; table-layout: auto;">MinAvgMarkToPass:</td>
+                            <td class="auto-style4">
+                                <span id="lblMinAvgMarkToPass">5</span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="auto-style3" align="right" style="text-align: right; table-layout: auto;">IsActive:</td>
+                            <td class="auto-style4">
+                                <span id="lblIsActive">True</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="auto-style2" align="right" style="text-align: right; table-layout: auto;">ApprovedDate:</td>
+                            <td class="auto-style6">
+                                <span id="lblApprovedDate">3/21/2025</span>
+                            </td>
+                        </tr>
+                        </tbody></table>
+                    <br>
+                    <span id="lblMessageMat" style="color:#23AC68;">6 material(s)</span>
+
+                    <br>
+                    <div>
+                        <table class="table table-striped" cellspacing="0" rules="all" border="1" id="gvMaterial" style="border-collapse:collapse;">
+                            <tbody><tr>
+                                <th scope="col">MaterialDescription</th><th scope="col">Author</th><th scope="col">Publisher</th><th scope="col">PublishedDate</th><th scope="col">Edition</th><th scope="col">ISBN</th><th scope="col">IsMainMaterial</th><th scope="col">IsHardCopy</th><th scope="col">IsOnline</th><th scope="col">Note</th>
+                            </tr><tr>
+                                <td>Slide (08)</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>                                                                                                    </td><td><span class="aspNetDisabled" title="IsMainMaterial"><input id="" type="checkbox" name="ctl00$ContentPlaceHolder1$gvMaterial$ctl02$ctl00" disabled="disabled"></span></td><td><span class="aspNetDisabled" title="IsHardCopy"><input id="" type="checkbox" name="ctl00$ContentPlaceHolder1$gvMaterial$ctl02$ctl01" disabled="disabled"></span></td><td><span class="aspNetDisabled" title="IsOnline"><input id="" type="checkbox" name="ctl00$ContentPlaceHolder1$gvMaterial$ctl02$ctl02" checked="checked" disabled="disabled"></span></td><td>Teaching &amp; learning materials</td>
+                            </tr><tr>
+                                <td>Lab (08)</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>                                                                                                    </td><td><span class="aspNetDisabled" title="IsMainMaterial"><input id="" type="checkbox" name="ctl00$ContentPlaceHolder1$gvMaterial$ctl03$ctl00" disabled="disabled"></span></td><td><span class="aspNetDisabled" title="IsHardCopy"><input id="" type="checkbox" name="ctl00$ContentPlaceHolder1$gvMaterial$ctl03$ctl01" disabled="disabled"></span></td><td><span class="aspNetDisabled" title="IsOnline"><input id="" type="checkbox" name="ctl00$ContentPlaceHolder1$gvMaterial$ctl03$ctl02" checked="checked" disabled="disabled"></span></td><td>Teaching &amp; learning materials</td>
+                            </tr><tr>
+                                <td>Quiz (04)</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>                                                                                                    </td><td><span class="aspNetDisabled" title="IsMainMaterial"><input id="" type="checkbox" name="ctl00$ContentPlaceHolder1$gvMaterial$ctl04$ctl00" disabled="disabled"></span></td><td><span class="aspNetDisabled" title="IsHardCopy"><input id="" type="checkbox" name="ctl00$ContentPlaceHolder1$gvMaterial$ctl04$ctl01" disabled="disabled"></span></td><td><span class="aspNetDisabled" title="IsOnline"><input id="" type="checkbox" name="ctl00$ContentPlaceHolder1$gvMaterial$ctl04$ctl02" checked="checked" disabled="disabled"></span></td><td>Teaching &amp; learning materials</td>
+                            </tr><tr>
+                                <td>Assignment (01)</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>                                                                                                    </td><td><span class="aspNetDisabled" title="IsMainMaterial"><input id="" type="checkbox" name="ctl00$ContentPlaceHolder1$gvMaterial$ctl05$ctl00" disabled="disabled"></span></td><td><span class="aspNetDisabled" title="IsHardCopy"><input id="" type="checkbox" name="ctl00$ContentPlaceHolder1$gvMaterial$ctl05$ctl01" disabled="disabled"></span></td><td><span class="aspNetDisabled" title="IsOnline"><input id="" type="checkbox" name="ctl00$ContentPlaceHolder1$gvMaterial$ctl05$ctl02" checked="checked" disabled="disabled"></span></td><td>Teaching &amp; learning materials</td>
+                            </tr><tr>
+                                <td>Tham khảo thêm:<br>- https://www.baeldung.com/jackson<br>- https://www.baeldung.com/rest-with-spring-series/<br>- https://www.baeldung.com/security-spring/<br>- https://vuejs.org/guide/introduction.html</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>                                                                                                    </td><td><span class="aspNetDisabled" title="IsMainMaterial"><input id="" type="checkbox" name="ctl00$ContentPlaceHolder1$gvMaterial$ctl06$ctl00" disabled="disabled"></span></td><td><span class="aspNetDisabled" title="IsHardCopy"><input id="" type="checkbox" name="ctl00$ContentPlaceHolder1$gvMaterial$ctl06$ctl01" disabled="disabled"></span></td><td><span class="aspNetDisabled" title="IsOnline"><input id="" type="checkbox" name="ctl00$ContentPlaceHolder1$gvMaterial$ctl06$ctl02" disabled="disabled"></span></td><td>JSON, Rest API, Spring Security and VueJS</td>
+                            </tr><tr>
+                                <td>https://openplanning.net/11669/spring-boot</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>                                                                                                    </td><td><span class="aspNetDisabled" title="IsMainMaterial"><input id="" type="checkbox" name="ctl00$ContentPlaceHolder1$gvMaterial$ctl07$ctl00" checked="checked" disabled="disabled"></span></td><td><span class="aspNetDisabled" title="IsHardCopy"><input id="" type="checkbox" name="ctl00$ContentPlaceHolder1$gvMaterial$ctl07$ctl01" disabled="disabled"></span></td><td><span class="aspNetDisabled" title="IsOnline"><input id="" type="checkbox" name="ctl00$ContentPlaceHolder1$gvMaterial$ctl07$ctl02" checked="checked" disabled="disabled"></span></td><td>Internet nguồn mở</td>
+                            </tr>
+                            </tbody></table>
+                    </div>
+
+                    <br>
+                    <span id="lblMessageLO" style="color:#23AC68;">4 LO(s)</span>
+
+                    <div>
+                        <table class="table table-striped" cellspacing="0" rules="all" border="1" id="gvLO" style="border-collapse:collapse;">
+                            <tbody><tr>
+                                <th scope="col">CLO Name</th><th scope="col">CLO Details</th><th scope="col">LO Details</th>
+                            </tr><tr>
+                                <td align="center" style="width:5%;">1</td><td style="width:20%;">CLO1</td><td style="width:80%;">Bảo mật an toàn cho ứng dụng</td>
+                            </tr><tr>
+                                <td align="center" style="width:5%;">2</td><td style="width:20%;">CLO2</td><td style="width:80%;">Đăng nhập từ mạng xã hội</td>
+                            </tr><tr>
+                                <td align="center" style="width:5%;">3</td><td style="width:20%;">CLO3</td><td style="width:80%;">Xây dựng và sử dụng RESTful API: Sử dụng công cụ Postman để test REST API; Sử dụng REST API với VueJS,  Tổ chức REST API làm việc với CSDL</td>
+                            </tr><tr>
+                                <td align="center" style="width:5%;">4</td><td style="width:20%;">CLO4</td><td style="width:80%;">Tương tác trực tuyến thông qua WebSocket</td>
+                            </tr>
+                            </tbody></table>
+                    </div>
+                    <br>
+
+                    <br>
+                    <button class="margin-bot-10 btn btn-primary btn-blue ml-1" id="btnDownloadAllStudentMaterial">Download All Student Material</button>
+                    <span id="lblMessageSche" style="color:#23AC68;">20 sessions (45'/session)</span>
+
+                    <div>
+                        <table class="auto-style2 table table-striped tbl-data" cellspacing="0" rules="all" border="1" id="gvSchedule" style="width:100%;border-collapse:collapse;">
+                            <tbody><tr>
+                                <th scope="col">Session</th><th scope="col">Topic</th><th scope="col">Learning-Teaching Type</th><th scope="col">LO</th><th scope="col">ITU</th><th scope="col">Student Materials</th><th scope="col">S-Download</th><th scope="col">Student's Tasks</th><th scope="col">URLs</th>
+                            </tr><tr>
+                                <td>1</td><td>Slide 1: Spring Boot Security 1 (P1)<br>• Spring Boot Security Introduction<br>• Using InMemoryUserManager</td><td>Offline</td><td>CLO1</td><td>ITU</td><td class="product">Syllabus, Assignment, Slide1, Lab1</td><td><a class="ContainSLink" href="https://drive.google.com/drive/folders/1c14ZWN0Qp5T3n5q6RwO9Hh1RWXS5KE62?usp=sharing">link1</a></td><td>-Giới thiệu Syllabus<br>-Giới thiệu Assignment<br>-Slide1(P1)<br>-Thực hành Lab1(P1)<br>* Phân bổ thời gian:<br>  + (2 giờ): Thực hiện assignment<br>  + (1 giờ): Thực hành hoặc thảo luận tình huống<br>  + (1 giờ): Học theo sự giảng dạy của giảng viên</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>2</td><td>Slide 1: Spring Boot Security 1 (P2)<br>• Login with custom form<br>• Using JdbcUserManager</td><td>Offline</td><td>CLO1</td><td>TU</td><td class="product">Slide1, Lab1</td><td>&nbsp;</td><td>-Slide1(P2)<br>-Thực hành Lab1(P2)<br>* Phân bổ thời gian:<br>  + (2 giờ): Thực hiện assignment<br>  + (1 giờ): Thực hành hoặc thảo luận tình huống<br>  + (1 giờ): Học theo sự giảng dạy của giảng viên</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>3</td><td>Slide 2: Spring Boot Security 2 (P1)<br>• Using UserDetails and UserDetailsService</td><td>Offline</td><td>CLO2</td><td>ITU</td><td class="product">Slide2, Lab2</td><td>&nbsp;</td><td>-Slide2(P1)<br>-Thực hành Lab2(P1)<br>* Phân bổ thời gian:<br>  + (2 giờ): Thực hiện assignment<br>  + (1 giờ): Thực hành hoặc thảo luận tình huống<br>  + (1 giờ): Học theo sự giảng dạy của giảng viên</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>4</td><td>Slide 2: Spring Boot Security 2 (P2)<br>• Spring Boot OAuth2</td><td>Offline</td><td>CLO2</td><td>TU</td><td class="product">Slide2, Lab2, Quiz1</td><td>&nbsp;</td><td>-Slide2(P2)<br>-Thực hành Lab2(P2)<br>* Phân bổ thời gian:<br>  + (2 giờ): Thực hiện assignment<br>  + (1 giờ): Thực hành hoặc thảo luận tình huống<br>  + (1giờ): Thực hiện trắc nghiệm trên LMS/CMS<br>  + (1 giờ): Học theo sự giảng dạy của giảng viên</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>5</td><td>Slide 3: Spring Boot JWT (P1)<br>• JWT Introduction<br>• Server-Side JWT</td><td>Offline</td><td>CLO1</td><td>ITU</td><td class="product">Slide3, Lab3</td><td>&nbsp;</td><td>-Slide3(P1)<br>-Thực hành Lab3(P1)<br>* Phân bổ thời gian:<br>  + (2 giờ): Thực hiện assignment<br>  + (1 giờ): Thực hành hoặc thảo luận tình huống<br>  + (1 giờ): Học theo sự giảng dạy của giảng viên</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>6</td><td>Slide 3: Spring Boot JWT (P2)<br>• Client-Side JWT using Postman<br>• Client-Side JWT using Fetch API</td><td>Offline</td><td>CLO1, CLO2</td><td>TU</td><td class="product">Slide3, Lab3</td><td>&nbsp;</td><td>-Slide3(P2)<br>-Thực hành Lab3(P2)<br>-Hướng dẫn nộp GĐ1<br>* Phân bổ thời gian:<br>  + (3 giờ): Thực hiện assignment<br>  + (1 giờ): Thực hành hoặc thảo luận tình huống<br>  + (1 giờ): Học theo sự giảng dạy của giảng viên</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>7</td><td>Slide 4: Spring Boot REST API &amp; Axios (P1)<br>• Creating a Simple Spring Boot REST API<br>• Creating Spring Boot REST API<br>• @RequestBody &amp; ResponseBody<br>• Entity and JsonIgnore Properties</td><td>Offline</td><td>CLO2</td><td>ITU</td><td class="product">Slide4, Lab4</td><td>&nbsp;</td><td>-Slide4(P1)<br>-Thực hành Lab4(P1)<br>* Phân bổ thời gian:<br>  + (2 giờ): Thực hiện assignment<br>  + (1 giờ): Thực hành hoặc thảo luận tình huống<br>  + (1 giờ): Học theo sự giảng dạy của giảng viên</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>8</td><td>Slide 4: Spring Boot REST API &amp; Axios (P2)<br>• Consuming REST API with Postman<br>• Consuming REST API with Axios</td><td>Offline</td><td>CLO4</td><td>TU</td><td class="product">Slide4, Lab4, Quiz2</td><td>&nbsp;</td><td>-Slide4(P2)<br>-Thực hành Lab4(P2)<br>* Phân bổ thời gian:<br>  + (2 giờ): Thực hiện assignment<br>  + (1 giờ): Thực hành hoặc thảo luận tình huống<br>  + (1 giờ): Thực hiện trắc nghiệm trên LMS/CMS<br>  + (1 giờ): Học theo sự giảng dạy của giảng viên</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>9</td><td>Slide 5: Building SPA with VueJS 1 (P1)<br>• Creating &amp; Organizing SPA Project<br>• Route Parameters and Working with Query<br>• Consuming REST API with Axios in VueJS</td><td>Offline</td><td>CLO3</td><td>ITU</td><td class="product">Slide5, Lab5</td><td>&nbsp;</td><td>-Slide5(P1)<br>-Thực hành Lab5(P1)<br>* Phân bổ thời gian:<br>  + (2 giờ): Thực hiện assignment<br>  + (1 giờ): Thực hành hoặc thảo luận tình huống<br>  + (1 giờ): Học theo sự giảng dạy của giảng viên</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>10</td><td>Slide 5: Building SPA with VueJS 1 (P2)<br>• Creating Product List Page<br>• Creating Product Details</td><td>Offline</td><td>CLO3</td><td>TU</td><td class="product">Slide5, Lab5</td><td>&nbsp;</td><td>-Slide5(P2)<br>-Thực hành Lab5(P2)<br>* Phân bổ thời gian:<br>  + (2 giờ): Thực hiện assignment<br>  + (1 giờ): Thực hành hoặc thảo luận tình huống<br>  + (1 giờ): Học theo sự giảng dạy của giảng viên</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>11</td><td>Slide 6: Building SPA with VueJS 2 (P1)<br>• Building Composables<br>• Building Plugins and Global Properties</td><td>Offline</td><td>CLO3</td><td>ITU</td><td class="product">Slide6, Lab6</td><td>&nbsp;</td><td>-Slide6(P1)<br>-Thực hành Lab6(P1)<br>* Phân bổ thời gian:<br>  + (2 giờ): Thực hiện assignment<br>  + (1 giờ): Thực hành hoặc thảo luận tình huống<br>  + (1 giờ): Học theo sự giảng dạy của giảng viên</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>12</td><td>Slide 6: Building SPA with VueJS 2 (P2)<br>• Building CRUD Page</td><td>Offline</td><td>CLO3</td><td>TU</td><td class="product">Slide6, Lab6, Quiz3</td><td>&nbsp;</td><td>-Slide6(P2)<br>-Thực hành Lab6(P2)<br>* Phân bổ thời gian:<br>  + (2 giờ): Thực hiện assignment<br>  + (1 giờ): Thực hành hoặc thảo luận tình huống<br>  + (1 giờ): Thực hiện trắc nghiệm trên LMS/CMS<br>  + (1 giờ): Học theo sự giảng dạy của giảng viên</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>13</td><td>Slide 7: Building SPA with VueJS 3 (P1)<br>• State Management</td><td>Offline</td><td>CLO3</td><td>ITU</td><td class="product">Slide7, Lab7</td><td>&nbsp;</td><td>-Slide7(P1)<br>-Thực hành Lab7(P1)<br>* Phân bổ thời gian:<br>  + (2 giờ): Thực hiện assignment<br>  + (1 giờ): Thực hành hoặc thảo luận tình huống<br>  + (1 giờ): Học theo sự giảng dạy của giảng viên</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>14</td><td>Slide 7: Building SPA with VueJS 3 (P2)<br>• Building Shopping Cart</td><td>Offline</td><td>CLO3</td><td>TU</td><td class="product">Slide7, Lab7</td><td>&nbsp;</td><td>-Slide7(P2)<br>-Thực hành Lab7(P2)<br>-Hướng dẫn nộp GĐ2<br>* Phân bổ thời gian:<br>  + (3 giờ): Thực hiện assignment<br>  + (1 giờ): Thực hành hoặc thảo luận tình huống<br>  + (30 phút): Thực hiện trắc nghiệm trên LMS/CMS<br>  + (1 giờ): Học theo sự giảng dạy của giảng viên</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>15</td><td>Slide 8: Spring Boot WebSocket (P1)<br>• WebSocket Introduction<br>• Dependencies for WebSocket<br>• Enable and Configure WebSocket<br>• Builfing Message-Handling Controller</td><td>Offline</td><td>CLO4</td><td>ITU</td><td class="product">Slide8, Lab8</td><td>&nbsp;</td><td>-Slide8(P1)<br>-Thực hành Lab8(P1)<br>* Phân bổ thời gian:<br>  + (2 giờ): Thực hiện assignment<br>  + (1 giờ): Thực hành hoặc thảo luận tình huống<br>  + (1 giờ): Học theo sự giảng dạy của giảng viên</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>16</td><td>Slide 8. Spring Boot WebSocket (P2)<br>• Building WebSocket Client with SockJS và StompJS</td><td>Offline</td><td>CLO4</td><td>TU</td><td class="product">Slide8, Lab8, Quiz4</td><td>&nbsp;</td><td>-Slide8(P2)<br>-Thực hành Lab8(P2)<br>-Hướng dẫn nộp Final<br>* Phân bổ thời gian:<br>  + (3 giờ): Thực hiện assignment<br>  + (1 giờ): Thực hành hoặc thảo luận tình huống<br>  + (1giờ): Thực hiện trắc nghiệm trên LMS/CMS<br>  + (1 giờ): Học theo sự giảng dạy của giảng viên</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>17</td><td>Hoạt động mở:<br>- Giảng viên cho sinh viên ôn tập toàn bộ nội dung của môn học hoặc/và<br>- Giải đáp các vấn đề liên quan đến Assignment trước khi bảo vệ chính thức hoặc/và<br>- Tổ chức seminar các chủ đề liên quan đến môn học hoặc/và<br>- Mời diễn giả đến thuyết trình chủ đề thực tế liên quan đến môn học hoặc/và <br>- Đưa sinh viên đến doanh nghiệp để giao lưu học hỏi</td><td>ORIT</td><td>All CLO</td><td>U</td><td class="product">&nbsp;</td><td>&nbsp;</td><td>Hệ thống lại kiến thức môn, tiếp thu kiến thức mở từ giảng viên, chuyên gia đến từ doanh nghiệp</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>300</td><td>Bảo vệ Assignment: Sinh viên phải chứng minh assignment là do mình/nhóm tự làm mà không phải sao chép của bất kỳ ai/nhóm khác. <br>Chú ý: các cơ sở có thể chọn 1 trong 2 hình thức tổ chức sau: <br>1. Sinh viên thuyết trình bằng slide, minh họa sản phẩm thực hiện theo yêu cầu của assignment, giảng viên chất vấn sinh viên về kiến thức, kỹ năng trong phạm vi assignment.<br>2. Thi thực hành trong phạm vi kiến thức của assignment, giảng viên vấn đáp trên bài thi và assignment.</td><td>Offline</td><td>All CLOs</td><td>U</td><td class="product">Assignment</td><td>&nbsp;</td><td>Sinh viên trình bày bằng slide hoặc thi thực hành. Mỗi buổi thi 2 giờ, mỗi sinh viên bảo vệ tối đa 10 phút nếu làm cá nhân và 30 phút nếu làm nhóm.</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>301</td><td>Bảo vệ Assignment: Sinh viên phải chứng minh assignment là do mình/nhóm tự làm mà không phải sao chép của bất kỳ ai/nhóm khác. <br>Chú ý: các cơ sở có thể chọn 1 trong 2 hình thức tổ chức sau: <br>1. Sinh viên thuyết trình bằng slide, minh họa sản phẩm thực hiện theo yêu cầu của assignment, giảng viên chất vấn sinh viên về kiến thức, kỹ năng trong phạm vi assignment.<br>2. Thi thực hành trong phạm vi kiến thức của assignment, giảng viên vấn đáp trên bài thi và assignment.</td><td>Offline</td><td>All CLOs</td><td>U</td><td class="product">Assignment</td><td>&nbsp;</td><td>Sinh viên trình bày bằng slide hoặc thi thực hành. Mỗi buổi thi 2 giờ, mỗi sinh viên bảo vệ tối đa 10 phút nếu làm cá nhân và 30 phút nếu làm nhóm.</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>302</td><td>Bảo vệ Assignment: Sinh viên phải chứng minh assignment là do mình/nhóm tự làm mà không phải sao chép của bất kỳ ai/nhóm khác. <br>Chú ý: các cơ sở có thể chọn 1 trong 2 hình thức tổ chức sau: <br>1. Sinh viên thuyết trình bằng slide, minh họa sản phẩm thực hiện theo yêu cầu của assignment, giảng viên chất vấn sinh viên về kiến thức, kỹ năng trong phạm vi assignment.<br>2. Thi thực hành trong phạm vi kiến thức của assignment, giảng viên vấn đáp trên bài thi và assignment.</td><td>Offline</td><td>All CLOs</td><td>U</td><td class="product">Assignment</td><td>&nbsp;</td><td>Sinh viên trình bày bằng slide hoặc thi thực hành. Mỗi buổi thi 2 giờ, mỗi sinh viên bảo vệ tối đa 10 phút nếu làm cá nhân và 30 phút nếu làm nhóm.</td><td>&nbsp;</td>
+                            </tr>
+                            </tbody></table>
+                    </div>
+                    <br>
+                    <span id="blbMessageCQ" style="color:#23AC68;">0 Constructive question(s)</span>
+
+                    <div>
+
+                    </div>
+                    <br>
+                    <span id="lblMessageAsse" style="color:#23AC68;">18 assessment(s)</span>
+
+                    <div>
+                        <table class="table table-striped" cellspacing="0" rules="all" border="1" id="gvAssessment" style="border-collapse:collapse;">
+                            <tbody><tr>
+                                <th scope="col">Category</th><th scope="col">Type</th><th scope="col">Part</th><th scope="col">Weight</th><th scope="col">Completion Criteria</th><th scope="col">Duration</th><th scope="col">CLO</th><th scope="col">Question Type</th><th scope="col">No Question</th><th scope="col">Knowledge and Skill</th><th scope="col">Grading Guide</th><th scope="col">Note</th>
+                            </tr><tr>
+                                <td>Assignment</td><td>On-going</td><td>2</td><td>20.0%</td><td></td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>Đánh giá Assignment GĐ 1</td><td>On-going</td><td>1</td><td>10.0%</td><td></td><td>&nbsp;</td><td>CLO1, CLO2. CLO4</td><td>Sản phẩm</td><td>1 sản phẩm</td><td>Bài 1 đến bài 4</td><td>Tải từ LMS và chấm đểm ở nhà</td><td>Bài nộp trên LMS</td>
+                            </tr><tr>
+                                <td>Đánh giá Assignment GĐ 2</td><td>On-going</td><td>1</td><td>10.0%</td><td></td><td>&nbsp;</td><td>CLO3, CLO4</td><td>Sản phẩm</td><td>1 sản phẩm</td><td>Bài 5 đến bài 7</td><td>Tải từ LMS và chấm đểm ở nhà</td><td>Bài nộp trên LMS</td>
+                            </tr><tr>
+                                <td>Lab</td><td>On-going</td><td>8</td><td>28.0%</td><td></td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>Lab 1</td><td>On-going</td><td>1</td><td>3.5%</td><td></td><td>2h</td><td>CLO1</td><td>Bài tập</td><td>3-5 bài</td><td>Nội dung trong Giáo trình, Slide, Lab, Assignment và các tài nguyên tham khảo trong Syllabus</td><td>SV nộp bài để giáo viên chấm<br>(thời hạn: cuối giờ hoặc cuối ngày (23h55), hoặc giảng viên quy định phù hợp với thời gian học của lớp)</td><td>Bài nộp trên LMS</td>
+                            </tr><tr>
+                                <td>Lab 2</td><td>On-going</td><td>1</td><td>3.5%</td><td></td><td>2h</td><td>CLO2</td><td>Bài tập</td><td>3-5 bài</td><td>Nội dung trong Giáo trình, Slide, Lab, Assignment và các tài nguyên tham khảo trong Syllabus</td><td>SV nộp bài để giáo viên chấm<br>(thời hạn: cuối giờ hoặc cuối ngày (23h55), hoặc giảng viên quy định phù hợp với thời gian học của lớp)</td><td>Bài nộp trên LMS</td>
+                            </tr><tr>
+                                <td>Lab 3</td><td>On-going</td><td>1</td><td>3.5%</td><td></td><td>2h</td><td>CLO1, CLO2</td><td>Bài tập</td><td>3-5 bài</td><td>Nội dung trong Giáo trình, Slide, Lab, Assignment và các tài nguyên tham khảo trong Syllabus</td><td>SV nộp bài để giáo viên chấm<br>(thời hạn: cuối giờ hoặc cuối ngày (23h55), hoặc giảng viên quy định phù hợp với thời gian học của lớp)</td><td>Bài nộp trên LMS</td>
+                            </tr><tr>
+                                <td>Lab 4</td><td>On-going</td><td>1</td><td>3.5%</td><td></td><td>2h</td><td>CLO2, CLO4</td><td>Bài tập</td><td>3-5 bài</td><td>Nội dung trong Giáo trình, Slide, Lab, Assignment và các tài nguyên tham khảo trong Syllabus</td><td>SV nộp bài để giáo viên chấm<br>(thời hạn: cuối giờ hoặc cuối ngày (23h55), hoặc giảng viên quy định phù hợp với thời gian học của lớp)</td><td>Bài nộp trên LMS</td>
+                            </tr><tr>
+                                <td>Lab 5</td><td>On-going</td><td>1</td><td>3.5%</td><td></td><td>2h</td><td>CLO3</td><td>Bài tập</td><td>3-5 bài</td><td>Nội dung trong Giáo trình, Slide, Lab, Assignment và các tài nguyên tham khảo trong Syllabus</td><td>SV nộp bài để giáo viên chấm<br>(thời hạn: cuối giờ hoặc cuối ngày (23h55), hoặc giảng viên quy định phù hợp với thời gian học của lớp)</td><td>Bài nộp trên LMS</td>
+                            </tr><tr>
+                                <td>Lab 6</td><td>On-going</td><td>1</td><td>3.5%</td><td></td><td>2h</td><td>CLO3</td><td>Bài tập</td><td>3-5 bài</td><td>Nội dung trong Giáo trình, Slide, Lab, Assignment và các tài nguyên tham khảo trong Syllabus</td><td>SV nộp bài để giáo viên chấm<br>(thời hạn: cuối giờ hoặc cuối ngày (23h55), hoặc giảng viên quy định phù hợp với thời gian học của lớp)</td><td>Bài nộp trên LMS</td>
+                            </tr><tr>
+                                <td>Lab 7</td><td>On-going</td><td>1</td><td>3.5%</td><td></td><td>2h</td><td>CLO3</td><td>Bài tập</td><td>3-5 bài</td><td>Nội dung trong Giáo trình, Slide, Lab, Assignment và các tài nguyên tham khảo trong Syllabus</td><td>SV nộp bài để giáo viên chấm<br>(thời hạn: cuối giờ hoặc cuối ngày (23h55), hoặc giảng viên quy định phù hợp với thời gian học của lớp)</td><td>Bài nộp trên LMS</td>
+                            </tr><tr>
+                                <td>Lab 8</td><td>On-going</td><td>1</td><td>3.5%</td><td></td><td>2h</td><td>CLO4</td><td>Bài tập</td><td>3-5 bài</td><td>Nội dung trong Giáo trình, Slide, Lab, Assignment và các tài nguyên tham khảo trong Syllabus</td><td>SV nộp bài để giáo viên chấm<br>(thời hạn: cuối giờ hoặc cuối ngày (23h55), hoặc giảng viên quy định phù hợp với thời gian học của lớp)</td><td>Bài nộp trên LMS</td>
+                            </tr><tr>
+                                <td>Quiz</td><td>On-going</td><td>4</td><td>12.0%</td><td></td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                            </tr><tr>
+                                <td>Quiz 1</td><td>On-going</td><td>1</td><td>3.0%</td><td></td><td>10 phút</td><td>CLO1, CLO2</td><td>Trắc nghiệm</td><td>15 câu hỏi/quiz</td><td>Nội dung trong Giáo trình, Slide, Lab, Assignment và các tài nguyên tham khảo trong Syllabus</td><td>Tổ chức tự động trên LMS</td><td>GV phải điều chỉnh thời gian bắt đầu cho bài quiz</td>
+                            </tr><tr>
+                                <td>Quiz 2</td><td>On-going</td><td>1</td><td>3.0%</td><td></td><td>10 phút</td><td>CLO1, CLO2, CLO4</td><td>Trắc nghiệm</td><td>15 câu hỏi/quiz</td><td>Nội dung trong Giáo trình, Slide, Lab, Assignment và các tài nguyên tham khảo trong Syllabus</td><td>Tổ chức tự động trên LMS</td><td>GV phải điều chỉnh thời gian bắt đầu cho bài quiz</td>
+                            </tr><tr>
+                                <td>Quiz 3</td><td>On-going</td><td>1</td><td>3.0%</td><td></td><td>10 phút</td><td>CLO3</td><td>Trắc nghiệm</td><td>15 câu hỏi/quiz</td><td>Nội dung trong Giáo trình, Slide, Lab, Assignment và các tài nguyên tham khảo trong Syllabus</td><td>Tổ chức tự động trên LMS</td><td>GV phải điều chỉnh thời gian bắt đầu cho bài quiz</td>
+                            </tr><tr>
+                                <td>Quiz 4</td><td>On-going</td><td>1</td><td>3.0%</td><td></td><td>10 phút</td><td>CLO3, CLO4</td><td>Trắc nghiệm</td><td>15 câu hỏi/quiz</td><td>Nội dung trong Giáo trình, Slide, Lab, Assignment và các tài nguyên tham khảo trong Syllabus</td><td>Tổ chức tự động trên LMS</td><td>GV phải điều chỉnh thời gian bắt đầu cho bài quiz</td>
+                            </tr><tr>
+                                <td>Bảo vệ Assignment</td><td>Final Exam</td><td>1</td><td>40.0%</td><td>5</td><td>&nbsp;</td><td>All CLOs</td><td>Sản phẩm, Slide, Document, Đề thi</td><td>1 Assignment</td><td>Toàn bộ kiến thức, kỹ năng và thái độ được yêu cầu trong assignment</td><td>* Hội đồng bảo vệ gồm 2 giảng viên (đứng lớp và phản biện)<br>* Trước buổi bảo vệ: Giảng viên chấm document, slide PowerPoint (nếu thuyết trình) và xem qua sản phẩm hoàn chỉnh do sinh viên nộp<br>* Tại buổi bảo vệ: Trình bày theo nhóm hoặc cá nhân. Hội đồng phỏng vấn từng sinh viên.</td><td>- Sinh viên nộp trên LMS<br>- GV chấm document trước ở nhà và ghi chú những điểm nghi ngờ để khi bảo vệ hỏi SV</td>
+                            </tr>
+                            </tbody></table>
+                    </div>
+                    <br>
+
+                </div>
+                <script src="/bundles/customjs"></script>
+                <script>
+                    $(document).ready(() => {
+                        if ($("tbody tr a.ContainSLink").toArray().length == 0) {
+                            $("#btnDownloadAllStudentMaterial").prop("disabled", true);
+                        } else {
+                            $("#btnDownloadAllStudentMaterial").prop("disabled", false);
+                        }
+                    })
+                    function downloadLoop(i, urls) {
+                        setTimeout(() => {
+                            urls[i].click();
+                            i++;
+                            if (i < urls.length) {
+                                downloadLoop(i, urls);
+                            }
+                        }, 10456)
+                    }
+                    $('#btnDownloadAllStudentMaterial').on('click', function (e) {
+                        e.preventDefault();
+                        let downloadLinks = $("tbody tr a.ContainSLink").toArray();
+                        let result = confirm("Do you want to download all materials??");
+                        if (result) {
+                            downloadLoop(0, downloadLinks);
+                        }
+                    })
+                    if (window.history.replaceState) {
+                        window.history.replaceState(null, null, window.location.href);
+                    }
+                </script>
+
+            </div>
+
+        </div>
+    </div>
+
+</form>
+
+<script>
+
+    $(document).ready(function () {
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('sb-active');
+        });
+        var lang = 'en';
+        $('#language').val(lang);
+        $('#language').change(function () {
+            $.ajax({
+
+                url: '/Language', // comma here instead of semicolon
+                data: { language: $(this).val() },
+                success: function () {
+                    window.location.reload();
+                }
+
+            });
+        })
+
+        toastr.options = {
+            "closeButton": true,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+        if (window.localStorage.getItem('typeToast') == 1) {
+            toastr.success(window.localStorage.getItem('messToast'));
+            window.localStorage.setItem('typeToast', 0);
+        }
+        if (window.localStorage.getItem('typeToast') == 2) {
+            toastr.error(window.localStorage.getItem('messToast'));
+            window.localStorage.setItem('typeToast', 0);
+        }
+    });
+    function showToastRedirectPage(type, mess) {
+        window.localStorage.setItem('typeToast', type);
+        window.localStorage.setItem('messToast', mess);
+    }
+</script>
+<script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;4fdc460e0f724a4981c33d789f799610&quot;,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+
+
+
+</body></html>
