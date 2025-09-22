@@ -7,8 +7,8 @@
 <form th:action="@{/lab-1/hinh-chu-nhat}" method="post">
     Chiều dài: <input type="number" name="chieuDai" th:value="${chieuDai}" required /><br/>
     Chiều rộng: <input type="number" name="chieuRong" th:value="${chieuRong}" required /><br/>
-    <button type="submit" value="dienTich">Tính diện tích</button>
-    <button type="submit" value="chuVi">Tính chu vi</button>
+    <button type="submit" name="action" value="dienTich">Tính diện tích</button>
+    <button type="submit" name="action" value="chuVi">Tính chu vi</button>
 </form>
 <div th:if="${message}">
     <p th:text="${message}"></p>
