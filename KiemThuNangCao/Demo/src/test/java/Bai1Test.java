@@ -2,6 +2,7 @@ import BaiTap.Bai1;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Bai1Test {
     private Bai1 bai1;
@@ -20,7 +21,7 @@ public class Bai1Test {
 
     @Test
     public void test2() {
-        int result = bai1.tinhTong(2, 3);
+        int result = bai1.tinhTong(2, 3.7);
         int expected = 5;
         assertEquals(result, expected);
     }
@@ -34,7 +35,7 @@ public class Bai1Test {
 
     @Test
     public void test4() {
-        int result = bai1.tinhTong(2, 3);
+        int result = bai1.tinhTong(2.2, 3);
         int expected = 5;
         assertEquals(result, expected);
     }
@@ -44,6 +45,13 @@ public class Bai1Test {
         int result = bai1.tinhTong(2, 3);
         int expected = 5;
         assertEquals(result, expected);
+    }
+
+    @Test
+    public void TestDiemAm(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            bai1.tinhTong(-10);
+        });
     }
 
 }
