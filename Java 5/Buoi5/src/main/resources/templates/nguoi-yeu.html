@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1>Danh Sach Nguoi Yeu</h1>
+
+<table border="1">
+    <tr>
+        <th>NickName</th>
+        <th>GioiTinh</th>
+        <th>NamSinh</th>
+        <th>ChieuCao</th>
+    </tr>
+    <tr th:each="ny : ${DSNguoiYeu}">
+        <td th:text="${ny.nickname}"></td>
+        <td th:text="${ny.gioiTinh}"></td>
+        <td th:text="${ny.namSinh}"></td>
+        <td th:text="${ny.chieuCao}"></td>
+    </tr>
+</table>
+</body>
+</html>
