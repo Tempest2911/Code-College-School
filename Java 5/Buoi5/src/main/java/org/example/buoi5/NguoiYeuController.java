@@ -26,4 +26,11 @@ public class NguoiYeuController {
             model.addAttribute("nguoiYeu", nguoiYeu);
             return "chi-tiet-nguoi-yeu";
         }
+
+    @GetMapping("/nguoi-yeu/add")
+    public String showAddForm(Model model) {
+        model.addAttribute("view", "form");
+        model.addAttribute("nguoiYeu", new NguoiYeu());
+        return "demo/hello";
+    }
 }

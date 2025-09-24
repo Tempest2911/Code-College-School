@@ -14,12 +14,17 @@
         <th>GioiTinh</th>
         <th>NamSinh</th>
         <th>ChieuCao</th>
+        <th>Action</th>
+
     </tr>
     <tr th:each="ny : ${DSNguoiYeu}">
         <td th:text="${ny.nickname}"></td>
         <td th:text="${ny.gioiTinh}"></td>
         <td th:text="${ny.namSinh}"></td>
         <td th:text="${ny.chieuCao}"></td>
+        <td>
+            <a th:href="@{'/nguoi-yeu/' + ${ny.nickname}}">Chi tiết</a>
+        </td>
     </tr>
 </table>
 </body>
