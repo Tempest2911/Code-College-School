@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div th:each="staff, st:${list}">
+        <img th:src="@{/Photo/photo.jpg}" alt="Avatar" width="150" height="150">
+        <b th:text="@{|${st.count}|}"></b>.
+        <b th:text="${#strings.capitalizeWords(staff.fullName)}"></b>
+        <b>$<span th:text="${#numbers.formatDecimal(staff.salary, 1, 'COMMA', 2, 'POINT')}"></span></b> <hr>
+    </div>
+</body>
+</html>
