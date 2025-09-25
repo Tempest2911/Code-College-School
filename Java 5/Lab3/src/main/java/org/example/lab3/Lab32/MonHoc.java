@@ -1,4 +1,4 @@
-package org.example.buoi5;
+package org.example.lab3.Lab32;
 
 import lombok.Getter;
 import lombok.Setter;

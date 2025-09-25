@@ -1,4 +1,4 @@
-package org.example.buoi5;
+package org.example.lab3.Lab32;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,5 +20,5 @@ public class MonHocController {
         model.addAttribute("DSMonHoc", NguoiYeu);
         return "hello";
     }
-    
+
 }
