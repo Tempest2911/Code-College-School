@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Môn học</title>
+</head>
+<body>
+<h1>Môn học</h1>
+
+<form th:action="@{/lab34/bai-1/add}" method="post">
+    <label>Mã môn:</label>
+    <input type="text" name="maMon" placeholder="Mã môn học"><br>
+
+    <label>Tên môn:</label>
+    <input type="text" name="tenMon" placeholder="Tên môn học"><br>
+
+    <label>Số tín chỉ:</label>
+    <input type="number" name="soTinChi" placeholder="Số tín chỉ"><br>
+
+    <label>Chuyên ngành:</label>
+    <select name="chuyenNghanh">
+        <option value="Digital Marketing">Digital Marketing</option>
+        <option value="Công Nghệ Thông Tin">Công Nghệ Thông Tin</option>
+        <option value="Thiết kế đồ họa">Thiết kế đồ họa</option>
+        <option value="Ô tô cơ khí">Ô tô cơ khí</option>
+    </select><br>
+
+    <label>Giảng viên:</label><br>
+    <input type="checkbox" name="giangVien" value="MinhDQ8"> MinhDQ8
+    <input type="checkbox" name="giangVien" value="DungNA29"> DungNA29
+    <input type="checkbox" name="giangVien" value="TienNH21"> TienNH21
+    <input type="checkbox" name="giangVien" value="NguyenVV4"> NguyenVV4
+    <br>
+
+    <label>Bắt buộc:</label><br>
+    <input type="radio" name="batBuoc" value="true"> Có
+    <input type="radio" name="batBuoc" value="false"> Không
+    <br>
+
+    <button type="submit">Lưu</button>
+</form>
+
+<hr>
+
+<table border="1">
+    <tr>
+        <th>Mã Môn</th>
+        <th>Tên Môn</th>
+        <th>Số Tín Chỉ</th>
+        <th>Chuyên Nghành</th>
+        <th>Giảng Viên</th>
+        <th>Bắt Buộc</th>
+        <th>Hành Động</th>
+    </tr>
+
+    <tr th:each="mh : ${DSMonHoc}">
+        <td th:text="${mh.maMon}"></td>
+        <td th:text="${mh.tenMon}"></td>
+        <td th:text="${mh.soTinChi}"></td>
+        <td th:text="${mh.chuyenNghanh}"></td>
+        <td th:text="${mh.giangVien}"></td>
+        <td th:text="${mh.batBuoc} ? 'Có' : 'Không'"></td>
+        <td>
+            <a th:href="@{'/lab34/bai-1/delete/' + ${mh.maMon}}">Xóa</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

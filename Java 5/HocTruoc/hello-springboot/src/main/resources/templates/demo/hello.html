@@ -14,7 +14,6 @@
 </div>
 
 
-
 <!-- Hiển thị danh sách sinh viên nếu có -->
 <div th:if="${students != null}">
     <h2>Danh sách sinh viên</h2>
@@ -32,7 +31,12 @@
 
         <table border="1">
             <tr>
-                <th>ID</th><th>Tên</th><th>Địa chỉ</th><th>SĐT</th><th>Email</th><th>Hành động</th>
+                <th>ID</th>
+                <th>Tên</th>
+                <th>Địa chỉ</th>
+                <th>SĐT</th>
+                <th>Email</th>
+                <th>Hành động</th>
             </tr>
             <tr th:each="cn : ${chuNha}">
                 <td th:text="${cn.id}"></td>
