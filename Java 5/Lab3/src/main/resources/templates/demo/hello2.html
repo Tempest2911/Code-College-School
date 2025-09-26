@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Môn học</title>
+</head>
+<body>
+<h2>Sửa Môn học</h2>
+
+<form th:action="@{/lab34/bai-1/update}" method="post">
+    <label>Mã môn:</label>
+    <input type="text" id="maMon" name="maMon" th:value="${monHoc.maMon}" readonly><br>
+
+    <label>Tên môn:</label>
+    <input type="text" id="tenMon" name="tenMon" th:value="${monHoc.tenMon}" placeholder="Tên môn học"><br>
+
+    <label>Số tín chỉ:</label>
+    <input type="number" id="soTinChi" name="soTinChi" th:value="${monHoc.soTinChi}" placeholder="Số tín chỉ"><br>
+
+    <label>Chuyên ngành:</label>
+    <select name="chuyenNghanh">
+        <option value="Digital Marketing" th:selected="${monHoc.chuyenNghanh == 'Digital Marketing'}">Digital
+            Marketing
+        </option>
+        <option value="Công Nghệ Thông Tin" th:selected="${monHoc.chuyenNghanh == 'Công Nghệ Thông Tin'}">Công Nghệ
+            Thông Tin
+        </option>
+        <option value="Thiết kế đồ họa" th:selected="${monHoc.chuyenNghanh == 'Thiết kế đồ họa'}">Thiết kế đồ họa
+        </option>
+        <option value="Ô tô cơ khí" th:selected="${monHoc.chuyenNghanh == 'Ô tô cơ khí'}">Ô tô cơ khí</option>
+    </select><br>
+
+    <label>Giảng viên:</label><br>
+    <input type="checkbox" name="giangVien" value="MinhDQ8"
+           th:checked="${#lists.contains(monHoc.giangVien, 'MinhDQ8')}"> MinhDQ8
+    <input type="checkbox" name="giangVien" value="DungNA29"
+           th:checked="${#lists.contains(monHoc.giangVien, 'DungNA29')}"> DungNA29
+    <input type="checkbox" name="giangVien" value="TienNH21"
+           th:checked="${#lists.contains(monHoc.giangVien, 'TienNH21')}"> TienNH21
+    <input type="checkbox" name="giangVien" value="NguyenVV4"
+           th:checked="${#lists.contains(monHoc.giangVien, 'NguyenVV4')}"> NguyenVV4
+    <br>
+
+
+    <label>Bắt buộc:</label><br>
+    <input type="radio" name="batBuoc" value="true" th:checked="${monHoc.batBuoc}"> Có
+    <input type="radio" name="batBuoc" value="false" th:checked="${!monHoc.batBuoc}"> Không
+    <br>
+
+    <button type="submit">Cập nhật</button>
+</form>
+
+<br>
+<a th:href="@{/lab34/bai-1}">Quay lại danh sách</a>
+
+</body>
+</html>

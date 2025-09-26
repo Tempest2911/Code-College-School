@@ -3,6 +3,7 @@ package org.example.lab3;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -12,10 +13,11 @@ public class MonHoc {
     private String tenMon;
     private Integer soTinChi;
     private String chuyenNghanh;
-    private List<String> giangVien;
+    private List<String> giangVien = new ArrayList<>(); // ✅ KHỞI TẠO LUÔN
     private Boolean batBuoc;
 
     public MonHoc() {
+        this.giangVien = new ArrayList<>(); // phòng ngừa null
     }
 
     public MonHoc(String maMon, String tenMon, Integer soTinChi, String chuyenNghanh, List<String> giangVien, Boolean batBuoc) {
@@ -23,7 +25,7 @@ public class MonHoc {
         this.tenMon = tenMon;
         this.soTinChi = soTinChi;
         this.chuyenNghanh = chuyenNghanh;
-        this.giangVien = giangVien;
+        this.giangVien = (giangVien != null) ? giangVien : new ArrayList<>();
         this.batBuoc = batBuoc;
     }
 }

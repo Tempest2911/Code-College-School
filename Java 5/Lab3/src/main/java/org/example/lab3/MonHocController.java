@@ -40,6 +40,31 @@ public class MonHocController {
         return "/demo/hello"; // load lại trang danh sách
     }
 
+    @GetMapping("/edit/{maMon}")
+    public String edit(@PathVariable("maMon") String maMon, Model model) {
+        MonHoc mh = repo.timMonHocTheoID(maMon);
+        if (mh != null) {
+            model.addAttribute("monHoc", mh); // đưa dữ liệu cũ vào form
+        }
+        return "/demo/hello2"; // sang edit.html
+    }
+
+    @PostMapping("/update")
+    public String update(@ModelAttribute MonHoc monHoc, Model model) {
+        MonHoc mh = repo.timMonHocTheoID(monHoc.getMaMon());
+        if (mh != null) {
+            mh.setTenMon(monHoc.getTenMon());
+            mh.setSoTinChi(monHoc.getSoTinChi());
+            mh.setChuyenNghanh(monHoc.getChuyenNghanh());
+            mh.setGiangVien(monHoc.getGiangVien());
+            mh.setBatBuoc(monHoc.getBatBuoc());
+        }
+        model.addAttribute("DSMonHoc", repo.getMonHoc());
+        return "/demo/hello"; // quay lại danh sách
+    }
+
+
+
 
 
 }

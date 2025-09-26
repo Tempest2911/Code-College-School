@@ -58,10 +58,11 @@
         <td th:text="${mh.tenMon}"></td>
         <td th:text="${mh.soTinChi}"></td>
         <td th:text="${mh.chuyenNghanh}"></td>
-        <td th:text="${mh.giangVien}"></td>
+        <td th:text="${mh.giangVien != null ? #strings.listJoin(mh.giangVien, ', ') : ''}"></td>
         <td th:text="${mh.batBuoc} ? 'Có' : 'Không'"></td>
         <td>
             <a th:href="@{'/lab34/bai-1/delete/' + ${mh.maMon}}">Xóa</a>
+            <a th:href="@{'/lab34/bai-1/edit/' + ${mh.maMon}}">Chi tiết</a>
         </td>
     </tr>
 </table>
