@@ -21,10 +21,7 @@ public class MonHocController {
 
     @PostMapping("/add")
     public String AddMonHoc(@ModelAttribute MonHoc monHoc, Model model) {
-        // thêm vào list
         repo.getMonHoc().add(monHoc);
-
-        // load lại danh sách
         model.addAttribute("DSMonHoc", repo.getMonHoc());
         return "/demo/hello";
     }
@@ -33,20 +30,19 @@ public class MonHocController {
     public String delete(@PathVariable("maMon") String maMon, Model model) {
         MonHoc mh = repo.timMonHocTheoID(maMon);
         if (mh != null) {
-            repo.getMonHoc().remove(mh); // xóa trực tiếp đối tượng tìm được
+            repo.getMonHoc().remove(mh);
         }
-
         model.addAttribute("DSMonHoc", repo.getMonHoc());
-        return "/demo/hello"; // load lại trang danh sách
+        return "/demo/hello";
     }
 
     @GetMapping("/edit/{maMon}")
     public String edit(@PathVariable("maMon") String maMon, Model model) {
         MonHoc mh = repo.timMonHocTheoID(maMon);
         if (mh != null) {
-            model.addAttribute("monHoc", mh); // đưa dữ liệu cũ vào form
+            model.addAttribute("monHoc", mh);
         }
-        return "/demo/hello2"; // sang edit.html
+        return "/demo/hello2";
     }
 
     @PostMapping("/update")
@@ -60,11 +56,7 @@ public class MonHocController {
             mh.setBatBuoc(monHoc.getBatBuoc());
         }
         model.addAttribute("DSMonHoc", repo.getMonHoc());
-        return "/demo/hello"; // quay lại danh sách
+        return "/demo/hello";
     }
-
-
-
-
 
 }
