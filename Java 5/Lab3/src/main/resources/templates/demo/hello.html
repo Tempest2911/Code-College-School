@@ -7,15 +7,15 @@
 <body>
 <h1>Môn học</h1>
 
-<form th:action="@{/lab34/bai-1/add}" method="post">
+<form th:action="@{/lab34/bai-1/add}" method="post" onsubmit="return validateForm()">
     <label>Mã môn:</label>
-    <input type="text" name="maMon" placeholder="Mã môn học"><br>
+    <input type="text" id="maMon" name="maMon" placeholder="Mã môn học"><br>
 
     <label>Tên môn:</label>
-    <input type="text" name="tenMon" placeholder="Tên môn học"><br>
+    <input type="text" id="tenMon" name="tenMon" placeholder="Tên môn học"><br>
 
     <label>Số tín chỉ:</label>
-    <input type="number" name="soTinChi" placeholder="Số tín chỉ"><br>
+    <input type="number" id="soTinChi" name="soTinChi" placeholder="Số tín chỉ"><br>
 
     <label>Chuyên ngành:</label>
     <select name="chuyenNghanh">
@@ -33,7 +33,7 @@
     <br>
 
     <label>Bắt buộc:</label><br>
-    <input type="radio" name="batBuoc" value="true"> Có
+    <input type="radio" checked name="batBuoc" value="true"> Có
     <input type="radio" name="batBuoc" value="false"> Không
     <br>
 
@@ -67,4 +67,24 @@
 </table>
 
 </body>
+
+<script>
+    function validateForm() {
+        let maMon = document.getElementById("maMon").value.trim();
+        let tenMon = document.getElementById("tenMon").value.trim();
+        let soTinChi = document.getElementById("soTinChi").value.trim();
+        let giangVienChecked = document.querySelectorAll('input[name="giangVien"]:checked');
+
+        if (maMon === "" ||  maMon === null ||  tenMon === "" || tenMon === null || soTinChi === "" || soTinChi === null ) {
+            alert("Please fill in all fields.");
+            return false;
+        }
+
+        if (giangVienChecked.length === 0) {
+            alert("Please select at least one Giảng viên.");
+            return false;
+        }
+        return true;
+    }
+</script>
 </html>
