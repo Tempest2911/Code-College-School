@@ -80,7 +80,16 @@
             alert("Please fill in all fields.");
             return false;
         }
-
+//check ten ko dc nhap so
+        let nameRegex = /^[A-Za-z\s]+$/;
+        if (!nameRegex.test(tenMon)) {
+            alert("Tên môn không được chứa số hoặc ký tự đặc biệt.");
+            return false;
+        }
+        if (isNaN(soTinChi) || soTinChi <= 0) {
+            alert("Số tín chỉ must be a positive number.");
+            return false;
+        }
         if (giangVienChecked.length === 0) {
             alert("Please select at least one Giảng viên.");
             return false;
