@@ -6,16 +6,13 @@ import org.example.asm.Model.User;
 import org.example.asm.Repository.DepartmentRepository;
 import org.example.asm.Repository.TaskRepository;
 import org.example.asm.Repository.UserRepository;
+import org.example.asm.Service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin/task")
@@ -30,6 +27,20 @@ public class AdminTaskController {
     @Autowired
     private DepartmentRepository departmentRepository;
 
+    @Autowired
+    private NotificationService notificationService;
+
+    // Create Task (nếu bạn muốn dùng riêng)
+    @PostMapping("/task")
+    public String createTask(@ModelAttribute Task task) {
+        taskRepository.save(task);
+
+        // Gửi thông báo realtime
+        notificationService.sendTaskNotification(task, "CREATED");
+
+        return "redirect:/admin/task/list";
+    }
+
     // Hiển thị form + danh sách
     @GetMapping("/list")
     public String showTaskList(Model model) {
@@ -40,11 +51,12 @@ public class AdminTaskController {
         return "admin-list";
     }
 
+    // Save or Update Task
     @PostMapping("/save")
     public String saveTask(@ModelAttribute Task task,
                            Principal principal) {
 
-        User creator = null;
+        User creator;
 
         if (principal != null) {
             // Có login thì lấy user từ DB
@@ -56,7 +68,6 @@ public class AdminTaskController {
 
         task.setCreatedBy(creator);
 
-
         // Nếu không chọn staff thì set null
         if (task.getAssignedTo() != null && task.getAssignedTo().getId() == null) {
             task.setAssignedTo(null);
@@ -67,10 +78,18 @@ public class AdminTaskController {
             task.setDepartment(null);
         }
 
+        boolean isNew = (task.getId() == null);
         taskRepository.save(task);
+
+        // Gửi thông báo realtime (phân biệt Create/Update)
+        if (isNew) {
+            notificationService.sendTaskNotification(task, "CREATED");
+        } else {
+            notificationService.sendTaskNotification(task, "UPDATED");
+        }
+
         return "redirect:/admin/task/list";
     }
-
 
     // Edit task
     @GetMapping("/edit/{id}")
@@ -83,10 +102,13 @@ public class AdminTaskController {
         return "admin-list";
     }
 
-    // Delete task
     @GetMapping("/delete/{id}")
     public String deleteTask(@PathVariable Integer id) {
-        taskRepository.deleteById(id);
+        Task task = taskRepository.findById(id).orElse(null);
+        if (task != null) {
+            taskRepository.deleteById(id);
+            notificationService.sendTaskNotification(task, "DELETED");
+        }
         return "redirect:/admin/task/list";
     }
 }

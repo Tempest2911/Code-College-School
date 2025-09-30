@@ -1,0 +1,53 @@
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2/dist/stomp.min.js"></script>
+
+<script>
+    let socket = new SockJS('/ws');
+    let stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function(frame) {
+        console.log("Connected: " + frame);
+
+        // Lắng nghe tất cả task update (Admin + Staff)
+        stompClient.subscribe('/topic/tasks', function(message) {
+            let task = JSON.parse(message.body);
+            updateTaskBoard(task);
+        });
+
+        // Nếu user là staff → nghe private task
+        stompClient.subscribe('/user/queue/tasks', function(message) {
+            let task = JSON.parse(message.body);
+            updateTaskBoard(task);
+        });
+    });
+
+    function updateTaskBoard(task) {
+        console.log("Realtime update:", task);
+
+        // Nếu task bị xoá
+        if (task.status === "DELETED") {
+            let card = document.getElementById("task-" + task.id);
+            if (card) card.remove();
+            return;
+        }
+
+        // Nếu task đã tồn tại → update DOM
+        let card = document.getElementById("task-" + task.id);
+        if (card) {
+            card.querySelector(".status").innerText = task.status;
+            card.querySelector(".priority").innerText = task.priority;
+        } else {
+            // Nếu là task mới → append vào cột Todo
+            let col = document.getElementById("todo-col");
+            let newCard = document.createElement("div");
+            newCard.id = "task-" + task.id;
+            newCard.classList.add("task-card");
+            newCard.innerHTML = `
+                <b>${task.title}</b><br>
+                <span class="status">${task.status}</span> |
+                <span class="priority">${task.priority}</span>
+            `;
+            col.appendChild(newCard);
+        }
+    }
+</script>

@@ -242,5 +242,33 @@
     </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+<script>
+    var socket = new SockJS('/ws');
+    var stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function(frame) {
+        console.log('Connected: ' + frame);
+
+        // Subscribe để nhận notification broadcast
+        stompClient.subscribe('/topic/notifications', function(notification){
+            alert("🔔 New Notification: " + notification.body);
+        });
+
+        // Nếu muốn nhận notification riêng (theo username)
+        // stompClient.subscribe('/user/queue/notifications', function(notification){
+        //     alert("🔔 Private: " + notification.body);
+        // });
+    });
+
+    // Test gửi message lên server
+    function sendMsg() {
+        stompClient.send("/app/hello", {}, "Hello server!");
+    }
+</script>
+
 </body>
 </html>
