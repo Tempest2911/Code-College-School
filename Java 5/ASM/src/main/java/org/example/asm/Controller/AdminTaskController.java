@@ -30,12 +30,12 @@ public class AdminTaskController {
     @Autowired
     private NotificationService notificationService;
 
-    // Create Task (nếu bạn muốn dùng riêng)
+    // Create task nhanh
     @PostMapping("/task")
     public String createTask(@ModelAttribute Task task) {
         taskRepository.save(task);
 
-        // Gửi thông báo realtime
+        // Gửi realtime notify
         notificationService.sendTaskNotification(task, "CREATED");
 
         return "redirect:/admin/task/list";
@@ -51,42 +51,31 @@ public class AdminTaskController {
         return "admin-list";
     }
 
-    // Save or Update Task
+    // Save task (create/update)
     @PostMapping("/save")
-    public String saveTask(@ModelAttribute Task task,
-                           Principal principal) {
-
-        User creator;
+    public String saveTask(@ModelAttribute Task task, Principal principal) {
+        User creator = null;
 
         if (principal != null) {
-            // Có login thì lấy user từ DB
             creator = userRepository.findByUsername(principal.getName());
         } else {
-            // Không login thì fallback về admin id=1
-            creator = userRepository.findById(1).orElse(null);
+            creator = userRepository.findById(1).orElse(null); // fallback admin
         }
 
         task.setCreatedBy(creator);
 
-        // Nếu không chọn staff thì set null
         if (task.getAssignedTo() != null && task.getAssignedTo().getId() == null) {
             task.setAssignedTo(null);
         }
 
-        // Nếu không chọn department thì set null
         if (task.getDepartment() != null && task.getDepartment().getId() == null) {
             task.setDepartment(null);
         }
 
-        boolean isNew = (task.getId() == null);
         taskRepository.save(task);
 
-        // Gửi thông báo realtime (phân biệt Create/Update)
-        if (isNew) {
-            notificationService.sendTaskNotification(task, "CREATED");
-        } else {
-            notificationService.sendTaskNotification(task, "UPDATED");
-        }
+        // Notify realtime
+        notificationService.sendTaskNotification(task, "UPDATED");
 
         return "redirect:/admin/task/list";
     }
@@ -102,13 +91,14 @@ public class AdminTaskController {
         return "admin-list";
     }
 
+    // Delete task
     @GetMapping("/delete/{id}")
     public String deleteTask(@PathVariable Integer id) {
-        Task task = taskRepository.findById(id).orElse(null);
-        if (task != null) {
-            taskRepository.deleteById(id);
+        taskRepository.findById(id).ifPresent(task -> {
+            taskRepository.delete(task);
             notificationService.sendTaskNotification(task, "DELETED");
-        }
+        });
+
         return "redirect:/admin/task/list";
     }
 }

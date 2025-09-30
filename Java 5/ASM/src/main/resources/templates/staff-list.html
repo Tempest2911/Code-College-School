@@ -140,20 +140,32 @@
         column.addEventListener("dragleave", () => {
             column.classList.remove("drag-over");
         });
+
         column.addEventListener("drop", () => {
             column.classList.remove("drag-over");
             const dragging = document.querySelector(".dragging");
             if (!dragging) return;
+
+            // 1. CHỈ DI CHUYỂN CARD (Card HTML gốc đã có đủ dữ liệu)
             column.appendChild(dragging);
 
             const taskId = dragging.getAttribute("data-id");
             const newStatus = column.getAttribute("data-status");
 
+            // 2. ĐÁNH DẤU CARD ĐỂ BỎ QUA UPDATE TỪ WEBSOCKET (REAL-TIME)
+            dragging.classList.add("task-updated-by-drag");
+
             fetch(`/staff/task/status/${taskId}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: "status=" + encodeURIComponent(newStatus)
-            }).then(() => console.log("Updated task " + taskId + " -> " + newStatus));
+            }).then(() => {
+                console.log("Updated task " + taskId + " -> " + newStatus);
+                // 3. XÓA ĐÁNH DẤU SAU KHI SERVER PHẢN HỒI (để các update sau vẫn hoạt động)
+                setTimeout(() => {
+                    dragging.classList.remove("task-updated-by-drag");
+                }, 100); // Đủ thời gian để xử lý WebSocket message
+            });
         });
     });
 </script>
@@ -161,29 +173,117 @@
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 
+
 <script>
-    var socket = new SockJS('/ws');
-    var stompClient = Stomp.over(socket);
+    let socket = new SockJS('/ws');     // endpoint đã cấu hình trong WebSocketConfig
+    let stompClient = Stomp.over(socket);
 
-    stompClient.connect({}, function(frame) {
-        console.log('Connected: ' + frame);
+    stompClient.connect({}, function (frame) {
+        console.log("Connected: " + frame);
 
-        // Subscribe để nhận notification broadcast
-        stompClient.subscribe('/topic/notifications', function(notification){
-            alert("🔔 New Notification: " + notification.body);
+        // Lắng nghe broadcast chung
+        stompClient.subscribe('/topic/tasks', function (message) {
+            let task = JSON.parse(message.body);
+            updateTaskList(task);   // gọi hàm bạn đã viết
         });
 
-        // Nếu muốn nhận notification riêng (theo username)
-        // stompClient.subscribe('/user/queue/notifications', function(notification){
-        //     alert("🔔 Private: " + notification.body);
-        // });
+        // Lắng nghe private queue (task gán cho user)
+        stompClient.subscribe('/user/queue/tasks', function (message) {
+            let task = JSON.parse(message.body);
+            updateTaskList(task);   // gọi hàm bạn đã viết
+        });
     });
-
-    // Test gửi message lên server
-    function sendMsg() {
-        stompClient.send("/app/hello", {}, "Hello server!");
+</script>
+<script>
+    function makeDraggable(card) {
+        card.addEventListener("dragstart", () => card.classList.add("dragging"));
+        card.addEventListener("dragend", () => card.classList.remove("dragging"));
     }
 </script>
+
+<script>
+    function updateTaskList(task) {
+        console.log("Realtime update:", task);
+
+        const existingCard = document.querySelector(`.task-card[data-id="${task.id}"]`);
+
+        // 1. Xử lý trường hợp DELETED
+        if(task.action === "DELETED") {
+            existingCard?.remove();
+            return;
+        }
+
+        let card = existingCard;
+        const isNewCard = !card; // Kiểm tra xem đây có phải là card mới hay không
+
+        // 2. Xử lý Tạo mới Card
+        if(isNewCard) {
+            card = document.createElement("div");
+            card.className = "card task-card";
+            card.setAttribute("draggable", "true");
+            card.setAttribute("data-id", task.id);
+            makeDraggable(card); // Gán lại event listeners cho card mới
+        }
+
+        // 3. Xử lý Missing Badge Content và Cập nhật Nội dung:
+        // CHỈ CẬP NHẬT NỘI DUNG CARD NẾU LÀ CARD MỚI HOẶC DỮ LIỆU CÓ ĐẦY ĐỦ
+        // Nếu task object từ WebSocket thiếu dữ liệu (assignedTo/createdBy là null),
+        // ta KHÔNG ghi đè nội dung HTML của card đang tồn tại.
+
+        // Kiểm tra xem task object có chứa dữ liệu chi tiết không
+        const hasFullData = task.assignedTo?.fullName && task.createdBy?.fullName && task.description;
+
+        if (isNewCard || hasFullData) {
+            // Dùng dữ liệu từ task, nếu thiếu dùng giá trị mặc định
+            const title = task.title || "No Title";
+            const description = task.description || "";
+            const deadline = task.deadline ? task.deadline.substring(0, 16).replace('T', ' ') : "No Deadline";
+            const assignedTo = task.assignedTo?.fullName || "Unassigned";
+            const department = task.assignedTo?.department?.name || "N/A";
+            const createdBy = task.createdBy?.fullName || "System";
+
+            // Cập nhật nội dung card
+            card.innerHTML = `
+            <div class="card-body">
+                <h5 class="card-title">${title}</h5>
+                <p class="card-text">${description}</p>
+                <div class="mb-2">
+                    <span class="badge bg-secondary">Deadline: ${deadline}</span>
+                    <span class="badge bg-info">Assigned: ${assignedTo}</span>
+                    <span class="badge bg-dark">Dept: ${department}</span>
+                    <span class="badge bg-light text-dark">By: ${createdBy}</span>
+                </div>
+            </div>
+            `;
+        } else {
+            // Đây là card đã tồn tại và update từ WebSocket thiếu dữ liệu chi tiết (chắc chắn là update status).
+            // Ta BỎ QUA việc ghi đè nội dung, chỉ thực hiện bước 4 (di chuyển).
+            console.log("Skipping content update for existing task (data incomplete):", task.id);
+        }
+
+        // 4. Di chuyển card đến cột mới (bắt buộc phải thực hiện)
+        let status = (task.status || "").toUpperCase().replace("_", "-");
+        let selector = "";
+
+        if (status === "TODO") {
+            selector = '[data-status="Todo"]';
+        } else if (status === "IN-PROGRESS") {
+            selector = '[data-status="In-Progress"]';
+        } else if (status === "DONE") {
+            selector = '[data-status="Done"]';
+        } else {
+            return;
+        }
+
+        const column = document.querySelector(selector);
+
+        // Chỉ thêm vào column nếu card chưa ở đúng vị trí
+        if(column && card.parentElement !== column) {
+            column.appendChild(card);
+        }
+    }
+</script>
+
 
 </body>
 </html>

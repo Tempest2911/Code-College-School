@@ -1,7 +1,5 @@
 package org.example.asm.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.asm.DTO.TaskDTO;
 import org.example.asm.Model.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,20 +8,24 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class NotificationService {
+
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
     public void sendTaskNotification(Task task, String action) {
-        TaskDTO dto = new TaskDTO(task, action);
-        messagingTemplate.convertAndSend("/topic/tasks", dto);
+        if (task == null) return;
 
-        // Nếu muốn gửi riêng cho staff được assign
-        if (task.getAssignedTo() != null) {
-            messagingTemplate.convertAndSendToUser(
-                    task.getAssignedTo().getUsername(),
-                    "/queue/tasks",
-                    dto
-            );
-        }
+        TaskDTO dto = new TaskDTO();
+        dto.setId(task.getId());
+        dto.setTitle(task.getTitle());
+        dto.setStatus(task.getStatus() != null ? task.getStatus() : "UNKNOWN");
+        dto.setPriority(task.getPriority() != null ? task.getPriority() : "NONE");
+        dto.setDeadline(task.getDeadline() != null ? task.getDeadline().toString() : null);
+        dto.setDepartment(task.getDepartment() != null ? task.getDepartment().getName() : null);
+        dto.setAssignedTo(task.getAssignedTo() != null ? task.getAssignedTo().getFullName() : null);
+        dto.setAction(action);
+
+        // 🔥 Broadcast cho tất cả Staff/Admin đang subscribe
+        messagingTemplate.convertAndSend("/topic/tasks", dto);
     }
 }
