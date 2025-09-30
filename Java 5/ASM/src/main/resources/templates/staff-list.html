@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Staff Task Board</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <style>
+        body { background: #f4f6f8; font-family: 'Segoe UI', sans-serif; }
+        .kanban-board { display: flex; gap: 24px; padding: 32px 0; }
+        .kanban-column {
+            flex: 1;
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            min-height: 500px;
+        }
+        .kanban-column h4 {
+            text-align: center;
+            margin-bottom: 18px;
+            font-weight: 600;
+            text-transform: capitalize; /* Todo, In Progress, Done */
+        }
+        .task-card {
+            margin-bottom: 16px;
+            cursor: grab;
+            border-left: 5px solid #0d6efd;
+        }
+        .drag-over {
+            border: 2px dashed #0d6efd;
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Task Board</a>
+        <div class="d-flex">
+            <a href="/asm/logout" class="btn btn-danger btn-sm">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Main -->
+<div class="container mt-4">
+    <h2 class="text-center mb-4">📌 Task Board - Department</h2>
+    <div class="kanban-board">
+        <!-- Todo -->
+        <div class="kanban-column" data-status="Todo">
+            <h4>📝 Todo</h4>
+            <div th:each="t : ${tasks}" th:if="${t.status == 'Todo'}"
+                 class="card task-card" draggable="true"
+                 th:attr="data-id=${t.id}">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${t.title}"></h5>
+                    <p class="card-text" th:text="${t.description}"></p>
+                    <div class="mb-2">
+                        <span class="badge bg-secondary"
+                              th:text="'Deadline: ' + ${#temporals.format(t.deadline,'yyyy-MM-dd HH:mm')}"></span>
+                        <span class="badge bg-info"
+                              th:text="'Assigned: ' + ${t.assignedTo.fullName}"></span>
+                        <span class="badge bg-dark"
+                              th:text="'Dept: ' + ${t.assignedTo.department.name}"></span>
+                        <span class="badge bg-light text-dark"
+                              th:text="'By: ' + ${t.createdBy.fullName}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- In Progress -->
+        <div class="kanban-column" data-status="In-Progress">
+            <h4>🚀 In Progress</h4>
+            <div th:each="t : ${tasks}" th:if="${t.status == 'In-Progress'}"
+                 class="card task-card" draggable="true"
+                 th:attr="data-id=${t.id}">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${t.title}"></h5>
+                    <p class="card-text" th:text="${t.description}"></p>
+                    <div class="mb-2">
+                        <span class="badge bg-secondary"
+                              th:text="'Deadline: ' + ${#temporals.format(t.deadline,'yyyy-MM-dd HH:mm')}"></span>
+                        <span class="badge bg-info"
+                              th:text="'Assigned: ' + ${t.assignedTo.fullName}"></span>
+                        <span class="badge bg-dark"
+                              th:text="'Dept: ' + ${t.assignedTo.department.name}"></span>
+                        <span class="badge bg-light text-dark"
+                              th:text="'By: ' + ${t.createdBy.fullName}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Done -->
+        <div class="kanban-column" data-status="Done">
+            <h4>✅ Done</h4>
+            <div th:each="t : ${tasks}" th:if="${t.status == 'Done'}"
+                 class="card task-card" draggable="true"
+                 th:attr="data-id=${t.id}">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${t.title}"></h5>
+                    <p class="card-text" th:text="${t.description}"></p>
+                    <div class="mb-2">
+                        <span class="badge bg-secondary"
+                              th:text="'Deadline: ' + ${#temporals.format(t.deadline,'yyyy-MM-dd HH:mm')}"></span>
+                        <span class="badge bg-info"
+                              th:text="'Assigned: ' + ${t.assignedTo.fullName}"></span>
+                        <span class="badge bg-dark"
+                              th:text="'Dept: ' + ${t.assignedTo.department.name}"></span>
+                        <span class="badge bg-light text-dark"
+                              th:text="'By: ' + ${t.createdBy.fullName}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS for DragDrop -->
+<script>
+    const tasks = document.querySelectorAll(".task-card");
+    const columns = document.querySelectorAll(".kanban-column");
+
+    tasks.forEach(task => {
+        task.addEventListener("dragstart", () => {
+            task.classList.add("dragging");
+        });
+        task.addEventListener("dragend", () => {
+            task.classList.remove("dragging");
+        });
+    });
+
+    columns.forEach(column => {
+        column.addEventListener("dragover", e => {
+            e.preventDefault();
+            column.classList.add("drag-over");
+        });
+        column.addEventListener("dragleave", () => {
+            column.classList.remove("drag-over");
+        });
+        column.addEventListener("drop", () => {
+            column.classList.remove("drag-over");
+            const dragging = document.querySelector(".dragging");
+            if (!dragging) return;
+            column.appendChild(dragging);
+
+            const taskId = dragging.getAttribute("data-id");
+            const newStatus = column.getAttribute("data-status");
+
+            fetch(`/staff/task/status/${taskId}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "status=" + encodeURIComponent(newStatus)
+            }).then(() => console.log("Updated task " + taskId + " -> " + newStatus));
+        });
+    });
+</script>
+</body>
+</html>

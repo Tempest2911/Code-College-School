@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Task</title>
+</head>
+<body>
+<h2>Edit Task</h2>
+
+<form th:action="@{/admin/task/edit/{id}(id=${task.id})}" method="post" th:object="${task}">
+    <input type="text" th:field="*{title}" placeholder="Title" required/>
+    <input type="text" th:field="*{description}" placeholder="Description" required/>
+
+    <select th:field="*{assignedTo}">
+        <option value="">--Select Staff--</option>
+        <option th:each="u : ${staffList}" th:value="${u.id}" th:text="${u.username}"></option>
+    </select>
+
+    <button type="submit">Update</button>
+</form>
+
+<br/>
+<a th:href="@{/admin/task/list}">Back to Task List</a>
+</body>
+</html>

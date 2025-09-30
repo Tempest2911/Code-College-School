@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Danh Sách Loa</h1>
+
+    <table border="1">
+        <tr>
+            <th>Mã loa</th>
+            <th>Tên loa</th>
+            <th>Công suất</th>
+            <th>Màu sắc</th>
+            <th>Kênh âm thanh</th>
+        </tr>
+
+        <tr th:each="Loa : ${DS_Loa} ">
+            <td th:text="${Loa.getMaLoa()}"></td>
+            <td th:text="${Loa.getTenLoa()}"></td>
+            <td th:text="${Loa.getConSuat()}"></td>
+            <td th:text="${Loa.getMauSac()}"></td>
+            <td th:text="${Loa.getKenhAmThanh()}"></td>
+        </tr>
+    </table>
+
+<form>
+    Nhập từ khóa tìm kiếm: <input name="keyword" type="text" th:value="${keyword}" />
+    <input type="submit" value="Tìm">
+</form>
+</body>
+</html>
