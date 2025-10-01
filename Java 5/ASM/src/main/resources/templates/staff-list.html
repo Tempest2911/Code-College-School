@@ -222,6 +222,17 @@
         else if (task.action === "UPDATED") showToast(`Admin đã cập nhật task: ${task.title}`, "info");
         else if (task.action === "DELETED") showToast(`Admin đã xóa task: ${task.title}`, "error");
 
+        // So sánh id cùng kiểu để tránh lỗi (dùng assignedToId mới)
+        const assignedId = task.assignedToId ? Number(task.assignedToId) : null;
+        const currentId = Number(window.currentStaffId);
+
+        // Nếu assignedTo không phải là user hiện tại thì xóa task khỏi giao diện (nếu có)
+        if (!assignedId || assignedId !== currentId) {
+            const oldCard = document.querySelector(`.task-card[data-id="${task.id}"]`);
+            if (oldCard) oldCard.remove();
+            return;
+        }
+
         // handle delete
         if (task.action === "DELETED") {
             const oldCard = document.querySelector(`.task-card[data-id="${task.id}"]`);
@@ -319,6 +330,12 @@
     }, function (err) {
         console.error("WebSocket error", err);
     });
+</script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    window.currentStaffId = /*[[${currentStaff.id}]]*/ 0;
+    /*]]>*/
 </script>
 
 </body>

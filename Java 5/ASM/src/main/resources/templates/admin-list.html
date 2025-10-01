@@ -101,7 +101,7 @@
             </h5>
         </div>
         <div class="card-body">
-            <form th:action="@{/admin/task/save}" th:object="${task}" method="post">
+            <form th:action="@{/admin/task/create}" th:object="${task}" method="post">
                 <input type="hidden" th:field="*{id}"/>
 
                 <div class="mb-3">
@@ -173,7 +173,7 @@
             <h5 class="mb-0" th:text="#{task.list}">All Tasks</h5>
         </div>
         <div class="card-body">
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover" id="taskTable">
                 <thead>
                 <tr>
                     <th th:text="#{task.id}">ID</th>
@@ -189,7 +189,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="t : ${tasks}">
+                <tr th:each="t : ${tasks}" th:attr="data-id=${t.id}">
                     <td th:text="${t.id}"></td>
                     <td th:text="${t.title}"></td>
                     <td th:text="${t.description}"></td>
@@ -250,6 +250,59 @@
 
 </div>
 
+
+<!-- Thêm thư viện WebSocket -->
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+<script>
+    // Cập nhật bảng task khi có thông báo WebSocket
+    function updateTaskTable(task) {
+        console.log('[ADMIN] Received task update:', task);
+        const table = document.getElementById("taskTable");
+        if (!table) { console.log('[ADMIN] Table not found'); return; }
+        const row = table.querySelector(`tr[data-id='${task.id}']`);
+        if (!row) { console.log(`[ADMIN] Row with data-id=${task.id} not found`); return; }
+
+        if (task.action === "DELETED") {
+            row.remove();
+            console.log(`[ADMIN] Row with id ${task.id} removed`);
+            return;
+        }
+
+        // Chỉ cập nhật cột Status (td thứ 4, index 3)
+        const statusTd = row.children[3];
+        if (statusTd) {
+            let badgeClass = '';
+            let statusText = '';
+            if (task.status === 'Done') {
+                badgeClass = 'badge status-done';
+                statusText = 'Done';
+            } else if (task.status === 'In-Progress') {
+                badgeClass = 'badge status-inprogress';
+                statusText = 'In Progress';
+            } else {
+                badgeClass = 'badge status-todo';
+                statusText = 'Todo';
+            }
+            statusTd.innerHTML = `<span class="${badgeClass}">${statusText}</span>`;
+            console.log(`[ADMIN] Updated status for id ${task.id} to ${statusText}`);
+        } else {
+            console.log(`[ADMIN] Status TD not found for row id ${task.id}`);
+        }
+    }
+
+    // Đảm bảo JS chỉ chạy sau khi DOM load xong
+    window.addEventListener('DOMContentLoaded', function() {
+        const socket = new SockJS('/ws');
+        const stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            stompClient.subscribe('/topic/tasks', function (message) {
+                const task = JSON.parse(message.body);
+                updateTaskTable(task);
+            });
+        });
+    });
+</script>
 
 </body>
 </html>

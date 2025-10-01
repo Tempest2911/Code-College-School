@@ -22,6 +22,8 @@ public class TaskDTO {
 
     private String action;
 
+    private Integer assignedToId;
+
     public static TaskDTO fromEntity(Task task, String action) {
         return new TaskDTO(
                 task.getId(),
@@ -33,7 +35,8 @@ public class TaskDTO {
                 task.getAssignedTo() != null ? task.getAssignedTo().getFullName() : null,
                 task.getDepartment() != null ? task.getDepartment().getName() : null,
                 task.getCreatedBy() != null ? task.getCreatedBy().getFullName() : null,
-                action
+                action,
+                task.getAssignedTo() != null ? task.getAssignedTo().getId() : null
         );
     }
 }

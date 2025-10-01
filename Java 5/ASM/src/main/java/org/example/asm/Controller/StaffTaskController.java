@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.example.asm.Model.Task;
 import org.example.asm.Model.User;
 import org.example.asm.Repository.TaskRepository;
+import org.example.asm.Service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,9 @@ public class StaffTaskController {
 
     @Autowired
     private TaskRepository taskRepository;
+
+    @Autowired
+    private TaskService taskService;
 
     @GetMapping("/list")
     public String myTasks(HttpSession session, Model model) {
@@ -60,6 +64,8 @@ public class StaffTaskController {
         task.setStatus(normalizedStatus);
 
         taskRepository.save(task);
+        // Broadcast cập nhật cho tất cả client (bao gồm admin)
+        taskService.broadcastTask(task, "UPDATED");
 
         if ("Admin".equals(user.getRole())) {
             return "redirect:/admin/task/list";

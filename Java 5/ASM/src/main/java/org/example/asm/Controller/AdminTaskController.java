@@ -43,7 +43,6 @@ public class AdminTaskController {
         if (creator == null) {
             creator = userRepository.findById(1).orElse(null); // fallback admin
         }
-
         task.setCreatedBy(creator);
 
         // ✅ Gắn AssignedTo từ ID (nếu có)
@@ -63,6 +62,7 @@ public class AdminTaskController {
         } else {
             task.setDepartment(null);
         }
+
 
         Task saved = taskRepository.save(task);
 

@@ -25,7 +25,4 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     @Query("SELECT t FROM Task t WHERE (:status IS NULL OR t.status = :status)")
     List<Task> findByStatus(@Param("status") String status);
 
-
-
-
 }
