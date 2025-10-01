@@ -18,19 +18,18 @@ public class StaffTaskController {
     @Autowired
     private TaskRepository taskRepository;
 
+
+
     @GetMapping("/list")
-    public String myDepartmentTasks(HttpSession session, Model model) {
+    public String myTasks(HttpSession session, Model model) {
         User user = (User) session.getAttribute("loggedInUser");
         if (user == null) return "redirect:/asm/login";
 
-        if (user.getDepartment() != null) {
-            model.addAttribute("tasks", taskRepository.findByDepartment_Id(user.getDepartment().getId()));
-        } else {
-            model.addAttribute("tasks", List.of()); // user chưa có phòng
-        }
+        // Staff chỉ xem task được gán cho chính họ
+        model.addAttribute("tasks", taskRepository.findByAssignedTo_Id(user.getId()));
+
         return "staff-list";
     }
-
 
 
     // Update status
@@ -68,6 +67,7 @@ public class StaffTaskController {
         }
         return "redirect:/staff/task/list";
     }
+
 
 
 }

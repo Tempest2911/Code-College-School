@@ -83,10 +83,12 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="#" th:text="#{title}">Admin - Task Board</a>
         <div class="d-flex">
+            <a href="/admin/task/dashboard" class="btn btn-info btn-sm me-2">📊 Dashboard</a>
             <a href="/asm/logout" class="btn btn-danger btn-sm">Logout</a>
         </div>
     </div>
 </nav>
+
 
 <div class="container mt-4">
 
@@ -99,7 +101,7 @@
             </h5>
         </div>
         <div class="card-body">
-            <form th:action="@{/admin/task/save}" th:object="${task}" method="post">
+            <form th:action="@{/admin/task/update}" th:object="${task}" method="post">
                 <input type="hidden" th:field="*{id}"/>
 
                 <div class="mb-3">
@@ -128,9 +130,12 @@
                     <div class="col-md-4 mb-3">
                         <label class="form-label" th:text="#{task.priority}">Priority</label>
                         <div class="priority-options">
-                            <label><input type="radio" th:field="*{priority}" value="Low"> <span th:text="#{priority.Low}">Low</span></label>
-                            <label><input type="radio" th:field="*{priority}" value="Medium"> <span th:text="#{priority.Medium}">Medium</span></label>
-                            <label><input type="radio" th:field="*{priority}" value="High"> <span th:text="#{priority.High}">High</span></label>
+                            <label><input type="radio" th:field="*{priority}" value="Low"> <span
+                                    th:text="#{priority.Low}">Low</span></label>
+                            <label><input type="radio" th:field="*{priority}" value="Medium"> <span
+                                    th:text="#{priority.Medium}">Medium</span></label>
+                            <label><input type="radio" th:field="*{priority}" value="High"> <span
+                                    th:text="#{priority.High}">High</span></label>
                         </div>
                     </div>
                 </div>
@@ -159,6 +164,8 @@
             </form>
         </div>
     </div>
+
+
 
     <!-- Danh sách Task -->
     <div class="card">
