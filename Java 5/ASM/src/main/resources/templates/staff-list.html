@@ -186,6 +186,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 
+
 <script>
     // helper: show toast
     function showToast(message, type = "info") {
@@ -212,23 +213,25 @@
         }
     }
 
+    // updateTaskList: receives DTO from backend via websocket
     function updateTaskList(task) {
         console.log("Realtime update:", task);
 
-        // toast
+        // toast by action
         if (task.action === "CREATED") showToast(`Admin đã tạo task: ${task.title}`, "success");
         else if (task.action === "UPDATED") showToast(`Admin đã cập nhật task: ${task.title}`, "info");
         else if (task.action === "DELETED") showToast(`Admin đã xóa task: ${task.title}`, "error");
 
-        // nếu bị xóa thì remove card rồi return
+        // handle delete
         if (task.action === "DELETED") {
             const oldCard = document.querySelector(`.task-card[data-id="${task.id}"]`);
             if (oldCard) oldCard.remove();
             return;
         }
 
-        // tìm card cũ (nếu có)
-        let card = document.querySelector(`.task-card[data-id="${task.id}"]`);
+        // find existing card
+        const existingCard = document.querySelector(`.task-card[data-id="${task.id}"]`);
+        let card = existingCard;
         const isNewCard = !card;
 
         if (isNewCard) {
@@ -239,44 +242,50 @@
             makeDraggable(card);
         }
 
-        // lấy thông tin
-        const title = task.title || "No Title";
-        const description = task.description || "";
-        const deadline = task.deadline ? task.deadline.substring(0,16).replace('T',' ') : "No Deadline";
-        const assignedToName = task.assignedTo?.fullName || task.assignedToName || "Unassigned";
-        const departmentName = task.department?.name || task.departmentName || "N/A";
-        const createdByName = task.createdBy?.fullName || task.createdByName || "System";
+        // compute fields: support both nested objects (task.assignedTo.fullName) or flattened names (task.assignedToName)
+        const title = (task.title !== undefined) ? task.title : (existingCard?.querySelector(".card-title")?.textContent || "No Title");
+        const description = (task.description !== undefined) ? task.description : (existingCard?.querySelector(".card-text")?.textContent || "");
+        const deadline = task.deadline ? (task.deadline.substring(0,16).replace('T',' ')) : (existingCard?.querySelector(".badge.bg-secondary")?.textContent.replace("Deadline: ","") || "No Deadline");
+        const assignedToName = task.assignedTo?.fullName || task.assignedToName || (existingCard?.querySelector(".badge.bg-info")?.textContent.replace("Assigned: ","") || "Unassigned");
+        const departmentName = task.department?.name || task.departmentName || (existingCard?.querySelector(".badge.bg-dark")?.textContent.replace("Dept: ","") || "N/A");
+        const createdByName = task.createdBy?.fullName || task.createdByName || (existingCard?.querySelector(".badge.bg-light")?.textContent.replace("By: ","") || "System");
 
-        // render nội dung
+        // build innerHTML
         card.innerHTML = `
-        <div class="card-body">
-            <h5 class="card-title">${escapeHtml(title)}</h5>
-            <p class="card-text">${escapeHtml(description)}</p>
-            <div class="mb-2">
-                <span class="badge bg-secondary">Deadline: ${escapeHtml(deadline)}</span>
-                <span class="badge bg-info">Assigned: ${escapeHtml(assignedToName)}</span>
-                <span class="badge bg-dark">Dept: ${escapeHtml(departmentName)}</span>
-                <span class="badge bg-light text-dark">By: ${escapeHtml(createdByName)}</span>
+            <div class="card-body">
+                <h5 class="card-title">${escapeHtml(title)}</h5>
+                <p class="card-text">${escapeHtml(description)}</p>
+                <div class="mb-2">
+                    <span class="badge bg-secondary">Deadline: ${escapeHtml(deadline)}</span>
+                    <span class="badge bg-info">Assigned: ${escapeHtml(assignedToName)}</span>
+                    <span class="badge bg-dark">Dept: ${escapeHtml(departmentName)}</span>
+                    <span class="badge bg-light text-dark">By: ${escapeHtml(createdByName)}</span>
+                </div>
             </div>
-        </div>
-    `;
+        `;
 
-        // tìm đúng cột theo status
-        let selector;
-        switch ((task.status || "").toUpperCase()) {
-            case "TODO": selector = '[data-status="Todo"]'; break;
-            case "IN-PROGRESS": selector = '[data-status="In-Progress"]'; break;
-            case "DONE": selector = '[data-status="Done"]'; break;
-        }
+        // ensure draggable listeners
+        makeDraggable(card);
+
+        // append/move card into proper column
+        let statusKey = (task.status || "").toUpperCase().replace("_","-"); // e.g. "IN-PROGRESS"
+        let selector = statusKey === "TODO" ? '[data-status="Todo"]'
+            : statusKey === "IN-PROGRESS" ? '[data-status="In-Progress"]'
+                : statusKey === "DONE" ? '[data-status="Done"]' : null;
 
         if (selector) {
             const column = document.querySelector(selector);
             if (column && card.parentElement !== column) {
                 column.appendChild(card);
+            } else if (!column && isNewCard) {
+                // if unknown status, append to first column (fallback)
+                document.querySelector(".kanban-board").firstElementChild.appendChild(card);
             }
+        } else if (isNewCard) {
+            // fallback append to Todo column
+            document.querySelector('[data-status="Todo"]').appendChild(card);
         }
     }
-
 
     // simple HTML escaper to avoid injection when interpolating
     function escapeHtml(str) {
