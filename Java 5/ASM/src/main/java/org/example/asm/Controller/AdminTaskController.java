@@ -33,7 +33,6 @@ public class AdminTaskController {
     private TaskService taskService;   // ✅ chỉ giữ lại TaskService
 
 
-    // 👉 Tạo mới Task
     @PostMapping("/create")
     public String createTask(@ModelAttribute Task task, Principal principal) {
         User creator = null;
@@ -46,6 +45,24 @@ public class AdminTaskController {
         }
 
         task.setCreatedBy(creator);
+
+        // ✅ Gắn AssignedTo từ ID (nếu có)
+        if (task.getAssignedTo() != null && task.getAssignedTo().getId() != null) {
+            User assigned = userRepository.findById(task.getAssignedTo().getId())
+                    .orElse(null);
+            task.setAssignedTo(assigned);
+        } else {
+            task.setAssignedTo(null);
+        }
+
+        // ✅ Gắn Department từ ID (nếu có)
+        if (task.getDepartment() != null && task.getDepartment().getId() != null) {
+            Department dept = departmentRepository.findById(task.getDepartment().getId())
+                    .orElse(null);
+            task.setDepartment(dept);
+        } else {
+            task.setDepartment(null);
+        }
 
         Task saved = taskRepository.save(task);
 
@@ -71,22 +88,48 @@ public class AdminTaskController {
         return "admin-list";
     }
 
-    // 👉 Update Task
-    @PostMapping("/update")
+    @PostMapping("/save")
     public String updateTask(@ModelAttribute Task task, Principal principal) {
-        User creator = null;
-        if (principal != null) {
-            creator = userRepository.findByUsername(principal.getName());
-        }
-        if (creator == null) {
-            creator = userRepository.findById(1).orElse(null);
-        }
+        User creator = (principal != null)
+                ? userRepository.findByUsername(principal.getName())
+                : userRepository.findById(1).orElse(null);
         task.setCreatedBy(creator);
+
+        // Lấy task cũ để so sánh
+        Task existing = taskRepository.findById(task.getId()).orElse(null);
+        String oldAssignedUsername = (existing != null && existing.getAssignedTo() != null)
+                ? existing.getAssignedTo().getUsername()
+                : null;
+
+        // Gắn AssignedTo mới
+        if (task.getAssignedTo() != null && task.getAssignedTo().getId() != null) {
+            User assigned = userRepository.findById(task.getAssignedTo().getId()).orElse(null);
+            task.setAssignedTo(assigned);
+        } else {
+            task.setAssignedTo(null);
+        }
+
+        // Gắn Department mới
+        if (task.getDepartment() != null && task.getDepartment().getId() != null) {
+            Department dept = departmentRepository.findById(task.getDepartment().getId()).orElse(null);
+            task.setDepartment(dept);
+        } else {
+            task.setDepartment(null);
+        }
 
         Task updated = taskRepository.save(task);
 
-        // ✅ Broadcast realtime
+        // ✅ Broadcast cho all + newAssignee
         taskService.broadcastTask(updated, "UPDATED");
+
+        // ✅ Nếu đổi AssignedTo → gửi "DELETED" cho oldAssignee
+        String newAssignedUsername = (updated.getAssignedTo() != null)
+                ? updated.getAssignedTo().getUsername()
+                : null;
+
+        if (oldAssignedUsername != null && !oldAssignedUsername.equals(newAssignedUsername)) {
+            taskService.notifyRemovedFromOldAssignee(updated, oldAssignedUsername);
+        }
 
         return "redirect:/admin/task/list";
     }

@@ -18,19 +18,18 @@ public class StaffTaskController {
     @Autowired
     private TaskRepository taskRepository;
 
-
-
     @GetMapping("/list")
     public String myTasks(HttpSession session, Model model) {
         User user = (User) session.getAttribute("loggedInUser");
         if (user == null) return "redirect:/asm/login";
 
-        // Staff chỉ xem task được gán cho chính họ
+        // Add current staff to model for Thymeleaf
+        model.addAttribute("currentStaff", user);
+        // Staff only sees their own tasks
         model.addAttribute("tasks", taskRepository.findByAssignedTo_Id(user.getId()));
 
         return "staff-list";
     }
-
 
     // Update status
     @PostMapping("/status/{id}")
@@ -67,7 +66,4 @@ public class StaffTaskController {
         }
         return "redirect:/staff/task/list";
     }
-
-
-
 }

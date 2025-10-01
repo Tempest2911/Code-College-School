@@ -1,9 +1,13 @@
 package org.example.asm.DTO;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.example.asm.Model.Task;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class TaskDTO {
     private Integer id;
     private String title;
@@ -12,60 +16,24 @@ public class TaskDTO {
     private String priority;
     private String deadline;
 
-    private SimpleUser assignedTo;
-    private SimpleUser createdBy;
-    private SimpleDepartment department;
+    private String assignedToName;
+    private String departmentName;
+    private String createdByName;
 
-    private String action; // CREATED / UPDATED / DELETED
+    private String action;
 
-    @Data
-    public static class SimpleUser {
-        private Integer id;
-        private String fullName;
-
-        public SimpleUser(Integer id, String fullName) {
-            this.id = id;
-            this.fullName = fullName;
-        }
-    }
-
-    @Data
-    public static class SimpleDepartment {
-        private Integer id;
-        private String name;
-
-        public SimpleDepartment(Integer id, String name) {
-            this.id = id;
-            this.name = name;
-        }
-    }
-
-    // ✅ Factory method convert Task -> TaskDTO
     public static TaskDTO fromEntity(Task task, String action) {
-        TaskDTO dto = new TaskDTO();
-        dto.setId(task.getId());
-        dto.setTitle(task.getTitle());
-        dto.setDescription(task.getDescription());
-        dto.setStatus(task.getStatus());
-        dto.setPriority(task.getPriority());
-        dto.setAction(action);
-
-        if (task.getDeadline() != null) {
-            dto.setDeadline(task.getDeadline().toString());
-        }
-
-        if (task.getAssignedTo() != null) {
-            dto.setAssignedTo(new SimpleUser(task.getAssignedTo().getId(), task.getAssignedTo().getFullName()));
-        }
-
-        if (task.getCreatedBy() != null) {
-            dto.setCreatedBy(new SimpleUser(task.getCreatedBy().getId(), task.getCreatedBy().getFullName()));
-        }
-
-        if (task.getDepartment() != null) {
-            dto.setDepartment(new SimpleDepartment(task.getDepartment().getId(), task.getDepartment().getName()));
-        }
-
-        return dto;
+        return new TaskDTO(
+                task.getId(),
+                task.getTitle(),
+                task.getDescription(),
+                task.getStatus(),
+                task.getPriority(),
+                task.getDeadline() != null ? task.getDeadline().toString() : null,
+                task.getAssignedTo() != null ? task.getAssignedTo().getFullName() : null,
+                task.getDepartment() != null ? task.getDepartment().getName() : null,
+                task.getCreatedBy() != null ? task.getCreatedBy().getFullName() : null,
+                action
+        );
     }
 }
