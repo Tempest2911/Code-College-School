@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nguoi yeu Cu</title>
+</head>
+<body>
+
+<table border="1">
+    <tr>
+        <th>Id</th>
+        <th>Ten</th>
+        <th>Ngay Chia Tay</th>
+        <th>Ly Do Chia Tay</th>
+        <th>Muc Do Drama</th>
+        <th>Action</th>
+    </tr>
+
+    <tr th:each="nguoiYeuCu : ${DSNguoiYeuCu}">
+        <td th:text="${nguoiYeuCu.id}"></td>
+        <td th:text="${nguoiYeuCu.ten}"></td>
+        <td th:text="${nguoiYeuCu.ngayCT}"></td>
+        <td th:text="${nguoiYeuCu.lyDoCT}"></td>
+        <td th:text="${nguoiYeuCu.mucDoDrama}"></td>
+        <td>
+            <a th:href="@{'/ex-lover/delete/' + ${nguoiYeuCu.id}}">Delete</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>
