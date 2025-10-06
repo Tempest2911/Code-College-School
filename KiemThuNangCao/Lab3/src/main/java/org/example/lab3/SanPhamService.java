@@ -1,7 +1,5 @@
 package org.example.lab3;
 
-import org.example.lab3.SanPham;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +9,7 @@ public class SanPhamService {
     // Thêm sản phẩm: soLuong > 0 và < 100
     public boolean them(SanPham sp) {
         if (sp.getSoLuong() <= 0 || sp.getSoLuong() >= 100) {
-            return false;
+            throw new IllegalArgumentException("Số lượng phải lớn hơn 0 và nhỏ hơn 100");
         }
         danhSach.add(sp);
         return true;
@@ -22,12 +20,12 @@ public class SanPhamService {
         for (SanPham sp : danhSach) {
             if (sp.getId().equals(id)) {
                 if (!spMoi.getMaSanPham().startsWith("SP")) {
-                    return false;
+                    throw new IllegalArgumentException("Mã sản phẩm phải bắt đầu bằng 'SP'");
                 }
                 for (SanPham spCheck : danhSach) {
                     if (!spCheck.getId().equals(id) &&
                             spCheck.getMaSanPham().equals(spMoi.getMaSanPham())) {
-                        return false; // mã sản phẩm trùng
+                        throw new IllegalArgumentException("Mã sản phẩm không được trùng"); // mã sản phẩm trùng
                     }
                 }
                 sp.setMaSanPham(spMoi.getMaSanPham());
