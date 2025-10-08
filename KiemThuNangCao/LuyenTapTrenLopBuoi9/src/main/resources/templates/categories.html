@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Category Management</title>
+    <style>
+        #Search, #CategoryForm {
+            border: 1px solid #888;
+            padding: 16px;
+            margin-bottom: 16px;
+            width: 350px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 700px;
+        }
+        th, td {
+            border: 1px solid #888;
+            padding: 6px 12px;
+            text-align: left;
+        }
+        .pagination {
+            margin-top: 12px;
+        }
+        .pagination a, .pagination span {
+            margin: 0 4px;
+            padding: 2px 8px;
+            text-decoration: none;
+            color: #333;
+        }
+        .pagination .active {
+            background: #eee;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div id="Search">
+    <h2>Search</h2>
+    <form th:action="@{/categories/search}" method="get">
+        <div>
+            <label>Category ID:</label>
+            <input type="text" name="id" placeholder="Enter ID"/>
+        </div>
+        <div>
+            <label>Category code:</label>
+            <input type="text" name="code" placeholder="Enter code"/>
+        </div>
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+<div id="CategoryForm">
+    <h2 th:text="${category.id == null ? 'Add Category' : 'Edit Category'}"></h2>
+    <form th:action="@{/categories/save}" th:object="${category}" method="post">
+        <div>
+            <label>Category ID:</label>
+            <input type="text" th:value="${category.id}" readonly th:if="${category.id != null}" />
+            <input type="hidden" th:field="*{id}" th:if="${category.id != null}" />
+            <input type="text" value="" disabled th:if="${category.id == null}" />
+        </div>
+        <div>
+            <label>Category code:</label>
+            <input type="text" th:field="*{categoryCode}" required/>
+        </div>
+        <div>
+            <label>Category name:</label>
+            <input type="text" th:field="*{categoryName}" required/>
+        </div>
+        <button type="submit" th:text="${category.id == null ? 'Add' : 'Update'}"></button>
+    </form>
+</div>
+
+<div>
+    <h2>Category List</h2>
+    <table>
+        <tr>
+            <th>Category ID</th>
+            <th>Category code</th>
+            <th>Category name</th>
+            <th>Action</th>
+        </tr>
+        <tr th:each="category : ${categories}">
+            <td th:text="${category.id}"></td>
+            <td th:text="${category.categoryCode}"></td>
+            <td th:text="${category.categoryName}"></td>
+            <td>
+                <a th:href="@{'/categories/edit/' + ${category.id}}">Edit</a>
+                <a th:href="@{'/categories/delete/' + ${category.id}}" onclick="return confirm('Are you sure?')">Remove</a>
+            </td>
+        </tr>
+    </table>
+    <div class="pagination">
+        <a th:if="${currentPage > 1}" th:href="@{'/categories?page=' + (${currentPage} - 1)}">&laquo;</a>
+        <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+            <a th:if="${i != currentPage}" th:href="@{'/categories?page=' + ${i}}" th:text="${i}"></a>
+            <span th:if="${i == currentPage}" class="active" th:text="${i}"></span>
+        </span>
+        <a th:if="${currentPage < totalPages}" th:href="@{'/categories?page=' + (${currentPage} + 1)}">&raquo;</a>
+    </div>
+</div>
+</body>
+</html>

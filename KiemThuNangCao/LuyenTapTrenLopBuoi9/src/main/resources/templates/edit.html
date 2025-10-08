@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Category</title>
+    <style>
+        #EditForm {
+            border: 1px solid #888;
+            padding: 16px;
+            margin-bottom: 16px;
+            width: 350px;
+        }
+    </style>
+</head>
+<body>
+<div id="EditForm">
+    <h2>Edit Category</h2>
+    <form th:action="@{/categories/save}" th:object="${category}" method="post">
+        <div>
+            <label>Category ID:</label>
+            <input type="text" th:value="${category.id}" readonly />
+            <input type="hidden" th:field="*{id}" />
+        </div>
+        <div>
+            <label>Category code:</label>
+            <input type="text" th:field="*{categoryCode}" required/>
+        </div>
+        <div>
+            <label>Category name:</label>
+            <input type="text" th:field="*{categoryName}" required/>
+        </div>
+        <button type="submit">Update</button>
+        <a th:href="@{/categories}">Cancel</a>
+    </form>
+</div>
+</body>
+</html>
+
