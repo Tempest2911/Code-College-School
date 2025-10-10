@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab6</title>
+</head>
+<body>
+    <div>
+        <h1>Danh Sách</h1>
+        <table th:border="1">
+            <tr>
+                <th>SpecialtyID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>CreatedAt</th>
+                <th>Status</th>
+                <th>DepartmentName</th>
+                <th>Action</th>
+            </tr>
+            <tr th:each="sp : ${specialties}">
+                <td th:text="${sp.id}"></td>
+                <td th:text="${sp.name}"></td>
+                <td th:text="${sp.description}"></td>
+                <td th:text="${sp.createdAt}"></td>
+                <td th:text="${sp.status}"></td>
+                <td th:text="${sp.departmentID?.name}"></td>
+                <td>
+                    <a th:href="@{'/specialties/' + ${sp.id}}">Detail</a> |
+
+                </td>
+        </table>
+    </div>
+</body>
+</html>
