@@ -1,4 +1,4 @@
-package org.example.lab6.Model;
+package org.example.lamview10table.Model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,7 +13,6 @@ import java.time.Instant;
 @Table(name = "Specialties")
 public class Specialty {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SpecialtyID", nullable = false)
     private Integer id;
 
