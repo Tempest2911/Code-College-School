@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Prescriptions</title>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container mt-4">
+    <h2>Prescriptions</h2>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Medical Record</th>
+            <th>Medicine</th>
+            <th>Dosage</th>
+            <th>Frequency</th>
+            <th>Duration</th>
+            <th>Note</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="prescription : ${prescriptions}">
+            <td th:text="${prescription.id}"></td>
+            <td th:text="${prescription.recordID.id}"></td>
+            <td th:text="${prescription.medicineID.name}"></td>
+            <td th:text="${prescription.dosage}"></td>
+            <td th:text="${prescription.frequency}"></td>
+            <td th:text="${prescription.duration}"></td>
+            <td th:text="${prescription.note}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="/" class="btn btn-primary">Back to Home</a>
+</div>
+</body>
+</html>
+

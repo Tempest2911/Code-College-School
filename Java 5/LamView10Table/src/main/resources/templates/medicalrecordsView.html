@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Medical Records</title>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container mt-4">
+    <h2>Medical Records</h2>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Record ID</th>
+            <th>Patient ID</th>
+            <th>Doctor ID</th>
+            <th>Diagnosis</th>
+            <th>RecordDate</th>
+            <th>Note</th>
+            <th>Appointment</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="record : ${medicalRecords}">
+            <td th:text="${record.id}"></td>
+            <td th:text="${record.patientID.fullName}"></td>
+            <td th:text="${record.doctorID.fullName}"></td>
+            <td th:text="${record.diagnosis}"></td>
+            <td th:text="${#dates.format(record.recordDate, 'yyyy-MM-dd HH:mm')}"></td>
+            <td th:text="${record.note}"></td>
+            <td th:text="${record.appointmentID.id}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="/" class="btn btn-primary">Back to Home</a>
+</div>
+</body>
+</html>
+
