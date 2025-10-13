@@ -98,7 +98,7 @@ public class Bai2Test {
 
     @Test
     void testEditBook_CoKiTu() {
-        Sach sach = new Sach("001", "LALALALA", 25, "Phong", 10);
+        Sach sach = new Sach("001", "BRRR", 25, "Phong", 10);
         service.themSach(sach);
 
         Sach updatedSach = new Sach("001", "Java$%#%", 25, "Phong", 12);
