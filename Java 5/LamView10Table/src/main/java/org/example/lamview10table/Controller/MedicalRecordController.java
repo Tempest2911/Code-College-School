@@ -11,7 +11,7 @@ public class MedicalRecordController {
     @Autowired
     private MedicalRecordRepository medicalRecordRepository;
 
-    @GetMapping("/medicalrecords")
+    @GetMapping("/medical-records")
     public String getAllMedicalRecords(Model model) {
         model.addAttribute("medicalRecords", medicalRecordRepository.findAll());
         return "medicalrecordsView";

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Danh Sách</h1>
+
+    <table border="1">
+        <tr>
+            <th>Id</th>
+            <th>Ma Mon Hoc</th>
+            <th>Ten Mon Hoc</th>
+            <th>Ngay Tao</th>
+        </tr>
+        <tr th:each="mh : ${listMonHoc}">
+            <td th:text="${mh.id}">1</td>
+            <td th:text="${mh.maMonHoc}">MH001</td>
+            <td th:text="${mh.tenMonHoc}">Toan</td>
+            <td th:text="${mh.ngayTao}">2024-01-01</td>
+
+        </tr>
+
+    </table>
+</body>
+</html>

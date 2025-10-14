@@ -54,5 +54,7 @@
             chuNhaRepository.deleteById(id);
             return "redirect:/chunha";
         }
+
+
     }
 
