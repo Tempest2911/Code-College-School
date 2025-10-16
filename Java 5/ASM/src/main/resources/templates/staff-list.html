@@ -73,6 +73,16 @@
 
 <div class="container mt-4">
     <h2 class="text-center mb-4">📌 Task Board - Department</h2>
+
+    <!-- Thông báo các task sắp đến hạn cho staff -->
+    <div th:if="${dueSoonTasks != null and !dueSoonTasks.isEmpty()}">
+        <div th:each="t : ${dueSoonTasks}" class="alert alert-warning" style="font-weight:bold;">
+            <span>
+                ⚠️ Task "<span th:text="${t.title}"></span>" sẽ đến hạn lúc <span th:text="${#temporals.format(t.deadline,'yyyy-MM-dd HH:mm')}"></span>!
+            </span>
+        </div>
+    </div>
+
     <div class="kanban-board">
         <div class="kanban-column" data-status="Todo">
             <h4>📝 Todo</h4>
@@ -217,10 +227,10 @@
     function updateTaskList(task) {
         console.log("Realtime update:", task);
 
-        // toast by action
-        if (task.action === "CREATED") showToast(`Admin đã tạo task: ${task.title}`, "success");
-        else if (task.action === "UPDATED") showToast(`Admin đã cập nhật task: ${task.title}`, "info");
-        else if (task.action === "DELETED") showToast(`Admin đã xóa task: ${task.title}`, "error");
+        if (task.action === "CREATED") showToast(`Đã tạo task: ${task.title}`, "success");
+        else if (task.action === "UPDATED") showToast(`Đã cập nhật task: ${task.title}`, "info");
+        else if (task.action === "DELETED") showToast(`Đã xóa task: ${task.title}`, "error");
+        else if (task.action === "Created" || task.action === "Updated" || task.deadline < 24*60*60*1000) showToast(`Task "${task.title}" sắp hết hạn!`, "warning");
 
         // So sánh id cùng kiểu để tránh lỗi (dùng assignedToId mới)
         const assignedId = task.assignedToId ? Number(task.assignedToId) : null;

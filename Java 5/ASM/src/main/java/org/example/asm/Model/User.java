@@ -12,7 +12,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "Users")
-public class User {
+public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
@@ -41,9 +41,6 @@ public class User {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
     private Department department;
-
-    @OneToMany(mappedBy = "user")
-    private Set<Notification> notifications = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "assignedTo")
     private Set<Task> assignedTasks = new LinkedHashSet<>();

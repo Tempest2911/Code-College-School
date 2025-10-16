@@ -12,7 +12,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+
 import java.security.Principal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,19 +79,28 @@ public class AdminTaskController {
         return "redirect:/admin/task/list";
     }
 
-    // 👉 List Task (lọc theo trạng thái)
-    @GetMapping("/list")
-    public String showTaskList(@RequestParam(required = false) String status, Model model) {
-        List<Task> tasks = (status != null && !status.isEmpty())
-                ? taskRepository.findByStatus(status)
-                : taskRepository.findAll();
 
+    // 👉 List Task (phân trang riêng, không search)
+    @GetMapping("/list")
+    public String showTaskList(
+            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size,
+            @RequestParam(value = "sort", required = false) String sort,
+            Model model) {
+        Pageable pageable;
+        if (sort != null && sort.equals("desc")) {
+            pageable = PageRequest.of(page, size, Sort.by("deadline").descending());
+        } else {
+            pageable = PageRequest.of(page, size, Sort.by("deadline").ascending());
+        }
+        Page<Task> taskPage = taskRepository.findAll(pageable);
         model.addAttribute("task", new Task());
-        model.addAttribute("tasks", tasks);
+        model.addAttribute("tasks", taskPage.getContent());
+        model.addAttribute("totalPages", taskPage.getTotalPages());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("size", size);
         model.addAttribute("staffList", userRepository.findByRole("staff"));
         model.addAttribute("departments", departmentRepository.findAll());
-        model.addAttribute("selectedStatus", status);
-
         return "admin-list";
     }
 
@@ -142,6 +158,15 @@ public class AdminTaskController {
         model.addAttribute("tasks", taskRepository.findAll());
         model.addAttribute("staffList", userRepository.findByRole("staff"));
         model.addAttribute("departments", departmentRepository.findAll());
+        // Bổ sung biến phân trang và search mặc định
+        model.addAttribute("totalPages", 1);
+        model.addAttribute("currentPage", 0);
+        model.addAttribute("size", 10);
+        model.addAttribute("keyword", "");
+        model.addAttribute("departmentId", "");
+        model.addAttribute("startDate", "");
+        model.addAttribute("endDate", "");
+        model.addAttribute("sort", "asc");
         return "admin-list";
     }
 
@@ -176,4 +201,98 @@ public class AdminTaskController {
 
         return "dashboard";
     }
+
+
+    // 👉 Search (theo tiêu đề, phòng ban, và khoảng thời gian)
+    @GetMapping("/search")
+    public String searchTasks(
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "departmentId", required = false) Integer departmentId,
+            @RequestParam(value = "startDate", required = false) String startDateStr,
+            @RequestParam(value = "endDate", required = false) String endDateStr,
+            @RequestParam(value = "sort", required = false) String sort,
+            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size,
+            Model model) {
+        LocalDateTime startDate = null;
+        LocalDateTime endDate = null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        if (startDateStr != null && !startDateStr.isEmpty()) {
+            startDate = LocalDateTime.parse(startDateStr, formatter);
+        }
+        if (endDateStr != null && !endDateStr.isEmpty()) {
+            endDate = LocalDateTime.parse(endDateStr, formatter);
+        }
+        Pageable pageable;
+        if (sort != null && sort.equals("desc")) {
+            pageable = org.springframework.data.domain.PageRequest.of(page, size, org.springframework.data.domain.Sort.by("deadline").descending());
+        } else {
+            pageable = org.springframework.data.domain.PageRequest.of(page, size, org.springframework.data.domain.Sort.by("deadline").ascending());
+        }
+        var taskPage = taskRepository.searchTasksPage(
+                (keyword != null && !keyword.isEmpty()) ? keyword : null,
+                departmentId,
+                startDate,
+                endDate,
+                pageable
+        );
+        model.addAttribute("task", new Task());
+        model.addAttribute("tasks", taskPage.getContent());
+        model.addAttribute("totalPages", taskPage.getTotalPages());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("size", size);
+        model.addAttribute("staffList", userRepository.findByRole("staff"));
+        model.addAttribute("departments", departmentRepository.findAll());
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("departmentId", departmentId);
+        model.addAttribute("startDate", startDateStr);
+        model.addAttribute("endDate", endDateStr);
+        model.addAttribute("sort", sort);
+        return "admin-list";
+    }
+
+    @GetMapping("/sortLowToHigh")
+    public String sortLowToHigh(
+            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size,
+            Model model) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+        Page<Task> taskPage = taskRepository.findAll(pageable);
+        model.addAttribute("task", new Task());
+        model.addAttribute("tasks", taskPage.getContent());
+        model.addAttribute("totalPages", taskPage.getTotalPages());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("size", size);
+        model.addAttribute("staffList", userRepository.findByRole("staff"));
+        model.addAttribute("departments", departmentRepository.findAll());
+        model.addAttribute("keyword", "");
+        model.addAttribute("departmentId", "");
+        model.addAttribute("startDate", "");
+        model.addAttribute("endDate", "");
+        model.addAttribute("sort", "asc");
+        return "admin-list";
+    }
+
+    @GetMapping("/sortHighToLow")
+    public String sortHighToLow(
+            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size,
+            Model model) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        Page<Task> taskPage = taskRepository.findAll(pageable);
+        model.addAttribute("task", new Task());
+        model.addAttribute("tasks", taskPage.getContent());
+        model.addAttribute("totalPages", taskPage.getTotalPages());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("size", size);
+        model.addAttribute("staffList", userRepository.findByRole("staff"));
+        model.addAttribute("departments", departmentRepository.findAll());
+        model.addAttribute("keyword", "");
+        model.addAttribute("departmentId", "");
+        model.addAttribute("startDate", "");
+        model.addAttribute("endDate", "");
+        model.addAttribute("sort", "desc");
+        return "admin-list";
+    }
+
 }

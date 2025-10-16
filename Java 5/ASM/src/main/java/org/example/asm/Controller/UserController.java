@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Controller
 @RequestMapping("/asm")
@@ -14,6 +16,8 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     // ✅ Trang đăng ký
     @GetMapping("/register")
@@ -45,7 +49,8 @@ public class UserController {
                         Model model) {
         User user = userRepository.findByUsername(formUser.getUsername());
         if (user != null && user.getPassword().equals(formUser.getPassword())) {
-            session.setAttribute("loggedInUser", user);
+            session.setAttribute("currentUser", user);
+            logger.info("[UserController] Đăng nhập thành công. currentUser: {}. Role: {}", user.getUsername(), user.getRole());
             // Admin → quản lý task, Staff → xem task của mình
             if ("admin".equals(user.getRole())) {
                 return "redirect:/admin/task/list";
