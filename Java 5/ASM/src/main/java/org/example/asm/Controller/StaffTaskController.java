@@ -24,7 +24,7 @@ public class StaffTaskController {
 
     @GetMapping("/list")
     public String myTasks(HttpSession session, Model model) {
-        User user = (User) session.getAttribute("loggedInUser");
+        User user = (User) session.getAttribute("currentUser");
         if (user == null) return "redirect:/asm/login";
 
         // Add current staff to model for Thymeleaf
@@ -40,7 +40,7 @@ public class StaffTaskController {
     public String updateStatus(@PathVariable Integer id,
                                @RequestParam String status,
                                HttpSession session) {
-        User user = (User) session.getAttribute("loggedInUser");
+        User user = (User) session.getAttribute("currentUser");
         if (user == null) {
             return "redirect:/asm/login";
         }

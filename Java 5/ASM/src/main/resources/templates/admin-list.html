@@ -145,14 +145,14 @@
                         <label class="form-label">Assign to Staff</label>
                         <select class="form-select" th:field="*{assignedTo.id}">
                             <option value="">-- Select Staff --</option>
-                            <option th:each="u : ${staffList}" th:value="${u.id}"></option>
+                            <option th:each="u : ${staffList}" th:text="${u.username}" th:value="${u.id}"></option>
                         </select>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Department</label>
                         <select class="form-select" th:field="*{department.id}">
                             <option value="">-- Select Department --</option>
-                            <option th:each="d : ${departments}" th:value="${d.id}"></option>
+                            <option th:each="d : ${departments}" th:text="${d.name}" th:value="${d.id}"></option>
                         </select>
                     </div>
                 </div>

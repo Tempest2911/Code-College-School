@@ -230,7 +230,6 @@
         if (task.action === "CREATED") showToast(`Đã tạo task: ${task.title}`, "success");
         else if (task.action === "UPDATED") showToast(`Đã cập nhật task: ${task.title}`, "info");
         else if (task.action === "DELETED") showToast(`Đã xóa task: ${task.title}`, "error");
-        else if (task.action === "Created" || task.action === "Updated" || task.deadline < 24*60*60*1000) showToast(`Task "${task.title}" sắp hết hạn!`, "warning");
 
         // So sánh id cùng kiểu để tránh lỗi (dùng assignedToId mới)
         const assignedId = task.assignedToId ? Number(task.assignedToId) : null;
@@ -347,6 +346,28 @@
     window.currentStaffId = /*[[${currentStaff.id}]]*/ 0;
     /*]]>*/
 </script>
+
+<script>
+    // Mỗi 30 giây hiển thị 1 toast để kiểm tra hoạt động
+    setInterval(() => {
+        const messages = [
+            "⏰ Hệ thống đang hoạt động bình thường.",
+            "🛠️ Đang kiểm tra tiến độ công việc...",
+            "💡 Vẫn đang đồng bộ dữ liệu task...",
+            "✅ ScheduleTask đang chạy!"
+        ];
+        // chọn ngẫu nhiên 1 thông điệp
+        const msg = messages[Math.floor(Math.random() * messages.length)];
+        showToast(msg, "info");
+    }, 10000);
+
+    stompClient.subscribe('/topic/schedule', function (message) {
+        const data = JSON.parse(message.body);
+        showToast(`${data.message} (${data.time})`, data.type || "info");
+    });
+
+</script>
+
 
 </body>
 </html>
