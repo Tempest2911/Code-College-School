@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Đăng ký nhận tin</title></head>
+<body>
+<h2>Đăng ký nhận tin tức/bài viết</h2>
+<form action="/subscribe" method="post">
+  <input type="email" name="email" placeholder="Email của bạn" required>
+  <button type="submit">Đăng ký</button>
+</form>
+<p th:text="${msg}"></p>
+</body>
+</html>

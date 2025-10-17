@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Danh sách sản phẩm</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        width: 60%;
+        margin: 40px auto;
+    }
+    input, button {
+        padding: 6px;
+        margin: 4px;
+    }
+    button {
+        cursor: pointer;
+    }
+
+</style>
+<body>
+<h2>Danh sách sản phẩm</h2>
+<a href="/upload">+ Thêm sản phẩm</a> |
+<a href="/cart">🛒 Giỏ hàng</a> |
+<a href="/logout">Đăng xuất</a>
+
+<div th:each="p : ${products}" style="margin-top: 15px;">
+    <img th:src="${p.image}" width="80">
+    <b th:text="${p.name}"></b> - <span th:text="${p.price}"></span> VND
+    <form th:action="@{'/cart/add/' + ${p.id}}" method="post" style="display:inline;">
+        <button type="submit">Thêm vào giỏ</button>
+    </form>
+</div>
+</body>
+</html>

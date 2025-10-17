@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Xem bài viết</title></head>
+<body>
+<header th:if="${session.user != null}">
+    <p>Chào mừng <b th:text="${session.user.fullname}"></b> |
+        <a href="/logout">Đăng xuất</a>
+    </p>
+</header>
+<h2 th:text="${post.title}"></h2>
+<p th:text="${post.content}"></p>
+<hr>
+<a href="/post">← Quay lại danh sách</a>
+</body>
+</html>

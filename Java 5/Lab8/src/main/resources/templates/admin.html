@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Trang quản trị</title></head>
+<body>
+<h2>Tạo bài viết mới</h2>
+<form action="/admin/create" method="post">
+  <input type="text" name="title" placeholder="Tiêu đề" required><br>
+  <textarea name="content" rows="5" cols="40" placeholder="Nội dung" required></textarea><br>
+  <button type="submit">Đăng bài</button>
+</form>
+<p th:if="${param.success}" style="color:green">Đăng bài thành công!</p>
+<hr>
+<a href="/logout">Đăng xuất</a>
+</body>
+</html>

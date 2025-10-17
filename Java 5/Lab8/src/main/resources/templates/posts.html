@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách bài viết</title>
+</head>
+<body>
+<header th:if="${session.user != null}">
+    <p>Chào mừng <b th:text="${session.user.fullname}"></b> |
+        <a href="/logout">Đăng xuất</a>
+    </p>
+</header>
+
+<h2>Danh sách bài viết</h2>
+<a href="/post?filter=unseen">Chưa xem</a> |
+<a href="/post?filter=seen">Đã xem</a> |
+<a href="/post">Tất cả</a>
+<hr>
+
+<table border="1" cellpadding="5">
+    <tr>
+        <th>Ngày đăng</th>
+        <th>Tiêu đề</th>
+        <th>Trạng thái</th>
+    </tr>
+    <tr th:each="p : ${posts}">
+        <td th:text="${#temporals.format(p.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
+        <td>
+            <a th:href="@{/post/{id}(id=${p.id})}" th:text="${p.title}"></a>
+        </td>
+        <td th:text="${viewed.get(p.id)} ? 'Đã xem' : 'Chưa xem'"></td>
+    </tr>
+</table>
+</body>
+</html>

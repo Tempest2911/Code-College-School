@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Giỏ hàng</title>
+</head>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    width: 60%;
+    margin: 40px auto;
+  }
+  input, button {
+    padding: 6px;
+    margin: 4px;
+  }
+  button {
+    cursor: pointer;
+  }
+
+</style>
+<body>
+<h2>Giỏ hàng</h2>
+<a href="/products">← Tiếp tục mua sắm</a> |
+<a href="/cart/clear">🗑️ Xóa toàn bộ</a>
+
+<table border="1" cellpadding="6">
+  <tr><th>ID</th><th>Số lượng</th><th>Hành động</th></tr>
+  <tr th:each="entry : ${cart}">
+    <td th:text="${entry.key}"></td>
+    <td>
+      <form th:action="@{'/cart/update/' + ${entry.key}}" method="post">
+        <input type="number" name="quantity" th:value="${entry.value}" min="1">
+        <button type="submit">Cập nhật</button>
+      </form>
+    </td>
+    <td><a th:href="@{'/cart/remove/' + ${entry.key}}">❌ Xóa</a></td>
+  </tr>
+</table>
+</body>
+</html>
