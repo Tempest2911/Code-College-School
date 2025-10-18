@@ -190,8 +190,8 @@
                         <label class="form-label">Department</label>
                         <select class="form-select" name="departmentId">
                             <option value="">All Departments</option>
-                            <option th:each="d : ${departments}" th:value="${d.id}"
-                                    th:selected="${departmentId} == ${d.id}"></option>
+                            <option th:each="d : ${departments}" th:text="${d.name}" th:value="${d.id}"></option>
+
                         </select>
                     </div>
                 </div>
