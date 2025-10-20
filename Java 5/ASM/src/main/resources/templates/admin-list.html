@@ -343,6 +343,49 @@
 <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 <script>
     // Cập nhật bảng task khi có thông báo WebSocket
+    function parseLocalDateTime(isoStr) {
+        if (!isoStr) return null;
+        // isoStr expected like: 2025-10-20T14:30 or 2025-10-20T14:30:00
+        const m = isoStr.match(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?/);
+        if (!m) return null;
+        const year = Number(m[1]), month = Number(m[2]) - 1, day = Number(m[3]);
+        const hour = Number(m[4]), minute = Number(m[5]), second = m[6] ? Number(m[6]) : 0;
+        return new Date(year, month, day, hour, minute, second);
+    }
+
+    function formatLocalDate(d) {
+        if (!d) return '';
+        const yy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        const hh = String(d.getHours()).padStart(2, '0');
+        const min = String(d.getMinutes()).padStart(2, '0');
+        return `${yy}-${mm}-${dd} ${hh}:${min}`;
+    }
+
+    function updateDeadlineCell(status, deadlineStr, deadlineTd) {
+        if (!deadlineTd) return;
+        if (!deadlineStr) {
+            deadlineTd.innerHTML = '';
+            return;
+        }
+        const d = parseLocalDateTime(deadlineStr);
+        const now = new Date();
+        let extraBadge = '';
+        if (d && d.getTime() < now.getTime()) {
+            extraBadge = '<span class="badge bg-danger">⏰ Overdue</span> ';
+        } else if (d) {
+            const diffHours = (d.getTime() - now.getTime()) / (1000 * 60 * 60);
+            if (diffHours <= 24) {
+                extraBadge = '<span class="badge bg-warning text-dark">⚠️ Due Soon</span> ';
+            } else {
+                extraBadge = '<span class="badge bg-success">✅ On Time</span> ';
+            }
+        }
+        const formatted = d ? formatLocalDate(d) : deadlineStr;
+        deadlineTd.innerHTML = `${extraBadge}<span class="badge bg-light text-dark">${formatted}</span>`;
+    }
+
     function updateTaskTable(task) {
         console.log('[ADMIN] Received task update:', task);
         const table = document.getElementById("taskTable");
@@ -362,7 +405,7 @@
             return;
         }
 
-        // Chỉ cập nhật cột Status (td thứ 4, index 3)
+        // Cập nhật cột Status (td thứ 4, index 3)
         const statusTd = row.children[3];
         if (statusTd) {
             let badgeClass = '';
@@ -372,15 +415,32 @@
                 statusText = 'Done';
             } else if (task.status === 'In-Progress') {
                 badgeClass = 'badge status-inprogress';
-                statusText = 'In Progress';
-            } else {
+                statusText = 'In-Progress';
+            } else if (task.status === 'Overdue') {
+                badgeClass = 'badge bg-danger';
+                statusText = 'Overdue';
+            } else if (task.status === 'Todo') {
                 badgeClass = 'badge status-todo';
                 statusText = 'Todo';
+            } else {
+                // fallback
+                badgeClass = 'badge status-todo';
+                statusText = task.status || 'Todo';
             }
             statusTd.innerHTML = `<span class="${badgeClass}">${statusText}</span>`;
             console.log(`[ADMIN] Updated status for id ${task.id} to ${statusText}`);
         } else {
             console.log(`[ADMIN] Status TD not found for row id ${task.id}`);
+        }
+
+        // Cập nhật cột Deadline (td thứ 6, index 5)
+        const deadlineTd = row.children[5];
+        updateDeadlineCell(task.status, task.deadline, deadlineTd);
+
+        // Optionally cập nhật AssignedTo tên và các cột khác nếu payload chứa
+        if (task.assignedToName !== undefined) {
+            const assignedTd = row.children[6];
+            if (assignedTd) assignedTd.textContent = task.assignedToName || '';
         }
     }
 

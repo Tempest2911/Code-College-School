@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách nhân viên</title>
+</head>
+<body>
+<h1>Quản lý nhân viên</h1>
+
+<h3>Thêm nhân viên mới</h3>
+<form th:action="@{/nhan-vien/add}" th:object="${nhanVien}" method="post">
+    <label>Mã nhân viên:</label>
+    <input type="text" th:field="*{maNhanVien}" required><br>
+
+    <label>Tên nhân viên:</label>
+    <input type="text" th:field="*{hoTen}" required><br>
+
+    <label>Giới tính:</label>
+    <input type="radio" th:field="*{gioiTinh}" value="true">Nam
+    <input type="radio" th:field="*{gioiTinh}" value="false">Nữ<br>
+
+    <label>Số điện thoại:</label>
+    <input type="text" th:field="*{soDienThoai}" required><br>
+
+    <label>Chức vụ:</label>
+    <select th:field="*{idChucVu.id}">
+        <option value="">-- Chọn chức vụ --</option>
+        <option th:each="cv : ${listChucVu}" th:value="${cv.id}" th:text="${cv.tenChucVu}"></option>
+    </select><br>
+
+    <button type="submit">Thêm mới</button>
+</form>
+
+<hr>
+
+<h3>Danh sách nhân viên</h3>
+<table border="1" style="margin-top:20px;">
+    <tr>
+        <th>Mã nhân viên</th>
+        <th>Tên nhân viên</th>
+        <th>Giới tính</th>
+        <th>SĐT</th>
+        <th>Chức vụ</th>
+        <th>Hành động</th>
+    </tr>
+    <tr th:each="nv : ${nhanVienList}">
+        <td th:text="${nv.maNhanVien}"></td>
+        <td th:text="${nv.hoTen}"></td>
+        <td th:text="${nv.gioiTinh} ? 'Nam' : 'Nữ'"></td>
+        <td th:text="${nv.soDienThoai}"></td>
+        <td th:text="${nv.idChucVu != null ? nv.idChucVu.tenChucVu : ''}"></td>
+        <td>
+            <a th:href="@{'/nhan-vien/edit/' + ${nv.id}}">Sửa</a> |
+            <a th:href="@{'/nhan-vien/delete/' + ${nv.id}}" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

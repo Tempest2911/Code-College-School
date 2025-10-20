@@ -5,9 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.asm.Model.Task;
 
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class TaskDTO {
     private Integer id;
     private String title;
@@ -15,16 +15,14 @@ public class TaskDTO {
     private String status;
     private String priority;
     private String deadline;
-
     private String assignedToName;
     private String departmentName;
     private String createdByName;
-
     private String action;
-
     private Integer assignedToId;
+    private String editor; // username người sửa
 
-    public static TaskDTO fromEntity(Task task, String action) {
+    public static TaskDTO fromEntity(Task task, String action, String editor) {
         return new TaskDTO(
                 task.getId(),
                 task.getTitle(),
@@ -36,7 +34,8 @@ public class TaskDTO {
                 task.getDepartment() != null ? task.getDepartment().getName() : null,
                 task.getCreatedBy() != null ? task.getCreatedBy().getFullName() : null,
                 action,
-                task.getAssignedTo() != null ? task.getAssignedTo().getId() : null
+                task.getAssignedTo() != null ? task.getAssignedTo().getId() : null,
+                editor
         );
     }
 }

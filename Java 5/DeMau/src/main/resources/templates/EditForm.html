@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sửa nhân viên</title>
+</head>
+<body>
+<h1>Cập nhật thông tin nhân viên</h1>
+
+<form th:action="@{/nhan-vien/update}" th:object="${nhanVien}" method="post">
+    <input type="hidden" th:field="*{id}" />
+
+    <label>Mã nhân viên:</label>
+    <input type="text" th:field="*{maNhanVien}" required><br>
+
+    <label>Tên nhân viên:</label>
+    <input type="text" th:field="*{hoTen}" required><br>
+
+    <label>Giới tính:</label>
+    <input type="radio" th:field="*{gioiTinh}" value="true">Nam
+    <input type="radio" th:field="*{gioiTinh}" value="false">Nữ<br>
+
+    <label>Số điện thoại:</label>
+    <input type="text" th:field="*{soDienThoai}" required><br>
+
+    <label>Chức vụ:</label>
+    <select th:field="*{idChucVu.id}">
+        <option value="">-- Chọn chức vụ --</option>
+        <option th:each="cv : ${listChucVu}" th:value="${cv.id}" th:text="${cv.tenChucVu}"></option>
+    </select><br>
+
+    <button type="submit">Lưu thay đổi</button>
+</form>
+
+<br>
+<a href="/nhan-vien">← Quay lại danh sách</a>
+
+</body>
+</html>

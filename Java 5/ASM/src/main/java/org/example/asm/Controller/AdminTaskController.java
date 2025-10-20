@@ -43,7 +43,7 @@ public class AdminTaskController {
     @PostMapping("/create")
     public String createTask(@ModelAttribute Task task, Principal principal) {
         User creator = null;
-
+        String editor = principal != null ? principal.getName() : "unknown";
         if (principal != null) {
             creator = userRepository.findByUsername(principal.getName());
         }
@@ -74,7 +74,7 @@ public class AdminTaskController {
         Task saved = taskRepository.save(task);
 
         // ✅ Broadcast realtime
-        taskService.broadcastTask(saved, "CREATED");
+        taskService.broadcastTask(saved, "CREATED", editor);
 
         return "redirect:/admin/task/list";
     }
@@ -106,6 +106,7 @@ public class AdminTaskController {
 
     @PostMapping("/save")
     public String updateTask(@ModelAttribute Task task, Principal principal) {
+        String editor = principal != null ? principal.getName() : "unknown";
         User creator = (principal != null)
                 ? userRepository.findByUsername(principal.getName())
                 : userRepository.findById(1).orElse(null);
@@ -136,7 +137,7 @@ public class AdminTaskController {
         Task updated = taskRepository.save(task);
 
         // ✅ Broadcast cho all + newAssignee
-        taskService.broadcastTask(updated, "UPDATED");
+        taskService.broadcastTask(updated, "UPDATED", editor);
 
         // ✅ Nếu đổi AssignedTo → gửi "DELETED" cho oldAssignee
         String newAssignedUsername = (updated.getAssignedTo() != null)
@@ -144,7 +145,7 @@ public class AdminTaskController {
                 : null;
 
         if (oldAssignedUsername != null && !oldAssignedUsername.equals(newAssignedUsername)) {
-            taskService.notifyRemovedFromOldAssignee(updated, oldAssignedUsername);
+            taskService.notifyRemovedFromOldAssignee(updated, oldAssignedUsername, editor);
         }
 
         return "redirect:/admin/task/list";
@@ -172,14 +173,13 @@ public class AdminTaskController {
 
     // 👉 Delete Task
     @GetMapping("/delete/{id}")
-    public String deleteTask(@PathVariable Integer id) {
+    public String deleteTask(@PathVariable Integer id, Principal principal) {
+        String editor = principal != null ? principal.getName() : "unknown";
         taskRepository.findById(id).ifPresent(task -> {
             taskRepository.delete(task);
-
             // ✅ Broadcast realtime
-            taskService.broadcastTask(task, "DELETED");
+            taskService.broadcastTask(task, "DELETED", editor);
         });
-
         return "redirect:/admin/task/list";
     }
 

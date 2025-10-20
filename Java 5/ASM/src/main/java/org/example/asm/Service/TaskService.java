@@ -12,34 +12,33 @@ public class TaskService {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
-    // Gửi broadcast + newAssignee
-    public void broadcastTask(Task task, String action) {
-        TaskDTO dto = TaskDTO.fromEntity(task, action);
-
-        // Gửi cho tất cả (dashboard, admin, board chung)
+    // Gửi broadcast cập nhật cho tất cả client (chỉ để cập nhật giao diện)
+    public void broadcastTask(Task task, String action, String editor) {
+        TaskDTO dto = TaskDTO.fromEntity(task, action, editor);
+        // Gửi cho tất cả client để cập nhật giao diện
         messagingTemplate.convertAndSend("/topic/tasks", dto);
-
-        // Gửi riêng cho newAssignee (nếu có)
-        if (task.getAssignedTo() != null && task.getAssignedTo().getUsername() != null) {
+        // Chỉ gửi thông báo toast cho editor (người thao tác)
+        if (editor != null) {
             messagingTemplate.convertAndSendToUser(
-                    task.getAssignedTo().getUsername(),
-                    "/queue/tasks",
-                    dto
+                editor,
+                "/queue/tasks",
+                dto
             );
         }
     }
 
-    public void notifyRemovedFromOldAssignee(Task task, String oldUsername) {
+    public void notifyRemovedFromOldAssignee(Task task, String oldUsername, String editor) {
         if (oldUsername == null) return;
-
         TaskDTO dto = new TaskDTO();
         dto.setId(task.getId());
         dto.setAction("DELETED");
-        dto.setTitle(task.getTitle()); // ⚡ thêm để client toast đẹp
-
-        messagingTemplate.convertAndSendToUser(oldUsername, "/queue/tasks", dto);
+        dto.setTitle(task.getTitle());
+        dto.setEditor(editor);
+        // Chỉ gửi thông báo toast cho editor khi xóa khỏi acc cũ
+        if (editor != null) {
+            messagingTemplate.convertAndSendToUser(editor, "/queue/tasks", dto);
+        }
     }
 
 
 }
-

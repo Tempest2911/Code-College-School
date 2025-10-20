@@ -86,7 +86,7 @@
     <div class="kanban-board">
         <div class="kanban-column" data-status="Todo">
             <h4>📝 Todo</h4>
-            <div th:each="t : ${tasks}" th:if="${t.status == 'Todo'}"
+            <div th:each="t : ${tasks}" th:if="${t.status == 'Todo' or t.status == 'Overdue'}"
                  class="card task-card" draggable="true"
                  th:attr="data-id=${t.id}">
                 <div class="card-body">
@@ -101,6 +101,20 @@
                               th:text="'Dept: ' + ${t.department.name}"></span>
                         <span class="badge bg-light text-dark"
                               th:text="'By: ' + ${t.createdBy.fullName}"></span>
+                    </div>
+                    <!-- Badge trạng thái deadline -->
+                    <div class="mt-1">
+                        <span th:if="${t.deadline != null and t.deadline.isBefore(T(java.time.LocalDateTime).now())}"
+                              class="badge bg-danger">⏰ Overdue</span>
+                        <span th:if="${t.deadline != null and t.deadline.isAfter(T(java.time.LocalDateTime).now())
+                            and T(java.time.Duration).between(T(java.time.LocalDateTime).now(), t.deadline).toHours() <= 24}"
+                              class="badge bg-warning text-dark">⚠️ Due Soon</span>
+                        <span th:if="${t.deadline != null and t.deadline.isAfter(T(java.time.LocalDateTime).now())
+                            and T(java.time.Duration).between(T(java.time.LocalDateTime).now(), t.deadline).toHours() > 24}"
+                              class="badge bg-success">✅ On Time</span>
+                        <span th:if="${t.deadline != null}"
+                              class="badge bg-light text-dark"
+                              th:text="${#temporals.format(t.deadline, 'yyyy-MM-dd HH:mm')}"></span>
                     </div>
                 </div>
             </div>
@@ -108,7 +122,7 @@
 
         <div class="kanban-column" data-status="In-Progress">
             <h4>🚀 In Progress</h4>
-            <div th:each="t : ${tasks}" th:if="${t.status == 'In-Progress'}"
+            <div th:each="t : ${tasks}" th:if="${t.status == 'In-Progress' or t.status == 'Overdue'}"
                  class="card task-card" draggable="true"
                  th:attr="data-id=${t.id}">
                 <div class="card-body">
@@ -124,13 +138,27 @@
                         <span class="badge bg-light text-dark"
                               th:text="'By: ' + ${t.createdBy.fullName}"></span>
                     </div>
+                    <!-- Badge trạng thái deadline -->
+                    <div class="mt-1">
+                        <span th:if="${t.deadline != null and t.deadline.isBefore(T(java.time.LocalDateTime).now())}"
+                              class="badge bg-danger">⏰ Overdue</span>
+                        <span th:if="${t.deadline != null and t.deadline.isAfter(T(java.time.LocalDateTime).now())
+                            and T(java.time.Duration).between(T(java.time.LocalDateTime).now(), t.deadline).toHours() <= 24}"
+                              class="badge bg-warning text-dark">⚠️ Due Soon</span>
+                        <span th:if="${t.deadline != null and t.deadline.isAfter(T(java.time.LocalDateTime).now())
+                            and T(java.time.Duration).between(T(java.time.LocalDateTime).now(), t.deadline).toHours() > 24}"
+                              class="badge bg-success">✅ On Time</span>
+                        <span th:if="${t.deadline != null}"
+                              class="badge bg-light text-dark"
+                              th:text="${#temporals.format(t.deadline, 'yyyy-MM-dd HH:mm')}"></span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="kanban-column" data-status="Done">
             <h4>✅ Done</h4>
-            <div th:each="t : ${tasks}" th:if="${t.status == 'Done'}"
+            <div th:each="t : ${tasks}" th:if="${t.status == 'Done' or t.status == 'Overdue'}"
                  class="card task-card" draggable="true"
                  th:attr="data-id=${t.id}">
                 <div class="card-body">
@@ -145,6 +173,20 @@
                               th:text="'Dept: ' + ${t.department.name}"></span>
                         <span class="badge bg-light text-dark"
                               th:text="'By: ' + ${t.createdBy.fullName}"></span>
+                    </div>
+                    <!-- Badge trạng thái deadline -->
+                    <div class="mt-1">
+                        <span th:if="${t.deadline != null and t.deadline.isBefore(T(java.time.LocalDateTime).now())}"
+                              class="badge bg-danger">⏰ Overdue</span>
+                        <span th:if="${t.deadline != null and t.deadline.isAfter(T(java.time.LocalDateTime).now())
+                            and T(java.time.Duration).between(T(java.time.LocalDateTime).now(), t.deadline).toHours() <= 24}"
+                              class="badge bg-warning text-dark">⚠️ Due Soon</span>
+                        <span th:if="${t.deadline != null and t.deadline.isAfter(T(java.time.LocalDateTime).now())
+                            and T(java.time.Duration).between(T(java.time.LocalDateTime).now(), t.deadline).toHours() > 24}"
+                              class="badge bg-success">✅ On Time</span>
+                        <span th:if="${t.deadline != null}"
+                              class="badge bg-light text-dark"
+                              th:text="${#temporals.format(t.deadline, 'yyyy-MM-dd HH:mm')}"></span>
                     </div>
                 </div>
             </div>
@@ -223,6 +265,77 @@
         }
     }
 
+    // parse/format deadline helper (ISO local date-time from backend)
+    function parseLocalDateTime(isoStr) {
+        if (!isoStr) return null;
+        const m = isoStr.match(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?/);
+        if (!m) return null;
+        const year = Number(m[1]), month = Number(m[2]) - 1, day = Number(m[3]);
+        const hour = Number(m[4]), minute = Number(m[5]), second = m[6] ? Number(m[6]) : 0;
+        return new Date(year, month, day, hour, minute, second);
+    }
+
+    function formatLocalDate(d) {
+        if (!d) return '';
+        const yy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        const hh = String(d.getHours()).padStart(2, '0');
+        const min = String(d.getMinutes()).padStart(2, '0');
+        return `${yy}-${mm}-${dd} ${hh}:${min}`;
+    }
+
+    function buildBadgesForDeadline(deadlineStr, status) {
+        if (!deadlineStr) return `<span class="badge bg-light text-dark">No Deadline</span>`;
+        const d = parseLocalDateTime(deadlineStr);
+        if (!d) return `<span class="badge bg-light text-dark">${deadlineStr}</span>`;
+        const now = new Date();
+        if (status === 'Overdue' || d.getTime() < now.getTime()) {
+            return `<span class="badge bg-danger">⏰ Overdue</span> <span class="badge bg-light text-dark">${formatLocalDate(d)}</span>`;
+        }
+        const diffHours = (d.getTime() - now.getTime()) / (1000 * 60 * 60);
+        if (diffHours <= 24) {
+            return `<span class="badge bg-warning text-dark">⚠️ Due Soon</span> <span class="badge bg-light text-dark">${formatLocalDate(d)}</span>`;
+        }
+        return `<span class="badge bg-success">✅ On Time</span> <span class="badge bg-light text-dark">${formatLocalDate(d)}</span>`;
+    }
+
+    // update or create card content and deadline/status visuals
+    function renderCardContent(card, task) {
+        const title = (task.title !== undefined) ? task.title : (card.querySelector('.card-title')?.textContent || 'No Title');
+        const description = (task.description !== undefined) ? task.description : (card.querySelector('.card-text')?.textContent || '');
+        const deadline = task.deadline ? task.deadline : (card.querySelector('.badge.bg-secondary')?.textContent.replace('Deadline: ','') || '');
+        const assignedToName = task.assignedToName || (card.querySelector('.badge.bg-info')?.textContent.replace('Assigned: ','') || 'Unassigned');
+        const departmentName = task.departmentName || (card.querySelector('.badge.bg-dark')?.textContent.replace('Dept: ','') || 'N/A');
+        const createdByName = task.createdByName || (card.querySelector('.badge.bg-light')?.textContent.replace('By: ','') || 'System');
+
+        card.innerHTML = `
+            <div class="card-body">
+                <h5 class="card-title">${escapeHtml(title)}</h5>
+                <p class="card-text">${escapeHtml(description)}</p>
+                <div class="mb-2">
+                    <span class="badge bg-secondary">Deadline: ${escapeHtml(formatLocalDate(parseLocalDateTime(deadline)) || deadline)}</span>
+                    <span class="badge bg-info">Assigned: ${escapeHtml(assignedToName)}</span>
+                    <span class="badge bg-dark">Dept: ${escapeHtml(departmentName)}</span>
+                    <span class="badge bg-light text-dark">By: ${escapeHtml(createdByName)}</span>
+                </div>
+            </div>
+        `;
+
+        // append overdue/due-soon/on-time badge area (separate, below)
+        const deadlineBadge = document.createElement('div');
+        deadlineBadge.className = 'mt-1';
+        deadlineBadge.innerHTML = buildBadgesForDeadline(task.deadline, task.status);
+        card.querySelector('.card-body').appendChild(deadlineBadge);
+
+        // visual cue when overdue
+        if (task.status === 'Overdue') {
+            card.style.borderLeft = '5px solid #dc3545';
+        } else {
+            card.style.borderLeft = '5px solid #0d6efd';
+        }
+    }
+
     // updateTaskList: receives DTO from backend via websocket
     function updateTaskList(task) {
         console.log("Realtime update:", task);
@@ -262,32 +375,20 @@
             makeDraggable(card);
         }
 
-        // compute fields: support both nested objects (task.assignedTo.fullName) or flattened names (task.assignedToName)
-        const title = (task.title !== undefined) ? task.title : (existingCard?.querySelector(".card-title")?.textContent || "No Title");
-        const description = (task.description !== undefined) ? task.description : (existingCard?.querySelector(".card-text")?.textContent || "");
-        const deadline = task.deadline ? (task.deadline.substring(0,16).replace('T',' ')) : (existingCard?.querySelector(".badge.bg-secondary")?.textContent.replace("Deadline: ","") || "No Deadline");
-        const assignedToName = task.assignedTo?.fullName || task.assignedToName || (existingCard?.querySelector(".badge.bg-info")?.textContent.replace("Assigned: ","") || "Unassigned");
-        const departmentName = task.department?.name || task.departmentName || (existingCard?.querySelector(".badge.bg-dark")?.textContent.replace("Dept: ","") || "N/A");
-        const createdByName = task.createdBy?.fullName || task.createdByName || (existingCard?.querySelector(".badge.bg-light")?.textContent.replace("By: ","") || "System");
+        // update content and visuals
+        renderCardContent(card, task);
 
-        // build innerHTML
-        card.innerHTML = `
-            <div class="card-body">
-                <h5 class="card-title">${escapeHtml(title)}</h5>
-                <p class="card-text">${escapeHtml(description)}</p>
-                <div class="mb-2">
-                    <span class="badge bg-secondary">Deadline: ${escapeHtml(deadline)}</span>
-                    <span class="badge bg-info">Assigned: ${escapeHtml(assignedToName)}</span>
-                    <span class="badge bg-dark">Dept: ${escapeHtml(departmentName)}</span>
-                    <span class="badge bg-light text-dark">By: ${escapeHtml(createdByName)}</span>
-                </div>
-            </div>
-        `;
+        // If status is Overdue: DO NOT move card between columns, keep it where it is but update visuals
+        if (task.status === 'Overdue') {
+            if (isNewCard) {
+                // append to the column corresponding to its previous status if possible, otherwise Todo
+                const fallback = document.querySelector('[data-status="Todo"]');
+                fallback.appendChild(card);
+            }
+            return; // don't move between columns
+        }
 
-        // ensure draggable listeners
-        makeDraggable(card);
-
-        // append/move card into proper column
+        // append/move card into proper column for normal statuses
         let statusKey = (task.status || "").toUpperCase().replace("_","-"); // e.g. "IN-PROGRESS"
         let selector = statusKey === "TODO" ? '[data-status="Todo"]'
             : statusKey === "IN-PROGRESS" ? '[data-status="In-Progress"]'

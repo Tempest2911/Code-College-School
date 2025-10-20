@@ -13,10 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns(
                         "/asm/login",
                         "/asm/register",
-                        "/asm/logout",
-                        "/css/**",
-                        "/js/**",
-                        "/images/**"
+                        "/asm/logout"
                 );
     }
 

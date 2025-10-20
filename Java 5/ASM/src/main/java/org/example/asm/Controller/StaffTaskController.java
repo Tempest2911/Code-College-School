@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -39,8 +40,10 @@ public class StaffTaskController {
     @PostMapping("/status/{id}")
     public String updateStatus(@PathVariable Integer id,
                                @RequestParam String status,
-                               HttpSession session) {
+                               HttpSession session,
+                               Principal principal) {
         User user = (User) session.getAttribute("currentUser");
+        String editor = principal != null ? principal.getName() : "unknown";
         if (user == null) {
             return "redirect:/asm/login";
         }
@@ -65,7 +68,7 @@ public class StaffTaskController {
 
         taskRepository.save(task);
         // Broadcast cập nhật cho tất cả client (bao gồm admin)
-        taskService.broadcastTask(task, "UPDATED");
+        taskService.broadcastTask(task, "UPDATED", editor);
 
         if ("Admin".equals(user.getRole())) {
             return "redirect:/admin/task/list";
