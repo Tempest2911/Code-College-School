@@ -30,6 +30,12 @@
     </div>
 
     <div>
+        <label>Giới tính:</label>
+        <input type="radio" th:field="*{gioiTinh}" value="true">Nam
+        <input type="radio" th:field="*{gioiTinh}" value="false">Nữ<br>
+    </div>
+
+    <div>
         <label>Số điện thoại:</label>
         <input type="text" th:field="*{soDienThoai}" />
         <span th:if="${#fields.hasErrors('soDienThoai')}" th:errors="*{soDienThoai}"></span>
@@ -114,11 +120,13 @@
     <a th:each="i : ${#numbers.sequence(1, totalPages)}"
        th:href="@{/nhan-vien/hien-thi(page=${i}, sortField=${sortField}, sortDir=${sortDir}, keyword=${keyword})}"
        th:text="${i}"
+       style="margin: 0 5px"
        th:classappend="${i == currentPage} ? 'active' : ''"></a>
 
     <a th:if="${currentPage < totalPages}"
        th:href="@{/nhan-vien/hien-thi(page=${currentPage + 1}, sortField=${sortField}, sortDir=${sortDir}, keyword=${keyword})}">Next</a>
 </div>
+
 
 
 </body>
