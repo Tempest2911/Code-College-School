@@ -48,6 +48,38 @@
 </form>
 <hr>
 
+<form th:action="@{/nhan-vien/search}" method="get">
+    <input type="text" name="keyword" th:value="${keyword}" placeholder="Tìm theo tên...">
+    <button type="submit">Tìm</button>
+    <a th:href="@{/nhan-vien/hien-thi}">Xóa tìm kiếm</a>
+</form>
+
+<div style="margin-bottom: 10px;">
+    <form th:action="@{/nhan-vien/sort}" method="get" style="display:inline;">
+        <input type="hidden" name="field" value="hoTen"/>
+        <input type="hidden" name="dir" value="asc"/>
+        <button type="submit">Sắp xếp theo tên ↑</button>
+    </form>
+
+    <form th:action="@{/nhan-vien/sort}" method="get" style="display:inline;">
+        <input type="hidden" name="field" value="hoTen"/>
+        <input type="hidden" name="dir" value="desc"/>
+        <button type="submit">Sắp xếp theo tên ↓</button>
+    </form>
+
+    <form th:action="@{/nhan-vien/sort}" method="get" style="display:inline;">
+        <input type="hidden" name="field" value="maNhanVien"/>
+        <input type="hidden" name="dir" value="asc"/>
+        <button type="submit">Sắp xếp theo mã ↑</button>
+    </form>
+
+    <form th:action="@{/nhan-vien/sort}" method="get" style="display:inline;">
+        <input type="hidden" name="field" value="maNhanVien"/>
+        <input type="hidden" name="dir" value="desc"/>
+        <button type="submit">Sắp xếp theo mã ↓</button>
+    </form>
+</div>
+
 <h3>Danh sách nhân viên</h3>
 <table border="1">
     <tr>
@@ -64,7 +96,7 @@
         <td th:text="${i.index + 1}"></td>
         <td th:text="${nv.maNhanVien}"></td>
         <td th:text="${nv.hoTen}"></td>
-        <td th:text="${nv.gioiTinh} ? 'Nam' : 'Nữ'"></td>
+        <td th:text="${nv.gioiTinh == true ? 'Nam' : 'Nữ'}"></td>
         <td th:text="${nv.soDienThoai}"></td>
         <td th:text="${nv.idChucVu.maChucVu}"></td>
         <td th:text="${nv.idChucVu.tenChucVu}"></td>
@@ -74,6 +106,20 @@
         </td>
     </tr>
 </table>
+
+<div class="pagination">
+    <a th:if="${currentPage > 1}"
+       th:href="@{/nhan-vien/hien-thi(page=${currentPage - 1}, sortField=${sortField}, sortDir=${sortDir}, keyword=${keyword})}">Prev</a>
+
+    <a th:each="i : ${#numbers.sequence(1, totalPages)}"
+       th:href="@{/nhan-vien/hien-thi(page=${i}, sortField=${sortField}, sortDir=${sortDir}, keyword=${keyword})}"
+       th:text="${i}"
+       th:classappend="${i == currentPage} ? 'active' : ''"></a>
+
+    <a th:if="${currentPage < totalPages}"
+       th:href="@{/nhan-vien/hien-thi(page=${currentPage + 1}, sortField=${sortField}, sortDir=${sortDir}, keyword=${keyword})}">Next</a>
+</div>
+
 
 </body>
 </html>

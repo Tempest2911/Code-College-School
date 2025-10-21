@@ -24,15 +24,34 @@ public class NhanVienController {
     @Autowired
     private ChucVuRepository chucVuRepository;
 
-    @GetMapping("hien-thi")
-    public String list(Model model) {
-        model.addAttribute("nhanVienList", nhanVienService.getAll());
-        NhanVien nhanVien = new NhanVien();
-        nhanVien.setGioiTinh(true);
-        model.addAttribute("nhanVien", nhanVien);
+    @GetMapping("/hien-thi")
+    public String viewHomePage(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "hoTen") String sortField,
+            @RequestParam(defaultValue = "asc") String sortDir,
+            @RequestParam(required = false) String keyword,
+            Model model) {
+
+        int pageSize = 5; // mỗi trang 5 dòng
+
+        var pageNhanVien = nhanVienService.getAllPaged(page, pageSize, sortField, sortDir, keyword);
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", pageNhanVien.getTotalPages());
+        model.addAttribute("totalItems", pageNhanVien.getTotalElements());
+
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        model.addAttribute("keyword", keyword);
+
+        model.addAttribute("nhanVienList", pageNhanVien.getContent());
+        model.addAttribute("nhanVien", new NhanVien());
         model.addAttribute("listChucVu", chucVuRepository.findAll());
+
         return "nhanVien";
     }
+
 
     @PostMapping("/add")
     public String add(
@@ -68,4 +87,27 @@ public class NhanVienController {
         nhanVienService.delete(id);
         return "redirect:/nhan-vien/hien-thi";
     }
+
+    // 🔍 Search theo tên
+    @GetMapping("/search")
+    public String search(@RequestParam("keyword") String keyword, Model model) {
+        model.addAttribute("nhanVienList", nhanVienService.search(keyword));
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("nhanVien", new NhanVien());
+        model.addAttribute("listChucVu", chucVuRepository.findAll());
+        return "nhanVien";
+    }
+
+    @GetMapping("/sort")
+    public String sort(@RequestParam("field") String field,
+                       @RequestParam("dir") String dir,
+                       Model model) {
+        model.addAttribute("nhanVienList", nhanVienService.sortByField(field, dir));
+        model.addAttribute("nhanVien", new NhanVien());
+        model.addAttribute("listChucVu", chucVuRepository.findAll());
+        model.addAttribute("currentSortField", field);
+        model.addAttribute("currentSortDir", dir);
+        return "nhanVien";
+    }
+
 }
