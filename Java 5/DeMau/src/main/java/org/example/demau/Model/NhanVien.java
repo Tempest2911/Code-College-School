@@ -1,6 +1,8 @@
 package org.example.demau.Model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
@@ -22,10 +24,16 @@ public class NhanVien {
 
     @Nationalized
     @Column(name = "ma_nhan_vien", length = 20)
+    @NotBlank(message = "Mã nhân viên không được để trống")
     private String maNhanVien;
 
     @Nationalized
     @Column(name = "ho_ten")
+    @NotBlank(message = "Tên nhân viên không được để trống")
+    @Pattern(
+            regexp = "^[\\p{L}\\s]+$",
+            message = "Tên nhân viên chỉ được chứa chữ và khoảng trắng, không được có số hoặc ký tự đặc biệt"
+    )
     private String hoTen;
 
     @Column(name = "ngay_sinh")
@@ -39,6 +47,8 @@ public class NhanVien {
     private String email;
 
     @Column(name = "so_dien_thoai", length = 15)
+    @NotBlank(message = "Số điện thoại không được để trống")
+    @Pattern(regexp = "\\d{10}", message = "Số điện thoại phải có 10 chữ số")
     private String soDienThoai;
 
     @Column(name = "luong", precision = 18, scale = 2)

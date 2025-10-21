@@ -138,7 +138,7 @@
                         <span class="badge bg-light text-dark"
                               th:text="'By: ' + ${t.createdBy.fullName}"></span>
                     </div>
-                    <!-- Badge trạng thái deadline -->
+
                     <div class="mt-1">
                         <span th:if="${t.deadline != null and t.deadline.isBefore(T(java.time.LocalDateTime).now())}"
                               class="badge bg-danger">⏰ Overdue</span>

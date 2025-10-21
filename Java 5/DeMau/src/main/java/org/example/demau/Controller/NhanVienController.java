@@ -1,11 +1,14 @@
 package org.example.demau.Controller;
 
+import jakarta.validation.Valid;
 import org.example.demau.Model.NhanVien;
-import org.example.demau.Repository.ChucVuRepository;
 import org.example.demau.Repository.NhanVienRepository;
+import org.example.demau.Service.NhanVienService;
+import org.example.demau.Repository.ChucVuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -13,48 +16,56 @@ import org.springframework.web.bind.annotation.*;
 public class NhanVienController {
 
     @Autowired
+    private NhanVienService nhanVienService;
+
+    @Autowired
     private NhanVienRepository nhanVienRepository;
 
     @Autowired
     private ChucVuRepository chucVuRepository;
 
-    // Danh sách + form thêm mới
-    @GetMapping
+    @GetMapping("hien-thi")
     public String list(Model model) {
-        model.addAttribute("nhanVienList", nhanVienRepository.findAll());
-        model.addAttribute("nhanVien", new NhanVien());
+        model.addAttribute("nhanVienList", nhanVienService.getAll());
+        NhanVien nhanVien = new NhanVien();
+        nhanVien.setGioiTinh(true);
+        model.addAttribute("nhanVien", nhanVien);
         model.addAttribute("listChucVu", chucVuRepository.findAll());
         return "nhanVien";
     }
 
-    // Lưu thêm mới
     @PostMapping("/add")
-    public String add(@ModelAttribute("nhanVien") NhanVien nhanVien) {
-        nhanVienRepository.save(nhanVien);
-        return "redirect:/nhan-vien";
+    public String add(
+            @Valid @ModelAttribute("nhanVien") NhanVien nhanVien,
+            BindingResult result,
+            Model model) {
+
+        if (result.hasErrors()) {
+            model.addAttribute("nhanVienList", nhanVienService.getAll());
+            model.addAttribute("listChucVu", chucVuRepository.findAll());
+            return "nhanVien";
+        }
+
+        nhanVienService.save(nhanVien);
+        return "redirect:/nhan-vien/hien-thi";
     }
 
-    // Trang sửa riêng
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable("id") Integer id, Model model) {
-        NhanVien nv = nhanVienRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid id: " + id));
-        model.addAttribute("nhanVien", nv);
+        model.addAttribute("nhanVien", nhanVienService.getById(id));
         model.addAttribute("listChucVu", chucVuRepository.findAll());
         return "EditForm";
     }
 
-    // Lưu cập nhật
     @PostMapping("/update")
     public String update(@ModelAttribute("nhanVien") NhanVien nhanVien) {
-        nhanVienRepository.save(nhanVien);
-        return "redirect:/nhan-vien";
+        nhanVienService.save(nhanVien);
+        return "redirect:/nhan-vien/hien-thi";
     }
 
-    // Xóa
-    @GetMapping("/delete/{id}")
+    @GetMapping("/remove/{id}")
     public String delete(@PathVariable("id") Integer id) {
-        nhanVienRepository.deleteById(id);
-        return "redirect:/nhan-vien";
+        nhanVienService.delete(id);
+        return "redirect:/nhan-vien/hien-thi";
     }
 }

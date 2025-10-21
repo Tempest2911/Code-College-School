@@ -4,56 +4,76 @@
     <meta charset="UTF-8">
     <title>Danh sách nhân viên</title>
 </head>
+<style>
+    span {
+        color: red;
+        font-size: 13px;
+    }
+
+</style>
 <body>
 <h1>Quản lý nhân viên</h1>
 
 <h3>Thêm nhân viên mới</h3>
 <form th:action="@{/nhan-vien/add}" th:object="${nhanVien}" method="post">
-    <label>Mã nhân viên:</label>
-    <input type="text" th:field="*{maNhanVien}" required><br>
 
-    <label>Tên nhân viên:</label>
-    <input type="text" th:field="*{hoTen}" required><br>
+    <div>
+        <label>Mã nhân viên:</label>
+        <input type="text" th:field="*{maNhanVien}" />
+        <span th:if="${#fields.hasErrors('maNhanVien')}" th:errors="*{maNhanVien}"></span>
+    </div>
 
-    <label>Giới tính:</label>
-    <input type="radio" th:field="*{gioiTinh}" value="true">Nam
-    <input type="radio" th:field="*{gioiTinh}" value="false">Nữ<br>
+    <div>
+        <label>Tên nhân viên:</label>
+        <input type="text" th:field="*{hoTen}" />
+        <span th:if="${#fields.hasErrors('hoTen')}" th:errors="*{hoTen}"></span>
+    </div>
 
-    <label>Số điện thoại:</label>
-    <input type="text" th:field="*{soDienThoai}" required><br>
+    <div>
+        <label>Số điện thoại:</label>
+        <input type="text" th:field="*{soDienThoai}" />
+        <span th:if="${#fields.hasErrors('soDienThoai')}" th:errors="*{soDienThoai}"></span>
+    </div>
 
-    <label>Chức vụ:</label>
-    <select th:field="*{idChucVu.id}">
-        <option value="">-- Chọn chức vụ --</option>
-        <option th:each="cv : ${listChucVu}" th:value="${cv.id}" th:text="${cv.tenChucVu}"></option>
-    </select><br>
+    <div>
+        <label>Chức vụ:</label>
+        <select th:field="*{idChucVu}">
+            <option th:each="cv : ${listChucVu}"
+                    th:value="${cv.id}"
+                    th:text="${cv.tenChucVu}"></option>
+        </select>
+    </div>
 
     <button type="submit">Thêm mới</button>
 </form>
-
 <hr>
 
 <h3>Danh sách nhân viên</h3>
-<table border="1" style="margin-top:20px;">
+<table border="1">
     <tr>
+        <th>STT</th>
         <th>Mã nhân viên</th>
         <th>Tên nhân viên</th>
         <th>Giới tính</th>
-        <th>SĐT</th>
-        <th>Chức vụ</th>
-        <th>Hành động</th>
+        <th>Số điện thoại</th>
+        <th>Mã chức vụ</th>
+        <th>Tên chức vụ</th>
+        <th>Action</th>
     </tr>
-    <tr th:each="nv : ${nhanVienList}">
+    <tr th:each="nv, i : ${nhanVienList}">
+        <td th:text="${i.index + 1}"></td>
         <td th:text="${nv.maNhanVien}"></td>
         <td th:text="${nv.hoTen}"></td>
         <td th:text="${nv.gioiTinh} ? 'Nam' : 'Nữ'"></td>
         <td th:text="${nv.soDienThoai}"></td>
-        <td th:text="${nv.idChucVu != null ? nv.idChucVu.tenChucVu : ''}"></td>
+        <td th:text="${nv.idChucVu.maChucVu}"></td>
+        <td th:text="${nv.idChucVu.tenChucVu}"></td>
         <td>
-            <a th:href="@{'/nhan-vien/edit/' + ${nv.id}}">Sửa</a> |
-            <a th:href="@{'/nhan-vien/delete/' + ${nv.id}}" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
+            <a th:href="@{'/nhan-vien/edit/' + ${nv.id}}">Edit</a>
+            <a th:href="@{'/nhan-vien/remove/' + ${nv.id}}" onclick="return confirm('Bạn có muốn xóa không?')">Remove</a>
         </td>
     </tr>
 </table>
+
 </body>
 </html>

@@ -16,9 +16,9 @@ public class AuthInterceptor implements HandlerInterceptor {
             String uri = request.getRequestURI();
 
             // Cho phép truy cập các trang công khai
-            if (uri.contains("/asm/login") || uri.contains("/asm/register")) {
-                return true;
-            }
+//            if (uri.contains("/asm/login") || uri.contains("/asm/register")) {
+//                return true;
+//            }
 
             response.sendRedirect("/asm/login");
             return false;
