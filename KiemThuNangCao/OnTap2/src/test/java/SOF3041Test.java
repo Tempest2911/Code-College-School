@@ -2,53 +2,53 @@ import org.example.ontap2.Phan1;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SOF3041Test {
 
+    Phan1 sumArray = new Phan1();
 
-    private Phan1 p1;
-
-    @BeforeEach
-    void setUp() {
-        p1 = new Phan1();
+    // Phân vùng tương đương
+    @Test
+    void testEmptyArray() {
+        assertEquals(0, sumArray.sum(new int[]{}));
     }
 
     @Test
-    public void TestBienTren() {
-        int[] arg = {1000};
-
-        assertTrue(p1.KiemTraTongHam1Den1000(arg));
+    void testPositiveNumbers() {
+        assertEquals(6, sumArray.sum(new int[]{1, 2, 3}));
     }
 
     @Test
-    public void TestBienDuoi() {
-        int[] arg = {1};
-        assertTrue(p1.KiemTraTongHam1Den1000(arg));
+    void testNegativeNumbers() {
+        assertEquals(-6, sumArray.sum(new int[]{-1, -2, -3}));
     }
 
     @Test
-    public void TestCanBienTren() {
-        int[] arg = {999};
-        assertTrue(p1.KiemTraTongHam1Den1000(arg));
+    void testMixedNumbers() {
+        assertEquals(0, sumArray.sum(new int[]{-2, 3, -1}));
     }
 
     @Test
-    public void TestCanBienDuoi() {
-        int[] arg = {2};
-        assertTrue(p1.KiemTraTongHam1Den1000(arg));
+    void testNullArray() {
+        assertThrows(IllegalArgumentException.class, () -> sumArray.sum(null));
+    }
+
+    // Giá trị biên
+    @Test
+    void testSingleElement() {
+        assertEquals(5, sumArray.sum(new int[]{5}));
     }
 
     @Test
-    public void TestDuoiBienDuoi() {
-        int[] arg = {0};
-        assertFalse(p1.KiemTraTongHam1Den1000(arg));
+    void testTwoElementsZero() {
+        assertEquals(0, sumArray.sum(new int[]{0, 0}));
     }
 
     @Test
-    public void TestTrenBienTren() {
-        int[] arg = {1001};
-        assertFalse(p1.KiemTraTongHam1Den1000(arg));
+    void testIntegerOverflow() {
+        int[] arr = {Integer.MAX_VALUE, 1};
+        int result = sumArray.sum(arr);
+        System.out.println("Kết quả tràn số: " + result);
     }
 }
