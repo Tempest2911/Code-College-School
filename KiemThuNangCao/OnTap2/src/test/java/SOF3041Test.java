@@ -18,6 +18,7 @@ public class SOF3041Test {
     @Test
     public void TestBienTren() {
         int[] arg = {1000};
+
         assertTrue(p1.KiemTraTongHam1Den1000(arg));
     }
 
