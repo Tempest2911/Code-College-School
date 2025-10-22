@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit</title>
+</head>
+<style>
+    span {
+        color: red;
+        font-size: 13px;
+    }
+
+</style>
+<body>
+<h1>Cập nhật thông tin</h1>
+
+<form th:action="@{/nhanvien/update}" th:object="${nhanvien}" method="post">
+    <input type="hidden" th:field="*{id}" />
+
+    <label>Mã nhân viên:</label>
+    <input type="text" th:field="*{maNhanVien}" required>
+    <span th:if="${#fields.hasErrors('maNhanVien')}" th:errors="*{maNhanVien}"></span><br>
+
+    <label>Tên nhân viên:</label>
+    <input type="text" th:field="*{hoTen}" required>
+    <span th:if="${#fields.hasErrors('hoTen')}" th:errors="*{hoTen}"></span><br>
+
+    <label>Giới tính:</label>
+    <input type="radio" th:field="*{gioiTinh}" value="true">Nam
+    <input type="radio" th:field="*{gioiTinh}" value="false">Nữ<br>
+
+    <label>Số điện thoại:</label>
+    <input type="text" th:field="*{soDienThoai}" required>
+    <span th:if="${#fields.hasErrors('soDienThoai')}" th:errors="*{soDienThoai}"></span><br>
+
+    <label>Chức vụ:</label>
+    <select th:field="*{idChucVu.id}">
+        <option value="">-- Chọn chức vụ --</option>
+        <option th:each="cv : ${listChucVu}" th:value="${cv.id}" th:text="${cv.tenChucVu}"></option>
+    </select><br>
+
+    <button type="submit">Lưu thay đổi</button>
+</form>
+
+<br>
+<a href="/nhanvien/hien-thi">← Quay lại danh sách</a>
+
+</body>
+</html>

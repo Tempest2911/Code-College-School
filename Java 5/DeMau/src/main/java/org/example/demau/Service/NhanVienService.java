@@ -15,10 +15,10 @@ import java.util.List;
 public class NhanVienService {
 
     @Autowired
-    private NhanVienRepository nhanVienRepository;
+    private NhanVienRepository nhanvienRepository;
 
     public List<NhanVien> getAll() {
-        return nhanVienRepository.findAll();
+        return nhanvienRepository.findAll();
     }
 
     public Page<NhanVien> getAllPaged(int pageNo, int pageSize, String sortField, String sortDir, String keyword) {
@@ -28,38 +28,39 @@ public class NhanVienService {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
 
         if (keyword != null && !keyword.trim().isEmpty()) {
-            return nhanVienRepository.findByHoTenContainingIgnoreCase(keyword, pageable);
+            // Nếu Entity có trường hoTen:
+            return nhanvienRepository.findByHoTenContainingIgnoreCase(keyword, pageable);
         }
-        return nhanVienRepository.findAll(pageable);
+        return nhanvienRepository.findAll(pageable);
     }
 
-    // Tìm kiếm theo họ tên
     public List<NhanVien> search(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
-            return nhanVienRepository.findAll();
+            return nhanvienRepository.findAll();
         }
-        return nhanVienRepository.searchByHoTen(keyword.trim());
+        // Nếu Entity có trường hoTen:
+        return nhanvienRepository.searchByHoTen(keyword.trim());
+        //return nhanvienRepository.findAll();
     }
 
-    // Sắp xếp theo trường chỉ định
     public List<NhanVien> sortByField(String field, String direction) {
         Sort sort = direction.equalsIgnoreCase("asc") ?
                 Sort.by(Sort.Direction.ASC, field) :
                 Sort.by(Sort.Direction.DESC, field);
-        return nhanVienRepository.findAll(sort);
+        return nhanvienRepository.findAll(sort);
     }
 
-    public void save(NhanVien nv) {
-        // xử lý logic trước khi lưu
-        nv.setHoTen(nv.getHoTen().trim());
-        nhanVienRepository.save(nv);
+    public void save(NhanVien nhanvien) {
+        // Nếu Entity có trường hoTen:
+        // nhanvien .setHoTen(nhanvien .getHoTen().trim());
+        nhanvienRepository.save(nhanvien);
     }
 
     public NhanVien getById(Integer id) {
-        return nhanVienRepository.findById(id).orElse(null);
+        return nhanvienRepository.findById(id).orElse(null);
     }
 
     public void delete(Integer id) {
-        nhanVienRepository.deleteById(id);
+        nhanvienRepository.deleteById(id);
     }
 }

@@ -9,24 +9,21 @@ import java.time.format.DateTimeFormatter;
 
 @Component
 public class ScheduledTask {
+    private final LocalDateTime startTime = LocalDateTime.now();
 
-    private final LocalDateTime startTime = LocalDateTime.now(); // Lưu thời điểm bắt đầu
+        @Scheduled(fixedRate = 1000)
+        public void printCurrentTime() {
+            LocalDateTime now = LocalDateTime.now();
 
-    // Mỗi giờ chạy 1 lần
-    @Scheduled(fixedRate = 1000) // mỗi 10 giây chạy thử
-    public void printCurrentTime() {
-        LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+            System.out.println("Giờ hiện tại: " + now.format(formatter));
 
-        // In ra giờ hiện tại
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        System.out.println("Giờ hiện tại: " + now.format(formatter));
+            Duration duration = Duration.between(startTime, now);
+            long hours = duration.toHours();
+            long minutes = duration.toMinutesPart();
+            long seconds = duration.toSecondsPart();
 
-        // Tính thời gian đã chạy
-        Duration duration = Duration.between(startTime, now);
-        long hours = duration.toHours();
-        long minutes = duration.toMinutesPart();
-        long seconds = duration.toSecondsPart();
-
-        System.out.printf("Ứng dụng đã chạy được: %02d:%02d:%02d%n", hours, minutes, seconds);
-    }
+            System.out.printf("Ứng dụng đã chạy được: %02d:%02d:%02d%n", hours, minutes, seconds);
+            System.out.println("--------------------------------------------------");
+        }
 }

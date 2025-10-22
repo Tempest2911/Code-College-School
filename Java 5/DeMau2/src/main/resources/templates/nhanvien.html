@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách</title>
+</head>
+<style>
+    span {
+        color: red;
+        font-size: 13px;
+    }
+
+</style>
+<body>
+<h1>Quản lý</h1>
+
+<h3>Thêm nhân viên mới</h3>
+<form th:action="@{/nhanvien/add}" th:object="${nhanvien}" method="post">
+
+    <div>
+        <label>Mã nhân viên:</label>
+        <input type="text" th:field="*{maNhanVien}"/>
+        <span th:if="${#fields.hasErrors('maNhanVien')}" th:errors="*{maNhanVien}"></span>
+    </div>
+
+    <div>
+        <label>Tên nhân viên:</label>
+        <input type="text" th:field="*{hoTen}"/>
+        <span th:if="${#fields.hasErrors('hoTen')}" th:errors="*{hoTen}"></span>
+    </div>
+
+    <div>
+        <label>Giới tính:</label>
+        <input type="radio" th:field="*{gioiTinh}" value="true">Nam
+        <input type="radio" th:field="*{gioiTinh}" value="false">Nữ<br>
+    </div>
+
+    <div>
+        <label>Số điện thoại:</label>
+        <input type="text" th:field="*{soDienThoai}"/>
+        <span th:if="${#fields.hasErrors('soDienThoai')}" th:errors="*{soDienThoai}"></span>
+    </div>
+
+    <div>
+        <label>Chức vụ:</label>
+        <select th:field="*{idChucVu}">
+            <option th:each="cv : ${listChucVu}"
+                    th:value="${cv.id}"
+                    th:text="${cv.maChucVu}"></option>
+        </select>
+    </div>
+
+    <button type="submit">Thêm mới</button>
+</form>
+<hr>
+
+<form th:action="@{/nhanvien/search}" method="get">
+    <input type="text" name="keyword" th:value="${keyword}" placeholder="Tìm theo tên...">
+    <button type="submit">Tìm</button>
+    <a th:href="@{/nhanvien/hien-thi}">Xóa tìm kiếm</a>
+</form>
+
+<div style="margin-bottom: 10px;">
+    <form th:action="@{/nhanvien/sort}" method="get" style="display:inline;">
+        <input type="hidden" name="field" value="hoTen"/>
+        <input type="hidden" name="dir" value="asc"/>
+        <button type="submit">Sắp xếp theo tên ↑</button>
+    </form>
+
+    <form th:action="@{/nhanvien/sort}" method="get" style="display:inline;">
+        <input type="hidden" name="field" value="hoTen"/>
+        <input type="hidden" name="dir" value="desc"/>
+        <button type="submit">Sắp xếp theo tên ↓</button>
+    </form>
+
+    <form th:action="@{/nhanvien/sort}" method="get" style="display:inline;">
+        <input type="hidden" name="field" value="maNhanVien"/>
+        <input type="hidden" name="dir" value="asc"/>
+        <button type="submit">Sắp xếp theo mã ↑</button>
+    </form>
+
+    <form th:action="@{/nhanvien/sort}" method="get" style="display:inline;">
+        <input type="hidden" name="field" value="maNhanVien"/>
+        <input type="hidden" name="dir" value="desc"/>
+        <button type="submit">Sắp xếp theo mã ↓</button>
+    </form>
+</div>
+
+<h3>Danh sách nhân viên</h3>
+<table border="1">
+    <tr>
+        <th>STT</th>
+        <th>Mã nhân viên</th>
+        <th>Tên nhân viên</th>
+        <th>Giới tính</th>
+        <th>Số điện thoại</th>
+        <th>Mã chức vụ</th>
+        <th>Tên chức vụ</th>
+        <th>Action</th>
+    </tr>
+    <tr th:each="nv, i : ${listNhanVien}">
+        <td th:text="${i.index + 1}"></td>
+        <td th:text="${nv.maNhanVien}"></td>
+        <td th:text="${nv.hoTen}"></td>
+        <td th:text="${nv.gioiTinh == true ? 'Nam' : 'Nữ'}"></td>
+        <td th:text="${nv.soDienThoai}"></td>
+        <td th:text="${nv.idChucVu.maChucVu}"></td>
+        <td th:text="${nv.idChucVu.tenChucVu}"></td>
+        <td>
+            <a th:href="@{'/nhanvien/edit/' + ${nv.id}}">Edit</a>
+            <a th:href="@{'/nhanvien/remove/' + ${nv.id}}"
+               onclick="return confirm('Bạn có muốn xóa không?')">Remove</a>
+        </td>
+    </tr>
+</table>
+
+
+<div class="pagination">
+    <a th:if="${currentPage > 1}"
+       th:href="@{/nhanvien/hien-thi(page=${currentPage - 1}, sortField=${sortField}, sortDir=${sortDir}, keyword=${keyword})}">Prev</a>
+
+    <a th:each="i : ${#numbers.sequence(1, totalPages)}"
+       th:href="@{/nhanvien/hien-thi(page=${i}, sortField=${sortField}, sortDir=${sortDir}, keyword=${keyword})}"
+       th:text="${i}"
+       style="margin: 0 5px"
+       th:classappend="${i == currentPage} ? 'active' : ''"></a>
+
+    <a th:if="${currentPage < totalPages}"
+       th:href="@{/nhanvien/hien-thi(page=${currentPage + 1}, sortField=${sortField}, sortDir=${sortDir}, keyword=${keyword})}">Next</a>
+</div>
+
+</body>
+</html>

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Danh sách nhân viên</title>
+    <title>Danh sách</title>
 </head>
 <style>
     span {
@@ -12,20 +12,20 @@
 
 </style>
 <body>
-<h1>Quản lý nhân viên</h1>
+<h1>Quản lý</h1>
 
 <h3>Thêm nhân viên mới</h3>
-<form th:action="@{/nhan-vien/add}" th:object="${nhanVien}" method="post">
+<form th:action="@{/nhan-vien/add}" th:object="${nhanvien}" method="post">
 
     <div>
         <label>Mã nhân viên:</label>
-        <input type="text" th:field="*{maNhanVien}" />
+        <input type="text" th:field="*{maNhanVien}"/>
         <span th:if="${#fields.hasErrors('maNhanVien')}" th:errors="*{maNhanVien}"></span>
     </div>
 
     <div>
         <label>Tên nhân viên:</label>
-        <input type="text" th:field="*{hoTen}" />
+        <input type="text" th:field="*{hoTen}"/>
         <span th:if="${#fields.hasErrors('hoTen')}" th:errors="*{hoTen}"></span>
     </div>
 
@@ -37,7 +37,7 @@
 
     <div>
         <label>Số điện thoại:</label>
-        <input type="text" th:field="*{soDienThoai}" />
+        <input type="text" th:field="*{soDienThoai}"/>
         <span th:if="${#fields.hasErrors('soDienThoai')}" th:errors="*{soDienThoai}"></span>
     </div>
 
@@ -46,7 +46,7 @@
         <select th:field="*{idChucVu}">
             <option th:each="cv : ${listChucVu}"
                     th:value="${cv.id}"
-                    th:text="${cv.tenChucVu}"></option>
+                    th:text="${cv.maChucVu}"></option>
         </select>
     </div>
 
@@ -98,7 +98,7 @@
         <th>Tên chức vụ</th>
         <th>Action</th>
     </tr>
-    <tr th:each="nv, i : ${nhanVienList}">
+    <tr th:each="nv, i : ${listNhanVien}">
         <td th:text="${i.index + 1}"></td>
         <td th:text="${nv.maNhanVien}"></td>
         <td th:text="${nv.hoTen}"></td>
@@ -108,10 +108,12 @@
         <td th:text="${nv.idChucVu.tenChucVu}"></td>
         <td>
             <a th:href="@{'/nhan-vien/edit/' + ${nv.id}}">Edit</a>
-            <a th:href="@{'/nhan-vien/remove/' + ${nv.id}}" onclick="return confirm('Bạn có muốn xóa không?')">Remove</a>
+            <a th:href="@{'/nhan-vien/remove/' + ${nv.id}}"
+               onclick="return confirm('Bạn có muốn xóa không?')">Remove</a>
         </td>
     </tr>
 </table>
+
 
 <div class="pagination">
     <a th:if="${currentPage > 1}"
@@ -126,8 +128,6 @@
     <a th:if="${currentPage < totalPages}"
        th:href="@{/nhan-vien/hien-thi(page=${currentPage + 1}, sortField=${sortField}, sortDir=${sortDir}, keyword=${keyword})}">Next</a>
 </div>
-
-
 
 </body>
 </html>

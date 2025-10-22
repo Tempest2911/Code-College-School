@@ -48,7 +48,10 @@ public class NhanVien {
 
     @Column(name = "so_dien_thoai", length = 15)
     @NotBlank(message = "Số điện thoại không được để trống")
-    @Pattern(regexp = "\\d{10}", message = "Số điện thoại phải có 10 chữ số")
+    @Pattern(
+            regexp = "^(\\+84|0)[0-9]{9}$",
+            message = "Số điện thoại phải bắt đầu bằng 0 hoặc +84 và chỉ chứa chữ số, không có ký tự đặc biệt"
+    )
     private String soDienThoai;
 
     @Column(name = "luong", precision = 18, scale = 2)

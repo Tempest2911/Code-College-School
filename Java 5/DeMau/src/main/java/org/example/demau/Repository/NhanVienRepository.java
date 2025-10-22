@@ -12,6 +12,6 @@ import java.util.List;
 public interface NhanVienRepository extends JpaRepository<NhanVien, Integer> {
     @Query("SELECT nv FROM NhanVien nv WHERE LOWER(nv.hoTen) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<NhanVien> searchByHoTen(@Param("keyword") String keyword);
-    Page<NhanVien> findByHoTenContainingIgnoreCase(String keyword, Pageable pageable);
 
+    Page<NhanVien> findByHoTenContainingIgnoreCase(String keyword, Pageable pageable);
 }
