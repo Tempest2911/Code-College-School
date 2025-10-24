@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit</title>
+</head>
+<style>
+    span {
+        color: red;
+        font-size: 13px;
+    }
+
+</style>
+<body>
+<h1>Cập nhật thông tin</h1>
+
+<form th:action="@{/sanpham/update}" th:object="${sanpham}" method="post">
+    <input type="hidden" th:field="*{id}" />
+
+    <label>Mã sản phẩm:</label>
+    <input type="text" th:field="*{maSanPham}" required>
+    <span th:if="${#fields.hasErrors('maSanPham')}" th:errors="*{maSanPham}"></span><br>
+
+    <label>Tên sản phẩm:</label>
+    <input type="text" th:field="*{tenSanPham}" required>
+    <span th:if="${#fields.hasErrors('tenSanPham')}" th:errors="*{tenSanPham}"></span><br>
+
+
+    <label>Giá bán:</label>
+    <input type="text" th:field="*{giaBan}" required>
+    <span th:if="${#fields.hasErrors('giaBan')}" th:errors="*{giaBan}"></span><br>
+
+    <label>Số lượng:</label>
+    <input type="text" th:field="*{soLuong}" required>
+    <span th:if="${#fields.hasErrors('soLuong')}" th:errors="*{soLuong}"></span><br>
+
+    <label>Loại sản phẩm:</label>
+    <select th:field="*{idLoaiSanPham.id}">
+        <option th:each="cv : ${listLoaiSanPham}" th:value="${cv.id}" th:text="${cv.tenLoai}"></option>
+    </select><br>
+
+    <button type="submit">Lưu thay đổi</button>
+</form>
+
+<br>
+<a href="/sanpham/hien-thi">← Quay lại danh sách</a>
+
+</body>
+</html>

@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 public class ScheduleTask {
     private final LocalDateTime startTime = LocalDateTime.now();
 
+
         @Scheduled(fixedRate = 1000)
         public void printCurrentTime() {
             LocalDateTime now = LocalDateTime.now();

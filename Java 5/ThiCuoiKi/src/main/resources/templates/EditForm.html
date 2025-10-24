@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit</title>
+</head>
+<style>
+    span {
+        color: red;
+        font-size: 13px;
+    }
+
+</style>
+<body>
+<h1>Cập nhật thông tin</h1>
+
+<form th:action="@{/xe/update}" th:object="${xe}" method="post">
+    <input type="hidden" th:field="*{id}" />
+
+    <label>Mã nhân viên:</label>
+    <input type="text" th:field="*{maXe}" required>
+    <span th:if="${#fields.hasErrors('maXe')}" th:errors="*{maXe}"></span><br>
+
+    <label>Tên nhân viên:</label>
+    <input type="text" th:field="*{tenXe}" required>
+    <span th:if="${#fields.hasErrors('tenXe')}" th:errors="*{tenXe}"></span><br>
+
+    <label>Giá:</label>
+    <input type="number" th:field="*{gia}" required>
+    <span th:if="${#fields.hasErrors('gia')}" th:errors="*{gia}"></span><br>
+
+    <label>Số chỗ ngồi:</label>
+    <input type="number" th:field="*{soChoNgoi}" required>
+    <span th:if="${#fields.hasErrors('soChoNgoi')}" th:errors="*{soChoNgoi}"></span><br>
+
+    <label>Chức vụ:</label>
+    <select th:field="*{idLoaiXe.id}">
+        <option value="">-- Chọn chức vụ --</option>
+        <option th:each="cv : ${listLoaiXe}" th:value="${cv.id}" th:text="${cv.tenLoaiXe}"></option>
+    </select><br>
+
+    <button type="submit">Lưu thay đổi</button>
+</form>
+
+<br>
+<a href="/xe/hien-thi">← Quay lại danh sách</a>
+
+</body>
+</html>
