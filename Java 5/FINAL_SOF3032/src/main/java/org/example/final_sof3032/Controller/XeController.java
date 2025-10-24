@@ -31,14 +31,10 @@ public class XeController {
             Model model) {
 
         int pageSize = 5;
-        var pageXe = xeService.getAllPaged(page, pageSize, sortField, sortDir, keyword);
+        var pageXe = xeService.getAllPaged(page, pageSize);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", pageXe.getTotalPages());
         model.addAttribute("totalItems", pageXe.getTotalElements());
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDir", sortDir);
-        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-        model.addAttribute("keyword", keyword);
         model.addAttribute("listXe", pageXe.getContent());
         Xe obj = new Xe();
         model.addAttribute("xe", obj);

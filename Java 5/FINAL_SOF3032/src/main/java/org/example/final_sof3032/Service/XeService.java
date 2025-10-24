@@ -17,15 +17,10 @@ public class XeService {
     @Autowired
     private XeRepository xeRepository;
 
-    public Page<Xe> getAllPaged(int pageNo, int pageSize, String sortField, String sortDir, String keyword) {
-        Sort sort = sortDir.equalsIgnoreCase("asc") ?
-                Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+    public Page<Xe> getAllPaged(int pageNo, int pageSize) {
 
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
 
-        if (keyword != null && !keyword.trim().isEmpty()) {
-            return xeRepository.findByTenXeContainingIgnoreCase(keyword, pageable);
-        }
         return xeRepository.findAll(pageable);
     }
 
