@@ -14,7 +14,7 @@
 <body>
 <h1>Quản lý</h1>
 
-<h3>Thêm nhân viên mới</h3>
+<h3>Add new</h3>
 <form th:action="@{/nhanvien/add}" th:object="${nhanvien}" method="post">
 
     <div>
@@ -86,7 +86,7 @@
     </form>
 </div>
 
-<h3>Danh sách nhân viên</h3>
+<h3>Danh sách</h3>
 <table border="1">
     <tr>
         <th>STT</th>
@@ -115,19 +115,19 @@
 </table>
 
 
-<div class="pagination">
-    <a th:if="${currentPage > 1}"
-       th:href="@{/nhanvien/hien-thi(page=${currentPage - 1}, sortField=${sortField}, sortDir=${sortDir}, keyword=${keyword})}">Prev</a>
+<!--<div class="pagination">-->
+<!--    <a th:if="${currentPage > 1}"-->
+<!--       th:href="@{/nhan-vien/hien-thi(page=${currentPage - 1}, sortField=${sortField}, sortDir=${sortDir}, keyword=${keyword})}">Prev</a>-->
 
-    <a th:each="i : ${#numbers.sequence(1, totalPages)}"
-       th:href="@{/nhanvien/hien-thi(page=${i}, sortField=${sortField}, sortDir=${sortDir}, keyword=${keyword})}"
-       th:text="${i}"
-       style="margin: 0 5px"
-       th:classappend="${i == currentPage} ? 'active' : ''"></a>
+<!--    <a th:each="i : ${#numbers.sequence(1, totalPages)}"-->
+<!--       th:href="@{/nhan-vien/hien-thi(page=${i}, sortField=${sortField}, sortDir=${sortDir}, keyword=${keyword})}"-->
+<!--       th:text="${i}"-->
+<!--       style="margin: 0 5px"-->
+<!--       th:classappend="${i == currentPage} ? 'active' : ''"></a>-->
 
-    <a th:if="${currentPage < totalPages}"
-       th:href="@{/nhanvien/hien-thi(page=${currentPage + 1}, sortField=${sortField}, sortDir=${sortDir}, keyword=${keyword})}">Next</a>
-</div>
+<!--    <a th:if="${currentPage < totalPages}"-->
+<!--       th:href="@{/nhan-vien/hien-thi(page=${currentPage + 1}, sortField=${sortField}, sortDir=${sortDir}, keyword=${keyword})}">Next</a>-->
+<!--</div>-->
 
 </body>
 </html>
