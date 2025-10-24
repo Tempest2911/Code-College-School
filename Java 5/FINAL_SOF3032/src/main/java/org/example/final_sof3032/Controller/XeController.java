@@ -1,6 +1,5 @@
 package org.example.final_sof3032.Controller;
 
-import jakarta.validation.Valid;
 import org.example.final_sof3032.Model.Xe;
 import org.example.final_sof3032.Repository.LoaiXeRepository;
 import org.example.final_sof3032.Repository.XeRepository;
@@ -8,7 +7,6 @@ import org.example.final_sof3032.Service.XeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -34,7 +32,6 @@ public class XeController {
 
         int pageSize = 5;
         var pageXe = xeService.getAllPaged(page, pageSize, sortField, sortDir, keyword);
-
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", pageXe.getTotalPages());
         model.addAttribute("totalItems", pageXe.getTotalElements());

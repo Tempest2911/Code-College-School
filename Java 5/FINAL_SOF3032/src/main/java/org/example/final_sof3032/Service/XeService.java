@@ -17,7 +17,6 @@ public class XeService {
     @Autowired
     private XeRepository xeRepository;
 
-
     public Page<Xe> getAllPaged(int pageNo, int pageSize, String sortField, String sortDir, String keyword) {
         Sort sort = sortDir.equalsIgnoreCase("asc") ?
                 Sort.by(sortField).ascending() : Sort.by(sortField).descending();
