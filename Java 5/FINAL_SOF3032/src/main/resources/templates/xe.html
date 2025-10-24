@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách</title>
+</head>
+<body>
+<h1>Quản Lý Xe</h1>
+
+<table border="1">
+    <tr>
+        <th>STT</th>
+        <th>Mã xe</th>
+        <th>Tên xe</th>
+        <th>Giá</th>
+        <th>Số chỗ ngồi</th>
+        <th>Mã loại xe</th>
+        <th>Tên loại xe</th>
+
+        <th>Action</th>
+    </tr>
+    <tr th:each="nv, i : ${listXe}">
+        <td th:text="${i.index + 1}"></td>
+        <td th:text="${nv.maXe}"></td>
+        <td th:text="${nv.tenXe}"></td>
+        <td th:text="${nv.gia}"></td>
+        <td th:text="${nv.soChoNgoi}"></td>
+        <td th:text="${nv.idLoaiXe.maLoaiXe}"></td>
+        <td th:text="${nv.idLoaiXe.tenLoaiXe}"></td>
+        <td>
+            <a th:href="@{'/xe/update/' + ${nv.id}}">Edit</a>
+        </td>
+    </tr>
+</table>
+
+
+<div class="pagination">
+    <a th:if="${currentPage > 1}"
+       th:href="@{/xe/hien-thi(page=${currentPage - 1})}">Prev</a>
+
+    <a th:each="i : ${#numbers.sequence(1, totalPages)}"
+       th:href="@{/xe/hien-thi(page=${i})}"
+       th:text="${i}"
+       style="margin: 0 5px"
+       th:classappend="${i == currentPage} ? 'active' : ''"></a>
+
+    <a th:if="${currentPage < totalPages}"
+       th:href="@{/xe/hien-thi(page=${currentPage + 1})}">Next</a>
+</div>
+
+</body>
+</html>
