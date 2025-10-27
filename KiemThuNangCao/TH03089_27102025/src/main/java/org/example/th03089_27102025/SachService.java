@@ -12,6 +12,10 @@ public class SachService {
             throw new IllegalArgumentException("Các trường không được để trống");
         }
 
+        if (sachMoi.getNamXuatBan() < 1990 || sachMoi.getNamXuatBan() > 2025) {
+            throw new IllegalArgumentException("Năm phải nằm trong khoảng 1990-2025");
+        }
+
         danhSach.add(sachMoi);
         return true;
     }
