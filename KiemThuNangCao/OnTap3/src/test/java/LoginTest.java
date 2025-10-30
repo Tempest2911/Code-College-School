@@ -20,7 +20,7 @@ public class LoginTest {
     @Test(priority = 1)
     public void testRegister() throws InterruptedException {
         driver.get("https://vitimex.com.vn/account/register");
-            driver.findElement(By.id("last_name")).sendKeys("Nguyễn");
+        driver.findElement(By.id("last_name")).sendKeys("Nguyễn");
         driver.findElement(By.id("first_name")).sendKeys("Phong");
         driver.findElement(By.id("radio2")).click();
         driver.findElement(By.id("birthday")).sendKeys("11/29/2007");

@@ -56,4 +56,12 @@ public class Bai2Test {
         Sach sachMoi = new Sach("S01", null, null, 2024, 999);
         assertThrows(IllegalArgumentException.class, () -> sachService.sua("S01", sachMoi));
     }
+
+    @Test
+    public void testSuaNamKhongHopLe() {
+        Sach sach = new Sach("S01", "Sigma", "Phong", 2000, 999);
+        assertTrue(sachService.them(sach));
+        Sach sachMoi = new Sach("S01", null, null, 9999, 999);
+        assertThrows(IllegalArgumentException.class, () -> sachService.sua("S01", sachMoi));
+    }
 }
