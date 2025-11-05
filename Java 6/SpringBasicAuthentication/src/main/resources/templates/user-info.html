@@ -7,17 +7,20 @@
 </head>
 <body>
 <div th:switch="${@auth.isAuthenticated()}">
+
     <ul th:case="true">
         <li>Username: <b>[[${@auth.username}]]</b></li>
         <li>Role: <b>[[${@auth.role}]]</b></li>
-        <li><a href="/logout"></a>Sign out</li>
+        <li><a href="/logout">Sign out</a></li>
         <li th:if="${@auth.hasRole('ADMIN')}">
             <a href="#">Go to admin page</a>
         </li>
     </ul>
+
     <ul th:case="false">
         <li>Bạn chưa đăng nhập</li>
     </ul>
+
 </div>
 </body>
 </html>
