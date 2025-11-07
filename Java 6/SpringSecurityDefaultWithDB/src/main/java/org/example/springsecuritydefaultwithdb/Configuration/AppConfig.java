@@ -1,4 +1,4 @@
-package org.example.springbasicauthentication.Configuration;
+package org.example.springsecuritydefaultwithdb.Configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +12,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
@@ -24,40 +27,31 @@ public class AppConfig {
 
     }
 
-    pu
-
-    // Stub User
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        String password = passwordEncoder.encode("123");
-        UserDetails user1 = User.withUsername("poly")
-                .password(password)
-                .roles("USER")
-                .build();
-        UserDetails user2 = User.withUsername("admin")
-                .password(password)
-                .roles("ADMIN")
-                .build();
-        UserDetails user3 = User.withUsername("both")
-                .password(password)
-                .roles("BOTH")
-                .build();
-        return new InMemoryUserDetailsManager(user1, user2, user3);
+    public UserDetailsService userDetailsService(DataSource dataSource, PasswordEncoder passwordEncoder) {
+        return new JdbcUserDetailsManager(dataSource);
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable);
         http.cors(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(auth -> {
-            auth.requestMatchers("/poly/**").authenticated();
-            auth.anyRequest().authenticated();
+//            auth.requestMatchers("/poly/**").authenticated();
+            auth.requestMatchers("poly/url1").authenticated();
+            auth.requestMatchers("poly/url2").hasRole("ADMIN");
+            auth.requestMatchers("poly/url3").hasRole("USER");
+            auth.requestMatchers("poly/url4").hasAnyRole("USER", "ADMIN");
+
+            auth.anyRequest().permitAll();
+
         });
         http.formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
         http.rememberMe(config -> {
             config.tokenValiditySeconds(86400);
             config.rememberMeParameter("remember-me");
+            config.userDetailsService(userDetailsService);
         });
         return http.build();
     }
