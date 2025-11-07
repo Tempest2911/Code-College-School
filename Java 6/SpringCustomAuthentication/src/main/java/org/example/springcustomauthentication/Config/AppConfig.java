@@ -52,7 +52,7 @@ public class AppConfig {
         });
         http.formLogin(config -> {
             config.loginPage("/auth/login");
-            config.loginProcessingUrl("/auth/login");
+            config.loginProcessingUrl("/auth/check");
             config.defaultSuccessUrl("/auth/success");
             config.failureUrl("/auth/fail");
             config.permitAll();
