@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thông tin người dùng</title>
+</head>
+<body>
+<h2>Thông tin cá nhân</h2>
+<p><strong>Họ tên:</strong> <span th:text="${name}"></span></p>
+<p><strong>Tuổi:</strong> <span th:text="${age}"></span></p>
+<p><strong>Email:</strong> <span th:text="${email}"></span></p>
+<br/>
+<a href="/logout">Đăng xuất</a>
+</body>
+</html>
