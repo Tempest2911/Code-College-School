@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -14,6 +13,7 @@
 <hr>
 <h1>Page:<b th:text="${message}"></b></h1>
 <hr>
-<div th:replace="~{/user-info.html}"></div>
+<!-- insert user-info template -->
+<div th:insert="~{user-info :: content}"></div>
 </body>
 </html>
