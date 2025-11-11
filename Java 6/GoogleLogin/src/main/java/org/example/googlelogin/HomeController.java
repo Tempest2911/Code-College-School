@@ -49,7 +49,7 @@ public class HomeController {
         String accessToken = client.getAccessToken().getTokenValue();
 
         // Gọi People API để lấy birthdays
-        String url = "API";
+        String url = "API NIGGER";
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
