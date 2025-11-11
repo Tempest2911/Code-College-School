@@ -12,14 +12,15 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table(name = "UserRoles")
 public class UserRole {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id", nullable = false)
     private Long id;
 
-    @Column(name = "Username", nullable = false, length = 50)
-    private String username;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "Username", nullable = false)
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "RoleId", nullable = false)
     private Role role;
 

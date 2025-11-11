@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Service
+@Service("auth")
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
@@ -30,7 +30,7 @@ public class UserService implements UserDetailsService {
             log.info("Loaded user: {} with password: {}", username, password);
             Set<UserRole> userRoles = user.getUserRoles();
             String[] roles = userRoles.stream()
-                .map(ur -> ur.getRole().getId().substring(5))
+                .map(ur -> ur.getRole().getId().replace("ROLE_", ""))
                 .toArray(String[]::new);
             log.info("User roles: {}", (Object) roles);
             return org.springframework.security.core.userdetails.User.withUsername(username)

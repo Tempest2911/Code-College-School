@@ -22,7 +22,7 @@ public class User {
     @Column(name = "Enabled", nullable = false)
     private Boolean enabled = false;
 
-    @OneToMany(mappedBy = "username")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserRole> userRoles = new LinkedHashSet<>();
 
 

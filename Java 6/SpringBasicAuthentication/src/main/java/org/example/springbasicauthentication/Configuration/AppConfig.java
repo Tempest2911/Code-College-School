@@ -24,8 +24,6 @@ public class AppConfig {
 
     }
 
-    pu
-
     // Stub User
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
