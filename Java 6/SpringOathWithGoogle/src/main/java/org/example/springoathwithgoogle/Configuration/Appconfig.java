@@ -55,7 +55,7 @@ public class Appconfig {
                 })
                 .logout(config -> {
                     ;
-                    config.logoutUrl("/auth/logout");
+                    config.logoutUrl("/logout");
                     config.logoutSuccessUrl("/");
                     config.clearAuthentication(true);
                     config.invalidateHttpSession(true);
