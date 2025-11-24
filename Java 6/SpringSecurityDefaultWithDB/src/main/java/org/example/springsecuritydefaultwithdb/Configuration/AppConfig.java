@@ -6,12 +6,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -24,12 +21,15 @@ public class AppConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-
     }
 
     @Bean
     public UserDetailsService userDetailsService(DataSource dataSource, PasswordEncoder passwordEncoder) {
-        return new JdbcUserDetailsManager(dataSource);
+        JdbcUserDetailsManager manager = new JdbcUserDetailsManager(dataSource);
+        manager.setUsersByUsernameQuery("select username, password, enabled from users where username = ?");
+        manager.setAuthoritiesByUsernameQuery("select username, authority from authorities where username = ?");
+
+        return manager;
     }
 
     @Bean
@@ -45,8 +45,8 @@ public class AppConfig {
             auth.requestMatchers("poly/url4").hasAnyRole("USER", "ADMIN");
 
             auth.anyRequest().permitAll();
-
         });
+
         http.formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
         http.rememberMe(config -> {
             config.tokenValiditySeconds(86400);

@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -53,9 +54,8 @@ public class AppConfig {
                         .requestMatchers("/poly/**").authenticated() // các route khác của /poly
                         .anyRequest().permitAll()
                 )
-                .formLogin(form -> form
-                        // nếu bạn muốn trang login tùy biến: .loginPage("/login/form")
-                        .permitAll()
+                // nếu bạn muốn trang login tùy biến: .loginPage("/login/form")
+                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll
                 )
                 .rememberMe(r -> r
                                 .tokenValiditySeconds(86400)
