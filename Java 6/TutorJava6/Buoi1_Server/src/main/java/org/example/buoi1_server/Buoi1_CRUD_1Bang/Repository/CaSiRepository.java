@@ -1,7 +1,7 @@
-package org.example.buoi1_server.Repository;
+package org.example.buoi1_server.Buoi1_CRUD_1Bang.Repository;
 
-import org.example.buoi1_server.Enity.CaSi;
-import org.example.buoi1_server.Model.Response.CaSiResponse;
+import org.example.buoi1_server.Buoi1_CRUD_1Bang.Enity.CaSi;
+import org.example.buoi1_server.Buoi1_CRUD_1Bang.Model.Response.CaSiResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,7 +17,7 @@ public interface CaSiRepository extends JpaRepository<CaSi, Integer> {
 
     // xu ly convert trong repo
     @Query("""
-        select new org.example.buoi1_server.Model.Response.CaSiResponse(
+        select new org.example.buoi1_server.Buoi1_CRUD_1Bang.Model.Response.CaSiResponse(
             c.id,
             c.tenCaSi,
             c.queQuan,
@@ -29,7 +29,7 @@ public interface CaSiRepository extends JpaRepository<CaSi, Integer> {
     List<CaSiResponse>hienThiDanhSachCaSi();
 
     @Query("""
-        select new org.example.buoi1_server.Model.Response.CaSiResponse(
+        select new org.example.buoi1_server.Buoi1_CRUD_1Bang.Model.Response.CaSiResponse(
             c.id,
             c.tenCaSi,
             c.queQuan,
@@ -42,7 +42,7 @@ public interface CaSiRepository extends JpaRepository<CaSi, Integer> {
     CaSiResponse detailCaSi(Integer id);
 
     @Query("""
-        select new org.example.buoi1_server.Model.Response.CaSiResponse(
+        select new org.example.buoi1_server.Buoi1_CRUD_1Bang.Model.Response.CaSiResponse(
             c.id,
             c.tenCaSi,
             c.queQuan,
@@ -51,6 +51,5 @@ public interface CaSiRepository extends JpaRepository<CaSi, Integer> {
         )
         from CaSi c
 """)
-
     Page<CaSiResponse> hienThiDanhSachPhanTrang(Pageable pageable);
 }

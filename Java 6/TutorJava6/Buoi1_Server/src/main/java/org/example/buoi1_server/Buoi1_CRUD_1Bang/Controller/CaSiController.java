@@ -1,8 +1,8 @@
-package org.example.buoi1_server.Controller;
+package org.example.buoi1_server.Buoi1_CRUD_1Bang.Controller;
 
-import org.example.buoi1_server.Model.Request.CaSiRequest;
-import org.example.buoi1_server.Model.Response.CaSiResponse;
-import org.example.buoi1_server.Service.CaSiService;
+import org.example.buoi1_server.Buoi1_CRUD_1Bang.Model.Request.CaSiRequest;
+import org.example.buoi1_server.Buoi1_CRUD_1Bang.Model.Response.CaSiResponse;
+import org.example.buoi1_server.Buoi1_CRUD_1Bang.Service.CaSiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

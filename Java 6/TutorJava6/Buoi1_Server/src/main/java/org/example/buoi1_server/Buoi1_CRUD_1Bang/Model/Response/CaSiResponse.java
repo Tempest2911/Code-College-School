@@ -1,4 +1,4 @@
-package org.example.buoi1_server.Model.Response;
+package org.example.buoi1_server.Buoi1_CRUD_1Bang.Model.Response;
 
 
 import lombok.AllArgsConstructor;

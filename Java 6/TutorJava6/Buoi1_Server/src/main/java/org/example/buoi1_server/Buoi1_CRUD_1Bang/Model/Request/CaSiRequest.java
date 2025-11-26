@@ -1,4 +1,4 @@
-package org.example.buoi1_server.Model.Request;
+package org.example.buoi1_server.Buoi1_CRUD_1Bang.Model.Request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

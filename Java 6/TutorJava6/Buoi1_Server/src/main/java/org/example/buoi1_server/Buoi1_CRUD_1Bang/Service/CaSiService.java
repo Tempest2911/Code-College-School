@@ -1,10 +1,9 @@
-package org.example.buoi1_server.Service;
+package org.example.buoi1_server.Buoi1_CRUD_1Bang.Service;
 
-import jdk.jfr.Category;
-import org.example.buoi1_server.Enity.CaSi;
-import org.example.buoi1_server.Model.Request.CaSiRequest;
-import org.example.buoi1_server.Model.Response.CaSiResponse;
-import org.example.buoi1_server.Repository.CaSiRepository;
+import org.example.buoi1_server.Buoi1_CRUD_1Bang.Enity.CaSi;
+import org.example.buoi1_server.Buoi1_CRUD_1Bang.Model.Request.CaSiRequest;
+import org.example.buoi1_server.Buoi1_CRUD_1Bang.Model.Response.CaSiResponse;
+import org.example.buoi1_server.Buoi1_CRUD_1Bang.Repository.CaSiRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

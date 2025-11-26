@@ -1,4 +1,4 @@
-package org.example.buoi1_server.Enity;
+package org.example.buoi1_server.Buoi1_CRUD_1Bang.Enity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
