@@ -19,7 +19,7 @@ public class StudentService {
 
     public Map<String, Student> getAllStudent() {
         var url = BASE_URL + ".json";
-        var student = restTemplate.getForObject(url, StudentMap.class);
+        var student = restTemplate.getForObject(url, Map.class);
         return student != null ? student : new HashMap<>();
     }
 
