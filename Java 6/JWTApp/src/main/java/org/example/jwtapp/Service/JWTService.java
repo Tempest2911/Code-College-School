@@ -1,48 +1,46 @@
 package org.example.jwtapp.Service;
 
+import ch.qos.logback.core.net.server.Client;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
+import io.jsonwebtoken.Jwts;
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 @Service
 public class JWTService {
-    private Key getSignKey() {
-        // Giả sử đây là khóa bí mật dùng để ký JWT
-        // Thực tế nên lưu trữ khóa này một cách an toàn, họ dùng random
-        String secretKey = "0123456789.0123456789012345678901234567890";
-// Chuyển chuỗi thành mảng byte[]
-        byte[] keyBytes = secretKey.getBytes();
-        // Tạo đối tượng key
-        return Keys.hmacShaKeyFor(keyBytes);
+    public Key getSigningKey(){
+        String secret = "012345678901234567890123456789012345678901234567890123456789012345";
+        return Keys.hmacShaKeyFor(secret.getBytes());
+    }
+   public String create (UserDetails user, int expirySeconds){
+       long now = System.currentTimeMillis();
+         return Jwts.builder()
+                 .setClaims(Map.of("name", "Poly"))
+                 .setSubject(user.getUsername())
+                 .setIssuedAt(new Date(now))
+                 .setExpiration(new Date (now + expirySeconds * 1000L))
+                 .signWith(this.getSigningKey(), SignatureAlgorithm.HS256)
+                 .compact();
+   }
+    public Claims getBody(String token){
+        return Jwts.parserBuilder()
+                .setSigningKey(this.getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
-
-    public String create(UserDetails user, int expirySeconds) {
-        // Lấy thời gian hiện tại
-        Long now = System.currentTimeMillis();
-
-        return Jwts.builder()
-                //Thiet lap claim tuy y bo sung vao payload cua JWT
-                .setClaims(Map.of("name", "Poly"))
-                //Thiet lap tieu de
-                .setSubject(user.getUsername())
-                //Ngay phat hanh token
-                .setIssuedAt(new Date(now))
-                //Ngay het han
-                .setExpiration(new Date(now + 1000 * expirySeconds))
-                //Ky token  bang chu ky thuat toan HMAC
-                .signWith(this.getSignKey(), SignatureAlgorithm.ES256)
-                //Nen va tao Token
-                .compact();
-
-
+    public boolean validate(Claims claims){
+        return claims.getExpiration().after(new Date());
     }
-
 
 }
