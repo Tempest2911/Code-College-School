@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/singer/management")
+@CrossOrigin(origins = "*")
 public class CaSiController {
 
     @Autowired

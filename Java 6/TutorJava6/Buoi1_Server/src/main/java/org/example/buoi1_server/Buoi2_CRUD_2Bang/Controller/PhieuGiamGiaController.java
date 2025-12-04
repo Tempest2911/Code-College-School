@@ -43,4 +43,9 @@ public class PhieuGiamGiaController {
     public void update(@RequestBody PhieuGiamGiaRequest request, @PathVariable("id") Integer id) {
         pggService.updatePhieuGiamGia(request, id);
     }
+
+    @DeleteMapping("delete")
+    public void delete(@RequestParam("id") Integer id) {
+        pggService.removePhieuGiamGia(id);
+    }
 }

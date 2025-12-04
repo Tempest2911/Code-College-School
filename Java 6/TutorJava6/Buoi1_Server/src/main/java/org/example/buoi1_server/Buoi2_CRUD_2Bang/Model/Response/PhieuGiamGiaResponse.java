@@ -10,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PhieuGiamGiaResponse {
+    // Mã phiếu, Tên phiếu, Số lượng, Loại giảm, Mã loại phiếu, Tên loại phiếu
 
     private String maPhieu;
 
