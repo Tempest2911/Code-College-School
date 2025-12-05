@@ -1,4 +1,4 @@
-<script setup>
+	<script setup>
     import { ref, onMounted } from 'vue';
     const form = ref({ sender: "", content: "", type: 'CHAT' });
     const list = ref([]);

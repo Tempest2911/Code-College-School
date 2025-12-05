@@ -21,7 +21,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
-
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder pe) {
         String password = pe.encode("123");
@@ -30,9 +29,8 @@ public class SecurityConfig {
         UserDetails user3 = User.withUsername("both@gmail.com").password(password).roles("BOTH").build();
         return new InMemoryUserDetailsManager(user1, user2, user3);
     }
-
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfigurationSource corsConfigurationSource) {
+    SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfigurationSource corsConfigurationSource) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(cfg->cfg.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests(auth->auth
