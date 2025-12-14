@@ -14,6 +14,22 @@ const address = ref('');
 const currentUser = ref(null);
 const selectedProduct = ref(null); // Sản phẩm đang xem chi tiết
 
+// --- THÊM BIẾN MỚI CHO TÌM KIẾM ---
+const searchText = ref('');
+const selectedCategory = ref(null); // null nghĩa là chọn tất cả
+
+// --- THÊM HÀM LỌC SẢN PHẨM ---
+const filteredProducts = computed(() => {
+  return products.value.filter(p => {
+    // 1. Lọc theo danh mục (Nếu có chọn)
+    const matchCategory = selectedCategory.value ? p.category.id === selectedCategory.value : true;
+    // 2. Lọc theo tên tìm kiếm
+    const matchSearch = p.name.toLowerCase().includes(searchText.value.toLowerCase());
+
+    return matchCategory && matchSearch;
+  });
+});
+
 // Form data
 const loginForm = ref({ username: '', password: '' });
 const productForm = ref({ id: null, name: '', price: 0, image: '', category: { id: 'CAR' } });
@@ -95,14 +111,49 @@ const loadOrders = async () => {
   let url = isAdmin.value ? 'http://localhost:8080/rest/orders' : `http://localhost:8080/rest/orders/user/${currentUser.value.username}`;
   const { data } = await axios.get(url); orders.value = data.sort((a, b) => b.id - a.id);
 };
+
 const checkout = async () => {
-  if (!currentUser.value) return alert("Đăng nhập đi bạn!");
-  if (!address.value) return alert("Địa chỉ đâu?");
+  // 1. Kiểm tra giỏ hàng có trống không (QUAN TRỌNG)
+  if (cart.value.length === 0) {
+    alert("Giỏ hàng đang trống! Vui lòng chọn sản phẩm trước.");
+    return; // Dừng lại ngay, không cho chạy tiếp
+  }
+
+  // 2. Kiểm tra đã đăng nhập chưa
+  if (!currentUser.value) {
+    alert("Bạn cần đăng nhập để mua hàng!");
+    currentView.value = 'login'; // Chuyển hướng người dùng sang trang login luôn cho tiện
+    return;
+  }
+
+  // 3. Kiểm tra đã nhập địa chỉ chưa
+  if (!address.value.trim()) { // .trim() để tránh trường hợp người dùng chỉ nhập dấu cách
+    alert("Vui lòng nhập địa chỉ nhận hàng!");
+    return;
+  }
+
+  // 4. Gửi yêu cầu đặt hàng lên Server
   try {
-    await axios.post('http://localhost:8080/rest/orders', { username: currentUser.value.username, address: address.value, cart: cart.value });
-    alert("Đặt hàng xong!"); cart.value = []; currentView.value = 'my-orders'; loadOrders();
-  } catch (e) { alert("Lỗi đặt hàng!"); }
+    const orderData = {
+      username: currentUser.value.username,
+      address: address.value,
+      cart: cart.value
+    };
+
+    await axios.post('http://localhost:8080/rest/orders', orderData);
+
+    // Thành công
+    alert("Đặt hàng thành công!");
+    cart.value = []; // Xóa sạch giỏ hàng
+    address.value = ''; // Xóa địa chỉ (nếu muốn)
+    currentView.value = 'my-orders'; // Chuyển sang trang xem đơn hàng
+    loadOrders(); // Tải lại danh sách đơn hàng mới nhất
+  } catch (e) {
+    console.error(e);
+    alert("Lỗi đặt hàng! Vui lòng thử lại sau.");
+  }
 };
+
 const loadProducts = async () => { const { data } = await axios.get('http://localhost:8080/rest/products'); products.value = data; loading.value = false; };
 const loadCategories = async () => { const { data } = await axios.get('http://localhost:8080/rest/categories'); categories.value = data; };
 // Tìm hàm addToCart cũ và thay bằng hàm này:
@@ -133,6 +184,7 @@ watch(cart, (v) => localStorage.setItem('cart', JSON.stringify(v)), { deep: true
 onMounted(() => { loadProducts(); loadCategories(); const c = localStorage.getItem('cart'); if (c) cart.value = JSON.parse(c); const u = localStorage.getItem('user'); if (u) currentUser.value = JSON.parse(u); });
 </script>
 
+
 <template>
   <div class="container-fluid p-0 bg-light min-vh-100">
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4 shadow-sm sticky-top">
@@ -161,7 +213,8 @@ onMounted(() => { loadProducts(); loadCategories(); const c = localStorage.getIt
             <i class="fas fa-history me-1"></i> Đơn hàng
           </button>
 
-          <button class="btn btn-sm btn-warning position-relative  ms-2 " @click="currentView = 'cart'">
+          <button class="btn btn-sm
+           btn-warning position-relative  ms-2 " @click="currentView = 'cart'">
             <i class="fas fa-shopping-cart me-1"></i> Giỏ hàng
             <span
               class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">
@@ -177,17 +230,53 @@ onMounted(() => { loadProducts(); loadCategories(); const c = localStorage.getIt
     </nav>
 
     <div v-if="currentView === 'home'" class="container py-5">
+
+      <div class="row mb-4 align-items-center">
+        <div class="col-md-8 mb-2">
+          <div class="btn-group shadow-sm">
+            <button class="btn fw-bold" :class="selectedCategory === null ? 'btn-primary' : 'btn-outline-primary'"
+              @click="selectedCategory = null">
+              Tất cả
+            </button>
+            <button v-for="c in categories" :key="c.id" class="btn fw-bold"
+              :class="selectedCategory === c.id ? 'btn-primary' : 'btn-outline-primary'"
+              @click="selectedCategory = c.id">
+              {{ c.name }}
+            </button>
+          </div>
+        </div>
+
+        <div class="col-md-4 mb-2">
+          <div class="input-group shadow-sm">
+            <input v-model="searchText" class="form-control" placeholder="Tìm siêu xe, máy bay...">
+            <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+          </div>
+        </div>
+      </div>
+
       <div class="row g-4">
-        <div class="col-md-3" v-for="p in products" :key="p.id">
+        <div class="col-12 text-center" v-if="filteredProducts.length === 0">
+          <p class="text-muted">Không tìm thấy sản phẩm nào!</p>
+        </div>
+
+        <div class="col-md-3" v-for="p in filteredProducts" :key="p.id">
           <div class="card h-100 shadow-sm border-0 product-card">
             <div class="card-img-wrapper" @click="viewProduct(p)"
               style="cursor:pointer; height:200px;display:flex;align-items:center;justify-content:center;padding:10px;background:#fff;">
               <img :src="getImageUrl(p.image)" style="max-height:100%;max-width:100%;object-fit:contain;">
             </div>
-            <div class="card-body">
-              <h6 class="fw-bold text-truncate" @click="viewProduct(p)" style="cursor:pointer">{{ p.name }}</h6>
-              <p class="text-danger fw-bold fs-5 mb-2">{{ formatPrice(p.price) }}</p>
-              <button class="btn btn-primary w-100 rounded-pill" @click="addToCart(p)">Thêm vào giỏ</button>
+            <div class="card-body d-flex flex-column">
+              <div class="mb-2">
+                <span class="badge bg-light text-dark border">{{ p.category.name }}</span>
+              </div>
+              <h6 class="fw-bold text-truncate" @click="viewProduct(p)" style="cursor:pointer" :title="p.name">{{ p.name
+                }}</h6>
+              <div class="mt-auto">
+                <p class="text-danger fw-bold fs-5 mb-2">{{ formatPrice(p.price) }}</p>
+                <button class="btn btn-primary w-100 rounded-pill" @click="addToCart(p)">
+                  <i class="fas fa-cart-plus me-1"></i> Thêm vào giỏ
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -318,8 +407,10 @@ onMounted(() => { loadProducts(); loadCategories(); const c = localStorage.getIt
         <div class="col-lg-4">
           <div class="card p-3">
             <h4>Thanh toán</h4><textarea v-model="address" class="form-control mb-3" placeholder="Địa chỉ"></textarea>
-            <h3 class="text-danger text-end">{{ formatPrice(totalAmount) }}</h3><button @click="checkout"
-              class="btn btn-success w-100">MUA</button>
+            <h3 class="text-danger text-end">{{ formatPrice(totalAmount) }}</h3>
+            <button @click="checkout" class="btn btn-success w-100" :disabled="cart.length === 0">
+              MUA NGAY
+            </button>
           </div>
         </div>
       </div>

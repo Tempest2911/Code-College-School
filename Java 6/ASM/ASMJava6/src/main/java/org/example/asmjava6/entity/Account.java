@@ -39,7 +39,7 @@ public class Account {
 
     @ColumnDefault("1")
     @Column(name = "Activated", nullable = false)
-    private Boolean activated = false;
+    private Boolean activated;
 
     @JsonIgnore
     @OneToMany(mappedBy = "username")
