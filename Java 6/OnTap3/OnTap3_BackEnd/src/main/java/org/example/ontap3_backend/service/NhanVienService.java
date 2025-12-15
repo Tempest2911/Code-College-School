@@ -20,13 +20,9 @@ public class NhanVienService {
         return repo.getAllCustom();
     }
 
-    public Page<NhanVienResponse> getPage(Pageable p) {
-        return repo.getPageCustom(p);
-    }
-
     public NhanVien add(NhanVien nv) {
-
-        return repo.save(nv);
+        NhanVien exit = repo.findById(nv.getId()).orElseThrow(() -> new ApiException("ID da ton tai", "CC1"));
+        return repo.save(exit);
     }
 
     public NhanVien update(NhanVien nv){
@@ -43,5 +39,11 @@ public class NhanVienService {
     public NhanVien detail(Integer id) {
         return repo.findById(id).get();
     }
+
+    public Page<NhanVienResponse> getPage(Pageable p) {
+        return repo.getPageCustom(p);
+    }
+
+
 
 }

@@ -28,7 +28,6 @@ public class NhanVienController {
 
     @PostMapping
     public NhanVien add(@RequestBody @Valid NhanVien NhanVien) {
-
         return nhanVienService.add(NhanVien);
     }
 

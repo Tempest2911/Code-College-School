@@ -1,8 +1,8 @@
 import axios from 'axios'
 
-const API_BASE_URL = 'http://localhost:8080/api/nhan-vien'
+const API_BASE_URL = 'http://localhost:8080/api/donHang'
 
-export async function getAllNhanVien() {
+export async function getAllDonHang() {
   const config = {
     auth: {
       username: 'TH03089',
@@ -12,7 +12,7 @@ export async function getAllNhanVien() {
 
   try {
     const response = await axios.get(API_BASE_URL, config)
-    console.log('Fetched NhanVien data:', response.data)
+    console.log('Fetched DonHang data:', response.data)
     return response.data
   } catch (error) {
     console.error('Lỗi gọi API:', error)

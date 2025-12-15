@@ -8,7 +8,6 @@
 import { ref } from 'vue'; // 1. Import ref
 import NhanVienManager from './components/NhanVienManager.vue';
 
-// 2. Khai báo biến isLoggedIn và set bằng true luôn để hiện bảng
 const isLoggedIn = ref(true);
 
 </script>
