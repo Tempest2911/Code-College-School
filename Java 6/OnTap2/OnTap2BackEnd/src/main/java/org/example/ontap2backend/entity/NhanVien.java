@@ -21,18 +21,12 @@ public class NhanVien {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Size(max = 100)
-    @Nationalized
     @Column(name = "ten_nhan_vien", length = 100)
     private String tenNhanVien;
 
-    @Size(max = 100)
-    @Nationalized
     @Column(name = "chuc_vu", length = 100)
     private String chucVu;
 
-    @Size(max = 100)
-    @Nationalized
     @Column(name = "phong_ban", length = 100)
     private String phongBan;
 
@@ -42,16 +36,12 @@ public class NhanVien {
     @Column(name = "gioi_tinh")
     private Boolean gioiTinh;
 
-    @Size(max = 200)
-    @Nationalized
     @Column(name = "dia_chi", length = 200)
     private String diaChi;
 
-    @Size(max = 20)
     @Column(name = "so_dien_thoai", length = 20)
     private String soDienThoai;
 
-    @Size(max = 100)
     @Column(name = "email", length = 100)
     private String email;
 

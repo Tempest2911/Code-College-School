@@ -29,11 +29,9 @@ public class ChamCong {
     @Column(name = "ngay_cham")
     private String ngayCham;
 
-    @NotEmpty(message = "Giờ vào không được để trống")
     @Column(name = "gio_vao")
     private String gioVao;
 
-    @NotEmpty(message = "Giờ ra không được để trống")
     @Column(name = "gio_ra")
     private String gioRa;
 
@@ -41,21 +39,12 @@ public class ChamCong {
     @Column(name = "so_gio_lam")
     private Double soGioLam;
 
-    @NotEmpty(message = "Trạng thái không được để trống")
-    @Size(max = 50)
-    @Nationalized
     @Column(name = "trang_thai", length = 50)
     private String trangThai;
 
-    @NotEmpty(message = "Ghi chú không được để trống")
-    @Size(max = 255)
-    @Nationalized
     @Column(name = "ghi_chu")
     private String ghiChu;
 
-    @NotEmpty(message = "Người xử lý không được để trống")
-    @Size(max = 100)
-    @Nationalized
     @Column(name = "nguoi_xu_ly", length = 100)
     private String nguoiXuLy;
 

@@ -26,27 +26,20 @@ public class ChamCongService {
     }
 
     public ChamCong add(ChamCong cc){
-        ChamCong exit = repo.findById(cc.getId()).orElseThrow(() -> new ApiException("ID da ton tai", "CC1"));
-        return repo.save(exit);
+        return repo.save(cc);
     }
 
     public ChamCong update(ChamCong cc){
-        ChamCong exit = repo.findById(cc.getId()).orElseThrow(() -> new ApiException("ID khong ton tai", "CC1"));
-        repo.findById(exit.getId());
+        repo.findById(cc.getId());
         return repo.save(cc);
     }
 
     public void delete(Integer id){
-        ChamCong exit = repo.findById(id).orElseThrow(() -> new ApiException("ID khong ton tai", "CC1"));
-        repo.delete(exit);
+        repo.deleteById(id);
     }
 
     public ChamCong detail(Integer id) {
         return repo.findById(id).get();
-    }
-
-    public boolean existsById(Integer id) {
-        return repo.existsById(id);
     }
 
 }

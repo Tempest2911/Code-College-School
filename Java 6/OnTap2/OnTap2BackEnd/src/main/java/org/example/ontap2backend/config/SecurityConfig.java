@@ -24,43 +24,21 @@ import java.util.List;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-
+    public SecurityFilterChain sfc(HttpSecurity http){
+        http.csrf(httpSecurityCsrfConfigurer ->  httpSecurityCsrfConfigurer.disable())
                 .cors(Customizer.withDefaults())
-
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
-
-                        .anyRequest().authenticated()
-                )
-
+                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults());
-
         return http.build();
     }
+@Bean
+public UserDetailsService uds() {
+    UserDetails user = User.withDefaultPasswordEncoder()
+            .username("TH03089")
+            .password("SD20202")
+            .roles("USER")
+            .build();
+    return new InMemoryUserDetailsManager(user);
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user = User.withDefaultPasswordEncoder()
-                .username("TH03089")  // MSSV
-                .password("SD20202")  // Lớp
-                .roles("USER")
-                .build();
-        return new InMemoryUserDetailsManager(user);
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("*"));
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+}
 }

@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/cham-cong")
+@RequestMapping("/api/chamCong")
 @CrossOrigin("*")
 public class ChamCongController {
 

@@ -1,43 +1,46 @@
-<template>
-    <div>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Ngày Chấm</th>
-                    <th>Số Giờ Làm</th>
-                    <th>Phạt</th>
-                    <th>Tên Nhân Viên</th>
-                    <th>Tên Phòng Ban</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="chamCong in chamCongs">
-                    <td>{{ chamCong.id }}</td>
-                    <td>{{ chamCong.ngayCham }}</td>
-                    <td>{{ chamCong.soGioLam }}</td>
-                    <td>{{ chamCong.phat }}</td>
-                    <td>{{ chamCong.tenNhanVien }}</td>
-                    <td>{{ chamCong.phongBan }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</template>
-
 <script setup>
-import { onMounted, ref } from "vue";
-import { getAllChamCong } from "./ChamCongService.ts";
+  import { ref, onMounted } from 'vue'
+  import axios from 'axios'
 
-const chamCongs = ref([]);
+const listChamCong = ref([])
 
 onMounted(async () => {
-    const getters = await getAllChamCong();
-    
-    chamCongs.value = getters;
-});
+   const authConfig = {
+      auth: {
+        username: 'TH03089',
+        password: 'SD20202'
+      }
+    }
 
+    const response = await axios.get('http://localhost:8080/api/chamCong', authConfig)
+
+    listChamCong.value = response.data
+})
 </script>
 
-<style lang="css" scoped>
-</style>
+<template>
+  <div>
+        <table border="1">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Ngày chấm</th>
+              <th>Số giờ làm </th>
+              <th>Phạt</th>
+              <th>Tên nhân viên</th>
+              <th>Phòng ban</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="cc in listChamCong">
+              <td>{{ cc.id }}</td>
+              <td>{{ cc.ngayCham }}</td>
+              <td>{{ cc.soGioLam }}</td>
+              <td>{{ cc.phat }}</td>
+              <td>{{ cc.tenNhanVien }}</td>
+              <td>{{ cc.phongBan }}</td>
+            </tr>
+          </tbody>
+        </table>
+  </div>
+</template>
