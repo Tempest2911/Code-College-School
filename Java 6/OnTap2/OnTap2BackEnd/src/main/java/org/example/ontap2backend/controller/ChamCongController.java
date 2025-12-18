@@ -17,7 +17,6 @@ import java.util.List;
 @RequestMapping("/api/chamCong")
 @CrossOrigin("*")
 public class ChamCongController {
-
     @Autowired
     ChamCongService chamCongService;
 
